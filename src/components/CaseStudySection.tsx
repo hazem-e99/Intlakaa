@@ -21,7 +21,7 @@ const CaseStudySection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight max-w-4xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-[1.5] max-w-4xl mx-auto">
             هدفنا مو بس نسوّي حملات… نسوّي حملات تنذكر كـ Case Study
           </h2>
         </motion.div>

@@ -121,11 +121,11 @@ const HeroSection = () => {
               >
                 <HiSparkles className="w-4 h-4 text-primary" />
               </motion.div>
-              <span className="text-sm font-semibold">وكالة تسويق سعودية رائدة</span>
+              <span className="text-sm font-bold tracking-wide">وكالة تسويق سعودية رائدة</span>
             </motion.div>
 
             {/* Main Heading with Animated Characters */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.4] tracking-tight">
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -134,21 +134,22 @@ const HeroSection = () => {
               >
                 بنساعدك تخلي
               </motion.span>
+              
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
-                className="text-gradient inline-block"
+                className="inline-block font-black text-foreground"
                 whileHover={{ scale: 1.05 }}
               >
                 نموك أسرع
               </motion.span>
-              <span>… </span>
+              <span className="font-black">… </span>
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
-                className="text-gradient inline-block"
+                className="text-gradient inline-block pt-3"
                 whileHover={{ scale: 1.05 }}
               >
                 وحملاتك أذكى
@@ -159,7 +160,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.7 }}
-              className="text-xl md:text-2xl text-muted-foreground leading-relaxed"
+              className="text-lg md:text-xl lg:text-2xl text-muted-foreground leading-[2] font-medium"
             >
               بخطط تسويقية قائمة على النتائج، واستراتيجيات عالمية مصممة خصيصًا لعلامتك التجارية، نوصلك لأفضل عائد بأقل مجهود..
             </motion.p>
@@ -181,8 +182,8 @@ const HeroSection = () => {
                   whileHover={{ y: -5, scale: 1.05 }}
                   className="bg-card/50 backdrop-blur-sm rounded-2xl p-4 border border-primary/10 shadow-soft"
                 >
-                  <div className="text-2xl font-bold text-gradient">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  <div className="text-2xl md:text-3xl font-black text-gradient tracking-tight">{stat.value}</div>
+                  <div className="text-sm md:text-base text-muted-foreground font-semibold mt-1">{stat.label}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -198,7 +199,7 @@ const HeroSection = () => {
                 <motion.button
                   whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.2)" }}
                   whileTap={{ scale: 0.95 }}
-                  className="group relative gradient-brand text-white px-8 py-4 rounded-full text-lg font-bold shadow-medium hover:shadow-lg transition-all overflow-hidden"
+                  className="group relative gradient-brand text-white px-10 py-4 rounded-full text-base md:text-lg font-black tracking-wide shadow-medium hover:shadow-lg transition-all overflow-hidden"
                 >
                   <motion.span
                     className="absolute inset-0 bg-white/20"

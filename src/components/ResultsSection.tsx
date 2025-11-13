@@ -20,7 +20,7 @@ const ResultsSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight max-w-4xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-[1.5] max-w-4xl mx-auto">
             نحب نخلي النتائج تتكلم بدالنا
           </h2>
           <p className="text-xl md:text-2xl text-muted-foreground">
@@ -67,7 +67,7 @@ const ResultsSection = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 gradient-brand rounded-3xl p-12 text-center"
         >
-          <p className="text-2xl md:text-3xl font-bold text-white leading-relaxed">
+          <p className="text-2xl md:text-3xl font-bold text-white leading-[1.8]">
             هذي مو بس أرقام... هذي قصص نجاح حقيقية مع عملاء انطلاقة
           </p>
         </motion.div>
