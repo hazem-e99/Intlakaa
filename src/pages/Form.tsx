@@ -1,0 +1,252 @@
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { ArrowRight } from "lucide-react";
+
+const Form = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const formData = new FormData(e.currentTarget);
+    
+    // إضافة معلومات إضافية للبريد
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '9c4b5e2e-3f7a-4d8b-9c1e-5a6b7c8d9e0f';
+    formData.append('access_key', accessKey);
+    formData.append('subject', 'طلب جديد من موقع انطلاقة');
+    formData.append('from_name', 'موقع انطلاقة');
+    
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        toast({
+          title: "تم إرسال النموذج بنجاح! ✓",
+          description: "سنتواصل معك قريباً لبدء رحلة النمو معاً",
+        });
+        
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } else {
+        throw new Error('فشل الإرسال');
+      }
+    } catch (error) {
+      toast({
+        title: "حدث خطأ",
+        description: "يرجى المحاولة مرة أخرى أو الاتصال بنا مباشرة",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background py-20 px-4">
+      <div className="container mx-auto max-w-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/")}
+            className="mb-8"
+          >
+            <ArrowRight className="ml-2 w-4 h-4" />
+            العودة للرئيسية
+          </Button>
+          
+          <div className="gradient-brand rounded-3xl p-1 shadow-medium">
+            <div className="bg-background rounded-3xl p-8 md:p-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
+                ابدأ رحلتك مع انطلاقة
+              </h1>
+              <p className="text-xl text-center text-muted-foreground mb-12">
+                عبّي البيانات وخلنا نبدأ معك خطوة النمو الحقيقي
+              </p>
+              
+              <form onSubmit={handleSubmit} className="space-y-6" action="https://api.web3forms.com/submit" method="POST">
+                {/* Hidden field for recipient email */}
+                <input type="hidden" name="redirect" value="https://antlaqa.com/thank-you" />
+                
+                <div className="space-y-2">
+                  <Label htmlFor="name">اسمك</Label>
+                  <Input
+                    id="name"
+                    name="name"
+                    required
+                    placeholder="أدخل اسمك الكامل"
+                    className="text-right"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="phone">رقم جوالك</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      required
+                      placeholder="5XXXXXXXX"
+                      className="text-right flex-1"
+                    />
+                    <div className="bg-muted px-4 rounded-lg flex items-center">
+                      <span className="text-muted-foreground">+966</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="user_email">البريد الإلكتروني</Label>
+                  <Input
+                    id="user_email"
+                    name="user_email"
+                    type="email"
+                    required
+                    placeholder="example@domain.com"
+                    className="text-right"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="job_title">المسمى الوظيفي</Label>
+                  <Input
+                    id="job_title"
+                    name="job_title"
+                    required
+                    placeholder="مثال: مدير تسويق، صاحب متجر، إلخ"
+                    className="text-right"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="store_url">رابط المتجر</Label>
+                  <Input
+                    id="store_url"
+                    name="store_url"
+                    type="url"
+                    placeholder="https://example.com"
+                    className="text-left"
+                    dir="ltr"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="store_age">عمر المتجر</Label>
+                  <Select name="store_age" required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="اختر عمر المتجر" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="new">جديد (أقل من 6 أشهر)</SelectItem>
+                      <SelectItem value="6-12">من 6 إلى 12 شهر</SelectItem>
+                      <SelectItem value="1-2">من سنة إلى سنتين</SelectItem>
+                      <SelectItem value="2+">أكثر من سنتين</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="monthly_budget">الميزانية التسويقية الشهرية</Label>
+                  <Select name="monthly_budget" required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="اختر الميزانية الشهرية" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="5k-10k">5,000 - 10,000 ريال</SelectItem>
+                      <SelectItem value="10k-25k">10,000 - 25,000 ريال</SelectItem>
+                      <SelectItem value="25k-50k">25,000 - 50,000 ريال</SelectItem>
+                      <SelectItem value="50k-100k">50,000 - 100,000 ريال</SelectItem>
+                      <SelectItem value="100k+">أكثر من 100,000 ريال</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="monthly_sales">المبيعات الشهرية</Label>
+                  <Select name="monthly_sales" required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="اختر المبيعات الشهرية" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="0-10k">أقل من 10,000 ريال</SelectItem>
+                      <SelectItem value="10k-50k">10,000 - 50,000 ريال</SelectItem>
+                      <SelectItem value="50k-100k">50,000 - 100,000 ريال</SelectItem>
+                      <SelectItem value="100k-500k">100,000 - 500,000 ريال</SelectItem>
+                      <SelectItem value="500k+">أكثر من 500,000 ريال</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="current_team">تشتغل مع وكالة أو فريق داخلي</Label>
+                  <Select name="current_team" required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="اختر الوضع الحالي" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="agency">نعم، مع وكالة</SelectItem>
+                      <SelectItem value="internal">نعم، فريق داخلي</SelectItem>
+                      <SelectItem value="freelancer">مع مستقلين</SelectItem>
+                      <SelectItem value="none">لا، بدون فريق تسويق</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="how_found">من فين عرفت وكالة انطلاقة</Label>
+                  <Select name="how_found" required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="كيف وصلت إلينا؟" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="social">وسائل التواصل الاجتماعي</SelectItem>
+                      <SelectItem value="referral">ترشيح من صديق/عميل</SelectItem>
+                      <SelectItem value="search">بحث جوجل</SelectItem>
+                      <SelectItem value="ad">إعلان</SelectItem>
+                      <SelectItem value="other">أخرى</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="pt-4"
+                >
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full gradient-brand text-white py-6 text-xl font-bold shadow-medium hover:shadow-lg transition-all"
+                  >
+                    {isSubmitting ? "جاري الإرسال..." : "إرسال النموذج"}
+                  </Button>
+                </motion.div>
+              </form>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+export default Form;

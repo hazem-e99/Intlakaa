@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 270 100% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 270 100% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 270 100% 12%;
+
+    --primary: 270 77% 20%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 270 73% 60%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 270 20% 96%;
+    --muted-foreground: 270 10% 45%;
+
+    --accent: 270 73% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 270 20% 90%;
+    --input: 270 20% 90%;
+    --ring: 270 77% 20%;
+
+    --radius: 0.75rem;
+
+    --brand-primary: 270 77% 20%;
+    --brand-secondary: 270 73% 60%;
+    
+    --gradient-brand: linear-gradient(to left, hsl(270 77% 20%), hsl(270 73% 60%));
+    --gradient-brand-hover: linear-gradient(to left, hsl(270 77% 25%), hsl(270 73% 65%));
+    
+    --shadow-soft: 0 4px 20px rgba(155, 80, 232, 0.1);
+    --shadow-medium: 0 8px 30px rgba(43, 8, 98, 0.15);
+    
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 270 50% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 270 40% 12%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 270 40% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 270 73% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 270 50% 25%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 270 30% 20%;
+    --muted-foreground: 270 10% 65%;
+
+    --accent: 270 73% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 270 30% 25%;
+    --input: 270 30% 25%;
+    --ring: 270 73% 60%;
+    
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    direction: rtl;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Tajawal', 'Cairo', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  .gradient-brand {
+    background: linear-gradient(to left, hsl(270 77% 20%), hsl(270 73% 60%));
+  }
+  
+  .gradient-brand-hover {
+    background: linear-gradient(to left, hsl(270 77% 25%), hsl(270 73% 65%));
+  }
+  
+  .text-gradient {
+    background: linear-gradient(to left, hsl(270 77% 20%), hsl(270 73% 60%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .shadow-soft {
+    box-shadow: 0 4px 20px rgba(155, 80, 232, 0.1);
+  }
+  
+  .shadow-medium {
+    box-shadow: 0 8px 30px rgba(43, 8, 98, 0.15);
+  }
+}

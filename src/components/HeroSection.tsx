@@ -1,0 +1,328 @@
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { FaArrowLeft, FaPhoneAlt } from "react-icons/fa";
+import { HiSparkles } from "react-icons/hi";
+import { IoTrendingUp, IoFlash } from "react-icons/io5";
+import heroImage from "@/assets/hero-image.png";
+import logo from "@/assets/logo.png"
+
+const HeroSection = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { scrollY } = useScroll();
+  
+  // Parallax effect
+  const y1 = useTransform(scrollY, [0, 300], [0, 50]);
+  const y2 = useTransform(scrollY, [0, 300], [0, -50]);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20,
+      });
+    };
+    
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Floating elements animation
+  const floatingAnimation = {
+    y: [0, -20, 0],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: "easeInOut" as const,
+    },
+  };
+
+  return (
+    <section className="relative min-h-screen flex items-center pt-20 pb-16 px-4 overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Gradient Orbs */}
+        <motion.div
+          className="absolute top-20 -right-40 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 -left-40 w-96 h-96 bg-secondary/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.5, 0.3, 0.5],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        
+        {/* Floating Icons */}
+        <motion.div
+          className="absolute top-1/4 right-1/4 text-primary/20"
+          animate={floatingAnimation}
+          style={{ x: mousePosition.x * 0.5, y: mousePosition.y * 0.5 }}
+        >
+          <HiSparkles size={40} />
+        </motion.div>
+        <motion.div
+          className="absolute top-1/3 left-1/4 text-secondary/20"
+          animate={{
+            y: [0, -20, 0],
+            transition: { duration: 3, repeat: Infinity, ease: "easeInOut" as const, delay: 1 },
+          }}
+          style={{ x: mousePosition.x * -0.3, y: mousePosition.y * -0.3 }}
+        >
+          <IoTrendingUp size={50} />
+        </motion.div>
+        <motion.div
+          className="absolute bottom-1/3 right-1/3 text-primary/20"
+          animate={{
+            y: [0, -20, 0],
+            transition: { duration: 3, repeat: Infinity, ease: "easeInOut" as const, delay: 2 },
+          }}
+          style={{ x: mousePosition.x * 0.7, y: mousePosition.y * 0.7 }}
+        >
+          <IoFlash size={35} />
+        </motion.div>
+      </div>
+
+      <motion.div style={{ opacity }} className="container mx-auto relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Text Content - Right Side */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-right space-y-8 order-2 lg:order-1"
+            style={{ y: y1 }}
+          >
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 rounded-full px-6 py-2 backdrop-blur-sm"
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              >
+                <HiSparkles className="w-4 h-4 text-primary" />
+              </motion.div>
+              <span className="text-sm font-semibold">وكالة تسويق سعودية رائدة</span>
+            </motion.div>
+
+            {/* Main Heading with Animated Characters */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="block mb-2"
+              >
+                بنساعدك تخلي
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="text-gradient inline-block"
+                whileHover={{ scale: 1.05 }}
+              >
+                نموك أسرع
+              </motion.span>
+              <span>… </span>
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="text-gradient inline-block"
+                whileHover={{ scale: 1.05 }}
+              >
+                وحملاتك أذكى
+              </motion.span>
+            </h1>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+              className="text-xl md:text-2xl text-muted-foreground leading-relaxed"
+            >
+              بخطط تسويقية قائمة على النتائج، واستراتيجيات عالمية مصممة خصيصًا لعلامتك التجارية، نوصلك لأفضل عائد بأقل مجهود..
+            </motion.p>
+            
+            {/* Stats Cards */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="grid grid-cols-3 gap-4"
+            >
+              {[
+                { value: "+250%", label: "نمو" },
+                { value: "500K+", label: "وصول" },
+                { value: "95%", label: "نجاح" },
+              ].map((stat, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ y: -5, scale: 1.05 }}
+                  className="bg-card/50 backdrop-blur-sm rounded-2xl p-4 border border-primary/10 shadow-soft"
+                >
+                  <div className="text-2xl font-bold text-gradient">{stat.value}</div>
+                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                </motion.div>
+              ))}
+            </motion.div>
+            
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.9 }}
+              className="flex gap-4 justify-start items-center"
+            >
+              <Link to="/form">
+                <motion.button
+                  whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.2)" }}
+                  whileTap={{ scale: 0.95 }}
+                  className="group relative gradient-brand text-white px-8 py-4 rounded-full text-lg font-bold shadow-medium hover:shadow-lg transition-all overflow-hidden"
+                >
+                  <motion.span
+                    className="absolute inset-0 bg-white/20"
+                    initial={{ x: "-100%", skewX: -20 }}
+                    whileHover={{ x: "100%", skewX: -20 }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  <span className="relative flex items-center gap-2">
+                    ابدأ الآن
+                    <motion.span
+                      animate={{ x: [0, -5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      <FaArrowLeft className="w-5 h-5" />
+                    </motion.span>
+                  </span>
+                </motion.button>
+              </Link>
+            </motion.div>
+          </motion.div>
+          
+          {/* Image - Left Side with Enhanced Effects */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="order-1 lg:order-2 relative"
+            style={{ 
+              y: y2,
+              x: mousePosition.x * 0.5,
+            }}
+          >
+            {/* Decorative Elements */}
+            <motion.div
+              className="absolute -top-6 -right-6 w-24 h-24 bg-secondary/30 rounded-full blur-2xl"
+              animate={{
+                scale: [1, 1.5, 1],
+                opacity: [0.5, 0.8, 0.5],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.div
+              className="absolute -bottom-6 -left-6 w-32 h-32 bg-primary/30 rounded-full blur-2xl"
+              animate={{
+                scale: [1.5, 1, 1.5],
+                opacity: [0.8, 0.5, 0.8],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            
+            {/* Image Container with 3D Effect */}
+            <motion.div
+              className="relative"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                transform: `perspective(1000px) rotateY(${mousePosition.x * 0.02}deg) rotateX(${-mousePosition.y * 0.02}deg)`,
+              }}
+            >
+              <motion.div
+                className="absolute inset-0  opacity-20 rounded-3xl blur-xl"
+                animate={{
+                  scale: [1, 1.1, 1],
+                  opacity: [0.2, 0.3, 0.2],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+              
+              <motion.img
+                src={logo}
+                alt="Digital Marketing"
+                className="relative w-full h-auto rounded-3xl "
+                animate={{ y: [0, -15, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              />
+              
+              {/* Floating Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 1.2 }}
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                className="absolute -bottom-6 -right-6 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-xl border border-primary/20"
+              >
+
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.5 }}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+      >
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+          className="w-6 h-10 border-2 border-primary/30 rounded-full flex justify-center"
+        >
+          <motion.div
+            animate={{ y: [0, 12, 0], opacity: [1, 0, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="w-1.5 h-1.5 bg-primary rounded-full mt-2"
+          />
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+};
+
+export default HeroSection;
