@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FaPlay } from "react-icons/fa";
+import { memo } from "react";
 
 const videos = [
   { id: 1, title: "حملة إعلانية ناجحة", src: "/v1.mp4" },
@@ -40,8 +40,9 @@ const CaseStudySection = () => {
                 <video
                   src={video.src}
                   controls
+                  preload="none"
+                  loading="lazy"
                   className="w-full h-full object-cover"
-                  preload="metadata"
                 >
                   المتصفح لا يدعم تشغيل الفيديو
                 </video>
@@ -54,4 +55,4 @@ const CaseStudySection = () => {
   );
 };
 
-export default CaseStudySection;
+export default memo(CaseStudySection);

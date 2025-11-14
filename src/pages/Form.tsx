@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,7 @@ const Form = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
@@ -54,7 +54,7 @@ const Form = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [navigate, toast]);
 
   return (
     <div className="min-h-screen bg-background py-20 px-4">
@@ -261,4 +261,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default memo(Form);

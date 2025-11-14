@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, memo, useMemo } from "react";
 
 const platforms = [
   { name: "سلة", logo: "/Logos/sallaLogo.png", color: "from-green-500/20 to-emerald-500/20" },
@@ -369,4 +369,4 @@ const PlatformsSection = () => {
   );
 };
 
-export default PlatformsSection;
+export default memo(PlatformsSection);

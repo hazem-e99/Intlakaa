@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { IoTrendingUp } from "react-icons/io5";
 import { FaUsers, FaShoppingCart, FaBullseye } from "react-icons/fa";
+import { memo } from "react";
 
 const metrics = [
   { icon: IoTrendingUp, value: "+250%", label: "نمو في المبيعات" },
@@ -76,4 +77,4 @@ const ResultsSection = () => {
   );
 };
 
-export default ResultsSection;
+export default memo(ResultsSection);

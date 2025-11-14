@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { memo } from "react";
 
 const PromoSection = () => {
   return (
@@ -35,4 +36,4 @@ const PromoSection = () => {
   );
 };
 
-export default PromoSection;
+export default memo(PromoSection);

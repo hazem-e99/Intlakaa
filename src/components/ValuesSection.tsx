@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FaUsers, FaBullseye, FaBookOpen, FaRocket } from "react-icons/fa";
 import { HiSparkles } from "react-icons/hi";
-import { useRef } from "react";
+import { useRef, memo } from "react";
 import { Link } from "react-router-dom";
 
 const timelineSteps = [
@@ -250,4 +250,4 @@ const ValuesSection = () => {
   );
 };
 
-export default ValuesSection;
+export default memo(ValuesSection);

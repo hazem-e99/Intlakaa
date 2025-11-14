@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, memo } from "react";
 import { FaArrowLeft, FaPhoneAlt } from "react-icons/fa";
 import { HiSparkles } from "react-icons/hi";
 import { IoTrendingUp, IoFlash } from "react-icons/io5";
@@ -16,17 +16,32 @@ const HeroSection = () => {
   const y2 = useTransform(scrollY, [0, 300], [0, -50]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
+  // Throttle mouse move events for better performance
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 20,
-        y: (e.clientY / window.innerHeight - 0.5) * 20,
-      });
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setMousePosition({
+          x: (e.clientX / window.innerWidth - 0.5) * 20,
+          y: (e.clientY / window.innerHeight - 0.5) * 20,
+        });
+      }, 50); // Throttle to 50ms
     };
     
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
+
+  // Memoize stats to prevent recreation on every render
+  const stats = useMemo(() => [
+    { value: "+250%", label: "نمو" },
+    { value: "500K+", label: "وصول" },
+    { value: "95%", label: "نجاح" },
+  ], []);
 
   // Floating elements animation
   const floatingAnimation = {
@@ -172,13 +187,9 @@ const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.8 }}
               className="grid grid-cols-3 gap-4"
             >
-              {[
-                { value: "+250%", label: "نمو" },
-                { value: "500K+", label: "وصول" },
-                { value: "95%", label: "نجاح" },
-              ].map((stat, index) => (
+              {stats.map((stat, index) => (
                 <motion.div
-                  key={index}
+                  key={stat.label}
                   whileHover={{ y: -5, scale: 1.05 }}
                   className="bg-card/50 backdrop-blur-sm rounded-2xl p-4 border border-primary/10 shadow-soft"
                 >
@@ -283,6 +294,7 @@ const HeroSection = () => {
               <motion.img
                 src={logo}
                 alt="Digital Marketing"
+                loading="eager"
                 className="relative w-full h-auto rounded-3xl "
                 animate={{ y: [0, -15, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -326,4 +338,4 @@ const HeroSection = () => {
   );
 };
 
-export default HeroSection;
+export default memo(HeroSection);
