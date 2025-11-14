@@ -2,12 +2,11 @@ import { motion } from "framer-motion";
 import { FaPlay } from "react-icons/fa";
 
 const videos = [
-  { id: 1, title: "حملة إعلانية ناجحة" },
-  { id: 2, title: "نمو مبيعات متجر" },
-  { id: 3, title: "استراتيجية محتوى" },
-  { id: 4, title: "تحسين معدل التحويل" },
-  { id: 5, title: "إدارة حملات سناب" },
-  { id: 6, title: "نجاح على تيك توك" },
+  { id: 1, title: "حملة إعلانية ناجحة", src: "/v1.mp4" },
+  { id: 2, title: "نمو مبيعات متجر", src: "/v2.mp4" },
+  { id: 3, title: "استراتيجية محتوى", src: "/v3.mp4" },
+  { id: 4, title: "تحسين معدل التحويل", src: "/v4.mp4" },
+  { id: 5, title: "إدارة حملات سناب", src: "/v5.mp4" },
 ];
 
 const CaseStudySection = () => {
@@ -37,17 +36,16 @@ const CaseStudySection = () => {
               whileHover={{ y: -10 }}
               className="relative group cursor-pointer"
             >
-              <div className="aspect-video bg-gradient-to-br from-primary to-secondary rounded-2xl shadow-soft hover:shadow-medium transition-all overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center">
-                  <motion.div
-                    whileHover={{ scale: 1.2 }}
-                    className="bg-white/20 backdrop-blur-sm rounded-full p-6"
-                  >
-                    <FaPlay className="w-12 h-12 text-white" />
-                  </motion.div>
-                </div>
+              <div className="aspect-video rounded-2xl shadow-soft hover:shadow-medium transition-all overflow-hidden">
+                <video
+                  src={video.src}
+                  controls
+                  className="w-full h-full object-cover"
+                  preload="metadata"
+                >
+                  المتصفح لا يدعم تشغيل الفيديو
+                </video>
               </div>
-              <h3 className="text-xl font-bold mt-4 text-center">{video.title}</h3>
             </motion.div>
           ))}
         </div>
