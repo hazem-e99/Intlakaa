@@ -81,7 +81,27 @@ const PlatformsSection = () => {
       
       {/* شبكة اللوجوهات الإبداعية */}
       <div className="container mx-auto relative z-10">
-        <div className="grid grid-flow-col auto-cols-max gap-6 md:gap-8 overflow-x-auto no-scrollbar pb-4" style={{ WebkitOverflowScrolling: 'touch' }}>
+        {/* شريط أفقي للموبايل والتابلت */}
+        <div className="grid grid-flow-col auto-cols-max gap-4 overflow-x-auto no-scrollbar pb-4 md:hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
+          {platforms.map((platform, index) => (
+            <div
+              key={platform.name}
+              className="relative group"
+            >
+              <div className="relative aspect-square bg-card/50 backdrop-blur-xl rounded-3xl p-2 flex items-center justify-center transition-all duration-300 overflow-hidden min-w-[72px] w-[72px] h-[72px]">
+                <img
+                  src={platform.logo}
+                  alt={platform.name}
+                  loading="lazy"
+                  className="relative w-10 h-10 object-contain transition-all duration-500"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* شبكة أعمدة للديسكتوب */}
+        <div className="hidden md:grid grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
           {platforms.map((platform, index) => (
             <div
               key={platform.name}
@@ -89,7 +109,6 @@ const PlatformsSection = () => {
               onMouseLeave={() => setHoveredIndex(null)}
               className="relative group"
             >
-              {/* خلفية متوهجة عند الهوفر فقط */}
               {hoveredIndex === index && (
                 <div
                   className="absolute -inset-2 rounded-3xl blur-xl opacity-100 transition-opacity duration-500"
@@ -98,24 +117,17 @@ const PlatformsSection = () => {
                   }}
                 />
               )}
-
-              {/* الكارت */}
-              <div className="relative aspect-square bg-card/50 backdrop-blur-xl rounded-3xl p-2 sm:p-6 md:p-12 flex items-center justify-center transition-all duration-300 overflow-hidden min-w-0 w-full">
-                {/* تأثير لمعان عند الهوفر فقط */}
+              <div className="relative aspect-square bg-card/50 backdrop-blur-xl rounded-3xl p-8 flex items-center justify-center transition-all duration-300 overflow-hidden min-w-0 w-full">
                 {hoveredIndex === index && (
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-100" />
                 )}
-
-                {/* اللوجو */}
                 <img
                   src={platform.logo}
                   alt={platform.name}
                   loading="lazy"
-                  className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-full md:h-full object-contain transition-all duration-500"
+                  className="relative w-full h-full object-contain transition-all duration-500"
                   style={hoveredIndex === index ? { transform: 'scale(1.1)', filter: 'brightness(1.15) contrast(1.1)' } : {}}
                 />
-
-                {/* اسم المنصة عند الهوفر فقط */}
                 {hoveredIndex === index && (
                   <div className="absolute bottom-3 left-0 right-0 text-center opacity-100 transition-opacity duration-300">
                     <span className={`text-xs font-bold bg-gradient-to-r ${platform.color} bg-clip-text text-transparent`}>
