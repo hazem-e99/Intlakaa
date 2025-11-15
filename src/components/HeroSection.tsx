@@ -136,7 +136,7 @@ const HeroSection = () => {
               >
                 <HiSparkles className="w-4 h-4 text-primary" />
               </motion.div>
-              <span className="text-sm font-bold tracking-wide">وكالة تسويق سعودية رائدة</span>
+              <span className="text-sm font-bold tracking-wide">وكالة تسويق رائدة</span>
             </motion.div>
 
             {/* Main Heading with Animated Characters */}
