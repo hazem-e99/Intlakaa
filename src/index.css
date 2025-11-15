@@ -1,4 +1,11 @@
-@tailwind base;
+/* إخفاء الـ scrollbar في جميع العناصر التي تحمل كلاس no-scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -135,5 +142,9 @@ All colors MUST be HSL.
   
   .shadow-medium {
     box-shadow: 0 8px 30px rgba(43, 8, 98, 0.15);
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 24px 8px rgba(155, 80, 232, 0.35), 0 2px 8px rgba(43, 8, 98, 0.15);
   }
 }

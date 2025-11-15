@@ -77,15 +77,15 @@ const ServicesSection = () => {
               <AccordionItem
                 key={service.id}
                 value={service.id}
-                className="bg-card rounded-2xl shadow-soft hover:shadow-medium transition-all border-none overflow-hidden"
+                className="bg-gradient-to-r from-primary to-secondary rounded-2xl shadow-soft hover:shadow-medium transition-all border-none overflow-hidden text-white"
               >
                 <AccordionTrigger className="px-8 py-6 hover:no-underline group">
                   <div className="flex items-center gap-4 w-full">
                     <div className="flex-1 flex items-center gap-3 justify-start">
                       <span className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <span className="text-xl font-bold text-primary">{service.number}</span>
+                        <span className="text-xl font-bold text-white">{service.number}</span>
                       </span>
-                      <h3 className="text-xl md:text-2xl font-bold group-hover:text-primary transition-colors text-right">
+                      <h3 className="text-xl md:text-2xl font-bold transition-colors text-right text-white">
                         {service.title}
                       </h3>
                     </div>
@@ -99,9 +99,9 @@ const ServicesSection = () => {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: itemIndex * 0.1 }}
-                        className="flex items-start gap-3 text-lg text-muted-foreground text-right"
+                        className="flex items-start gap-3 text-xl md:text-2xl text-white text-right"
                       >
-                        <span className="flex-shrink-0 w-2 h-2 rounded-full bg-gradient-to-r from-primary to-secondary mt-2"></span>
+                        <span className="flex-shrink-0 w-2 h-2 rounded-full bg-white mt-2"></span>
                         <span>{item}</span>
                       </motion.li>
                     ))}

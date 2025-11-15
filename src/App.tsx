@@ -41,6 +41,13 @@ const App = () => (
           </Routes>
         </Suspense>
       </BrowserRouter>
+        {/* زر ثابت أسفل يسار الصفحة */}
+        <a
+          href="/form"
+          className="fixed bottom-4 left-4 z-50 px-6 py-3 rounded-lg shadow-lg shadow-glow text-white font-bold text-base transition-transform hover:scale-105 gradient-brand"
+        >
+          عبى المنوذج واختصر وقت نموك
+        </a>
     </TooltipProvider>
   </QueryClientProvider>
 );
