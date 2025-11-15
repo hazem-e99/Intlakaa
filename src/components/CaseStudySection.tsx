@@ -42,7 +42,8 @@ const CaseStudySection = () => {
                   controls
                   preload="none"
                   loading="lazy"
-                  className="w-full h-full object-cover"
+                  poster="/path/to/thumbnail.jpg" // يمكنك تغيير المسار لصورة مناسبة
+                  className="w-full h-full"
                 >
                   المتصفح لا يدعم تشغيل الفيديو
                 </video>

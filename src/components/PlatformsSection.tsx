@@ -81,7 +81,7 @@ const PlatformsSection = () => {
       
       {/* شبكة اللوجوهات الإبداعية */}
       <div className="container mx-auto relative z-10">
-        <div className="grid grid-cols-6 gap-6 md:gap-8 overflow-x-auto no-scrollbar pb-4" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <div className="grid grid-flow-col auto-cols-max gap-6 md:gap-8 overflow-x-auto no-scrollbar pb-4" style={{ WebkitOverflowScrolling: 'touch' }}>
           {platforms.map((platform, index) => (
             <div
               key={platform.name}
@@ -100,7 +100,7 @@ const PlatformsSection = () => {
               )}
 
               {/* الكارت */}
-              <div className="relative aspect-square bg-card/50 backdrop-blur-xl rounded-3xl p-8 md:p-12 flex items-center justify-center transition-all duration-300 overflow-hidden min-w-[160px] md:min-w-[200px] lg:min-w-[220px]">
+              <div className="relative aspect-square bg-card/50 backdrop-blur-xl rounded-3xl p-2 sm:p-6 md:p-12 flex items-center justify-center transition-all duration-300 overflow-hidden min-w-0 w-full">
                 {/* تأثير لمعان عند الهوفر فقط */}
                 {hoveredIndex === index && (
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-100" />
@@ -111,7 +111,7 @@ const PlatformsSection = () => {
                   src={platform.logo}
                   alt={platform.name}
                   loading="lazy"
-                  className="relative w-full h-full object-contain p-2 md:p-4 transition-all duration-500"
+                  className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-full md:h-full object-contain transition-all duration-500"
                   style={hoveredIndex === index ? { transform: 'scale(1.1)', filter: 'brightness(1.15) contrast(1.1)' } : {}}
                 />
 
