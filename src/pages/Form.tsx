@@ -13,43 +13,43 @@ const Form = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    const formData = new FormData(e.currentTarget);
-    
-    // إضافة معلومات إضافية للبريد
-    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '9c4b5e2e-3f7a-4d8b-9c1e-5a6b7c8d9e0f';
-    formData.append('access_key', accessKey);
-    formData.append('subject', 'طلب جديد من موقع انطلاقة');
-    formData.append('from_name', 'موقع انطلاقة');
-    
+
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
+      const formData = new FormData(e.currentTarget);
+      const entries = Array.from(formData.entries()) as [string, FormDataEntryValue][];
+
+      const subject = 'طلب جديد من موقع انطلاقة';
+
+      // Build a readable email body from the form fields
+      const bodyLines = entries.map(([key, value]) => {
+        const label = key.replace(/_/g, ' ');
+        return `${label}: ${String(value)}`;
       });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        toast({
-          title: "تم إرسال النموذج بنجاح! ✓",
-          description: "سنتواصل معك قريباً لبدء رحلة النمو معاً",
-        });
-        
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      } else {
-        throw new Error('فشل الإرسال');
-      }
-    } catch (error) {
+      const body = bodyLines.join('\n');
+
+      const mailto = `mailto:Osama@intlakaa.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+      // Open the user's mail client with the prefilled email
+      window.location.href = mailto;
+
       toast({
-        title: "حدث خطأ",
-        description: "يرجى المحاولة مرة أخرى أو الاتصال بنا مباشرة",
-        variant: "destructive",
+        title: "تم فتح برنامج البريد",
+        description: "اكمل الإرسال من خلال برنامج البريد الخاص بك.",
+      });
+
+      // optional: navigate back after a short delay so user sees the toast
+      setTimeout(() => {
+        navigate('/');
+      }, 1500);
+    } catch (err) {
+      console.error('mailto send failed', err);
+      toast({
+        title: 'حدث خطأ',
+        description: 'تعذر فتح برنامج البريد. جرب استخدام متصفح أو جهاز آخر.',
+        variant: 'destructive',
       });
     } finally {
       setIsSubmitting(false);
@@ -82,8 +82,9 @@ const Form = () => {
                 عبّي البيانات وخلنا نبدأ معك خطوة النمو الحقيقي
               </p>
               
-              <form onSubmit={handleSubmit} className="space-y-5" action="https://api.web3forms.com/submit" method="POST">
-                {/* Hidden field for recipient email */}
+              <form onSubmit={handleSubmit} className="space-y-5" action="/api/submit-form" method="POST">
+                {/* Hidden field for recipient email (used by proxy) */}
+                <input type="hidden" name="to" value="Osama@intlakaa.com" />
                 <input type="hidden" name="redirect" value="https://antlaqa.com/thank-you" />
                 
                 {/* صف واحد للاسم والجوال */}
