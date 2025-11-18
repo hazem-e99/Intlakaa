@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
-import { FaPhone, FaFacebook, FaEnvelope, FaInstagram, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import { FaPhone, FaFacebook, FaEnvelope, FaInstagram, FaTwitter, FaWhatsapp, FaLinkedin } from "react-icons/fa";
+import { SiTiktok } from "react-icons/si";
 
 const Footer = () => {
   const socialLinks = [
-    { icon: FaFacebook, href: "https://www.facebook.com/share/1Vv4xzKZyu/", label: "Facebook" },
+    { icon: FaLinkedin, href: "https://www.linkedin.com/company/intlakaa/", label: "LinkedIn" },
+    { icon: FaFacebook, href: "https://www.facebook.com/share/1Vv4xzKZyu", label: "Facebook" },
+    { icon: SiTiktok, href: "https://www.tiktok.com/@qualified.leads.ksa?_r=1&_d=dme10l879mi4md&sec_uid=MS4wLjABAAAAzs5R5_crSo6dtkoR6t4gYO1Eq_G9RZf5OaTRolxTIVMmI19b57D2HmxGDVsXngFs&share_author_id=7471966503442383878&sharer_language=ar&source=h5_m&u_code=eim0hmbda91cd4&timestamp=1763383530&user_id=7471966503442383878&sec_user_id=MS4wLjABAAAAzs5R5_crSo6dtkoR6t4gYO1Eq_G9RZf5OaTRolxTIVMmI19b57D2HmxGDVsXngFs&item_author_type=1&utm_source=copy&utm_campaign=client_share&utm_medium=android&share_iid=7535015404634507029&share_link_id=d5bbdc42-fe58-4107-9e6b-dedfc3812db6&share_app_id=1233&ugbiz_name=ACCOUNT&ug_btm=b8727%2Cb7360&social_share_type=5&enable_checksum=1", label: "TikTok" },
     { icon: FaInstagram, href: "#", label: "Instagram" },
     { icon: FaTwitter, href: "#", label: "Twitter" },
   ];
