@@ -36,14 +36,12 @@ const CaseStudySection = () => {
               whileHover={{ y: -10 }}
               className="relative group cursor-pointer"
             >
-              <div className="aspect-video rounded-2xl shadow-soft hover:shadow-medium transition-all overflow-hidden">
+              <div className="aspect-video rounded-2xl shadow-soft hover:shadow-medium transition-all overflow-hidden bg-black">
                 <video
                   src={video.src}
                   controls
-                  preload="none"
-                  loading="lazy"
-                  poster="/path/to/thumbnail.jpg" // يمكنك تغيير المسار لصورة مناسبة
-                  className="w-full h-full"
+                  preload="metadata"
+                  className="w-full h-full object-cover"
                 >
                   المتصفح لا يدعم تشغيل الفيديو
                 </video>
