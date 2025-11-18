@@ -1,24 +1,12 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
-// Generate video array from 1 to 13
-const clientVideos = Array.from({ length: 13 }, (_, i) => ({
-  id: i + 1,
-  src: `/clients/${i + 1}.mp4`,
+// List of available video IDs based on actual files
+const clientVideos = [1, 2, 3, 4, 6, 13].map((id) => ({
+  id,
+  src: `/clients/${id}.mp4`,
 }));
 
-const VIDEOS_PER_PAGE = 4;
-
 const ClientsSection = () => {
-  const [visibleCount, setVisibleCount] = useState(VIDEOS_PER_PAGE);
-  const visibleVideos = clientVideos.slice(0, visibleCount);
-  const hasMore = visibleCount < clientVideos.length;
-
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => Math.min(prev + VIDEOS_PER_PAGE, clientVideos.length));
-  };
-
   return (
     <section className="py-20 px-4 bg-background">
       <div className="container mx-auto">
@@ -37,8 +25,8 @@ const ClientsSection = () => {
           </p>
         </motion.div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-          {visibleVideos.map((video, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {clientVideos.map((video, index) => (
             <motion.div
               key={video.id}
               initial={{ opacity: 0, y: 30 }}
@@ -61,24 +49,6 @@ const ClientsSection = () => {
             </motion.div>
           ))}
         </div>
-
-        {hasMore && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex justify-center"
-          >
-            <Button
-              onClick={handleLoadMore}
-              size="lg"
-              className="px-8 py-6 text-lg"
-              variant="outline"
-            >
-              عرض المزيد
-            </Button>
-          </motion.div>
-        )}
       </div>
     </section>
   );
