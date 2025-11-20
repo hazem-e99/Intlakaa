@@ -53,7 +53,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center pt-20 pb-6 px-4 overflow-hidden">
+    <section className="relative min-h-screen flex items-center pt-28 md:pt-20 pb-6 px-4 overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Gradient Orbs */}
@@ -303,7 +303,7 @@ const HeroSection = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 1.2 }}
                 whileHover={{ scale: 1.1, rotate: 5 }}
-                className="absolute -bottom-6 -right-6 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-xl border border-primary/20"
+                className="hidden md:block absolute -bottom-6 -right-6 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-xl border border-primary/20"
               >
 
               </motion.div>

@@ -14,7 +14,7 @@ const PlatformsSection = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section className="relative py-32 px-4 bg-background overflow-hidden">
+    <section className="relative py-8 md:py-32 px-4 bg-background overflow-hidden">
       {/* خلفية متحركة */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
