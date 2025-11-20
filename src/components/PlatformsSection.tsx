@@ -69,7 +69,7 @@ const PlatformsSection = () => {
             </div>
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 bg-gradient-to-r from-primary via-secondary to-primary py-4 bg-clip-text text-transparent">
             المنصات التي نُبدع فيها
           </h2>
 
