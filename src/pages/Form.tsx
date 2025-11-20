@@ -121,23 +121,21 @@ const Form = () => {
                 {/* صف واحد للبريد والمسمى الوظيفي */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="user_email">البريد الإلكتروني</Label>
+                    <Label htmlFor="user_email">البريد الإلكتروني (اختياري)</Label>
                     <Input
                       id="user_email"
                       name="user_email"
                       type="email"
-                      required
                       placeholder="example@domain.com"
                       className="form-input text-right"
                     />
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="job_title">المسمى الوظيفي</Label>
+                    <Label htmlFor="job_title">المسمى الوظيفي (اختياري)</Label>
                     <Input
                       id="job_title"
                       name="job_title"
-                      required
                       placeholder="مثال: مدير تسويق، صاحب متجر"
                       className="form-input text-right"
                     />
@@ -147,11 +145,12 @@ const Form = () => {
                 {/* صف واحد لرابط المتجر والميزانية */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="store_url">رابط المتجر (اختياري)</Label>
+                    <Label htmlFor="store_url">رابط المتجر</Label>
                     <Input
                       id="store_url"
                       name="store_url"
                       type="url"
+                      required
                       placeholder="https://example.com"
                       className="form-input text-right"
                       dir="ltr"
@@ -159,8 +158,8 @@ const Form = () => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="monthly_budget">الميزانية التسويقية الشهرية</Label>
-                    <Select name="monthly_budget" required>
+                    <Label htmlFor="monthly_budget">الميزانية التسويقية الشهرية (اختياري)</Label>
+                    <Select name="monthly_budget">
                       <SelectTrigger>
                         <SelectValue placeholder="اختر الميزانية" />
                       </SelectTrigger>
@@ -192,8 +191,8 @@ const Form = () => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="store_age">عمر المتجر</Label>
-                    <Select name="store_age" required>
+                    <Label htmlFor="store_age">عمر المتجر (اختياري)</Label>
+                    <Select name="store_age">
                       <SelectTrigger>
                         <SelectValue placeholder="اختر عمر المتجر" />
                       </SelectTrigger>
@@ -210,8 +209,8 @@ const Form = () => {
                 {/* صف واحد للفريق الحالي وكيف عرفنا */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="current_team">تشتغل مع وكالة أو فريق داخلي</Label>
-                    <Select name="current_team" required>
+                    <Label htmlFor="current_team">تشتغل مع وكالة أو فريق داخلي (اختياري)</Label>
+                    <Select name="current_team">
                       <SelectTrigger>
                         <SelectValue placeholder="اختر الوضع الحالي" />
                       </SelectTrigger>
@@ -225,8 +224,8 @@ const Form = () => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="how_found">كيف عرفت انطلاقة؟</Label>
-                    <Select name="how_found" required>
+                    <Label htmlFor="how_found">كيف عرفت انطلاقة؟ (اختياري)</Label>
+                    <Select name="how_found">
                       <SelectTrigger>
                         <SelectValue placeholder="كيف وصلت إلينا؟" />
                       </SelectTrigger>
