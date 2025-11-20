@@ -147,4 +147,44 @@ All colors MUST be HSL.
   .shadow-glow {
     box-shadow: 0 0 24px 8px rgba(155, 80, 232, 0.35), 0 2px 8px rgba(43, 8, 98, 0.15);
   }
+
+  /* Video card resets: ensure no pseudo-element overlays or filters hide the video frame */
+  .video-card {
+    position: relative;
+    background: #000;
+  }
+
+  .video-card video {
+    /* Ensure videos don't float above fixed UI like the navbar */
+    position: static !important;
+    z-index: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    background: #000 !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
+    opacity: 1 !important;
+  }
+
+  /* Hide any pseudo-element overlays inside video cards (defensive) */
+  .video-card::before,
+  .video-card::after,
+  .video-card *::before,
+  .video-card *::after {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Make sure non-video children sit behind the video */
+  .video-card > *:not(video) {
+    z-index: 10;
+  }
+
+  /* Form inputs: make placeholder text aligned to the right (RTL) */
+  .form-input::placeholder {
+    text-align: right !important;
+  }
 }

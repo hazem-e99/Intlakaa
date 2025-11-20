@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import ScrollToTop from "./lib/ScrollToTop";
 
 // Lazy load pages for code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -32,6 +33,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <ScrollToTop />
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/" element={<Index />} />
@@ -41,13 +43,7 @@ const App = () => (
           </Routes>
         </Suspense>
       </BrowserRouter>
-        {/* زر ثابت أسفل يسار الصفحة */}
-        <a
-          href="/form"
-          className="fixed bottom-4 left-4 z-50 px-6 py-3 rounded-lg shadow-lg shadow-glow text-white font-bold text-base transition-transform hover:scale-105 gradient-brand"
-        >
-          عبى المنوذج واختصر وقت نموك
-        </a>
+        {/* CTA anchor removed as requested */}
     </TooltipProvider>
   </QueryClientProvider>
 );

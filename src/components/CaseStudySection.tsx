@@ -25,7 +25,7 @@ const CaseStudySection = () => {
           </h2>
         </motion.div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {videos.map((video, index) => (
             <motion.div
               key={video.id}
@@ -36,14 +36,12 @@ const CaseStudySection = () => {
               whileHover={{ y: -10 }}
               className="relative group cursor-pointer"
             >
-              <div className="aspect-video rounded-2xl shadow-soft hover:shadow-medium transition-all overflow-hidden">
+              <div className="video-card aspect-video rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden bg-black">
                 <video
                   src={video.src}
                   controls
-                  preload="none"
-                  loading="lazy"
-                  poster="/path/to/thumbnail.jpg" // يمكنك تغيير المسار لصورة مناسبة
-                  className="w-full h-full"
+                  preload="metadata"
+                  className="w-full h-full object-cover bg-black block relative z-10"
                 >
                   المتصفح لا يدعم تشغيل الفيديو
                 </video>

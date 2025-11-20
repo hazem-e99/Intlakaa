@@ -36,12 +36,12 @@ const ClientsSection = () => {
               whileHover={{ y: -8, scale: 1.02 }}
               className="relative group cursor-pointer"
             >
-              <div className="aspect-video rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden bg-black">
+              <div className="video-card aspect-video rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden bg-black">
                 <video
                   src={video.src}
                   controls
                   preload="metadata"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover bg-black block relative z-10"
                 >
                   المتصفح لا يدعم تشغيل الفيديو
                 </video>

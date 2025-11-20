@@ -58,7 +58,7 @@ const Form = () => {
 
   return (
     <div className="min-h-screen bg-background py-20 px-4">
-      <div className="container mx-auto max-w-3xl">
+      <div className="w-full md:container md:mx-auto md:max-w-3xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -96,7 +96,7 @@ const Form = () => {
                       name="name"
                       required
                       placeholder="أدخل اسمك الكامل"
-                      className="text-right"
+                      className="form-input text-right"
                     />
                   </div>
                   
@@ -109,7 +109,7 @@ const Form = () => {
                         type="tel"
                         required
                         placeholder="5XXXXXXXX"
-                        className="text-right flex-1"
+                        className="form-input text-right flex-1"
                       />
                       <div className="bg-muted px-4 rounded-lg flex items-center">
                         <span className="text-muted-foreground">+966</span>
@@ -128,7 +128,7 @@ const Form = () => {
                       type="email"
                       required
                       placeholder="example@domain.com"
-                      className="text-right"
+                      className="form-input text-right"
                     />
                   </div>
                   
@@ -139,7 +139,7 @@ const Form = () => {
                       name="job_title"
                       required
                       placeholder="مثال: مدير تسويق، صاحب متجر"
-                      className="text-right"
+                      className="form-input text-right"
                     />
                   </div>
                 </div>
@@ -153,7 +153,7 @@ const Form = () => {
                       name="store_url"
                       type="url"
                       placeholder="https://example.com"
-                      className="text-left"
+                      className="form-input text-right"
                       dir="ltr"
                     />
                   </div>
