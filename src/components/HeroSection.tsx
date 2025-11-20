@@ -10,11 +10,10 @@ import logo from "@/assets/logo.png"
 const HeroSection = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { scrollY } = useScroll();
-  
+
   // Parallax effect
-  const y1 = useTransform(scrollY, [0, 300], [0, 50]);
-  const y2 = useTransform(scrollY, [0, 300], [0, -50]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+
+
 
   // Throttle mouse move events for better performance
   useEffect(() => {
@@ -28,7 +27,7 @@ const HeroSection = () => {
         });
       }, 50); // Throttle to 50ms
     };
-    
+
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
@@ -54,7 +53,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center pt-20 pb-16 px-4 overflow-hidden">
+    <section className="relative min-h-screen flex items-center pt-20 pb-6 px-4 overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Gradient Orbs */}
@@ -82,7 +81,7 @@ const HeroSection = () => {
             ease: "easeInOut",
           }}
         />
-        
+
         {/* Floating Icons */}
         <motion.div
           className="absolute top-1/4 right-1/4 text-primary/20"
@@ -113,7 +112,7 @@ const HeroSection = () => {
         </motion.div>
       </div>
 
-      <motion.div style={{ opacity }} className="container mx-auto relative z-10">
+      <motion.div className="container mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Text Content - Right Side */}
           <motion.div
@@ -121,7 +120,6 @@ const HeroSection = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-right space-y-8 order-2 lg:order-1"
-            style={{ y: y1 }}
           >
             {/* Badge */}
             <motion.div
@@ -149,7 +147,7 @@ const HeroSection = () => {
               >
                 بنساعدك تخلي
               </motion.span>
-              
+
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -170,7 +168,7 @@ const HeroSection = () => {
                 وحملاتك أذكى
               </motion.span>
             </h1>
-            
+
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -179,7 +177,7 @@ const HeroSection = () => {
             >
               بخطط تسويقية قائمة على النتائج، واستراتيجيات عالمية مصممة خصيصًا لعلامتك التجارية، نوصلك لأفضل عائد بأقل مجهود..
             </motion.p>
-            
+
             {/* Stats Cards */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -198,7 +196,7 @@ const HeroSection = () => {
                 </motion.div>
               ))}
             </motion.div>
-            
+
             {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -231,15 +229,14 @@ const HeroSection = () => {
               </Link>
             </motion.div>
           </motion.div>
-          
+
           {/* Image - Left Side with Enhanced Effects */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             className="order-1 lg:order-2 relative"
-            style={{ 
-              y: y2,
+            style={{
               x: mousePosition.x * 0.5,
             }}
           >
@@ -268,7 +265,7 @@ const HeroSection = () => {
                 ease: "easeInOut",
               }}
             />
-            
+
             {/* Image Container with 3D Effect */}
             <motion.div
               className="relative"
@@ -290,7 +287,7 @@ const HeroSection = () => {
                   ease: "easeInOut",
                 }}
               />
-              
+
               <motion.img
                 src={logo}
                 alt="Digital Marketing"
@@ -299,7 +296,7 @@ const HeroSection = () => {
                 animate={{ y: [0, -15, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               />
-              
+
               {/* Floating Badge */}
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}

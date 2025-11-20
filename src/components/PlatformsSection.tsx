@@ -72,13 +72,13 @@ const PlatformsSection = () => {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
             المنصات التي نُبدع فيها
           </h2>
-          
+
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             نحول حضورك الرقمي لتجربة استثنائية عبر أقوى المنصات العالمية
           </p>
         </motion.div>
       </div>
-      
+
       {/* شبكة اللوجوهات الإبداعية */}
       <div className="container mx-auto relative z-10">
         {/* شريط أفقي للموبايل والتابلت */}

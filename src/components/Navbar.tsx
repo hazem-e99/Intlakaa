@@ -1,8 +1,20 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import logo from "@/assets/logo.png";
 
 const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
@@ -13,9 +25,14 @@ const Navbar = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="انطلاقة" className="h-12 w-auto" />
+            <img
+              src={logo}
+              alt="انطلاقة"
+              className={`h-12 w-auto transition-all duration-300 ${!isScrolled ? 'invisible md:visible opacity-0 md:opacity-100' : 'visible opacity-100'
+                }`}
+            />
           </Link>
-          
+
           <div className="flex items-center gap-4">
             <a
               href="tel:+966532759488"
@@ -23,7 +40,7 @@ const Navbar = () => {
             >
               <span>966532759488+</span>
             </a>
-            
+
             <Link to="/form">
               <motion.button
                 whileHover={{ scale: 1.05 }}
