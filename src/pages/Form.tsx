@@ -154,21 +154,18 @@ const Form = () => {
                 
                 {/* الميزانية أُزِيلت — يبقى حقل رابط المتجر الموجود أعلاه مرة واحدة */}
                 
-                {/* صف واحد للمبيعات */}
+                {/* صف واحد للمبيعات (حقل نصي حر) */}
                 <div className="grid md:grid-cols-1 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="monthly_sales">المبيعات الشهرية</Label>
-                    <Select name="monthly_sales" required>
-                      <SelectTrigger>
-                        <SelectValue placeholder="اختر المبيعات" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="0-50k">أقل من 50,000 ريال</SelectItem>
-                        <SelectItem value="50k-100k">50,000 - 100,000 ريال</SelectItem>
-                        <SelectItem value="100k-500k">100,000 - 500,000 ريال</SelectItem>
-                        <SelectItem value="500k+">أكثر من 500,000 ريال</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Input
+                      id="monthly_sales"
+                      name="monthly_sales"
+                      type="text"
+                      required
+                      placeholder="مثال: 50,000 ريال أو وصف المبيعات"
+                      className="form-input text-right"
+                    />
                   </div>
                 </div>
                 
