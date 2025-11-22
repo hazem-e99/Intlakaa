@@ -19,7 +19,21 @@ const Form = () => {
 
     try {
       const formData = new FormData(e.currentTarget);
-      const entries = Array.from(formData.entries()) as [string, FormDataEntryValue][];
+      let entries = Array.from(formData.entries()) as [string, FormDataEntryValue][];
+
+      // Merge phone_code and phone into a single phone value before sending
+      const hasPhone = entries.some(([k]) => k === 'phone');
+      if (hasPhone) {
+        const phoneCode = entries.find(([k]) => k === 'phone_code')?.[1] ?? '';
+        const phoneNum = entries.find(([k]) => k === 'phone')?.[1] ?? '';
+        const codeStr = String(phoneCode).trim();
+        const numStr = String(phoneNum).trim();
+        const fullPhone = codeStr ? `${codeStr}${numStr}` : numStr;
+
+        // filter out old phone fields and replace with merged phone
+        entries = entries.filter(([k]) => k !== 'phone_code' && k !== 'phone');
+        entries.push(['phone', fullPhone]);
+      }
 
       const subject = 'طلب جديد من موقع انطلاقة';
 
@@ -104,6 +118,14 @@ const Form = () => {
                     <Label htmlFor="phone">رقم جوالك</Label>
                     <div className="flex gap-2">
                       <Input
+                        id="phone_code"
+                        name="phone_code"
+                        type="tel"
+                        placeholder="+966"
+                        className="form-input text-left w-28"
+                        dir="ltr"
+                      />
+                      <Input
                         id="phone"
                         name="phone"
                         type="tel"
@@ -111,70 +133,29 @@ const Form = () => {
                         placeholder="5XXXXXXXX"
                         className="form-input text-right flex-1"
                       />
-                      <div className="bg-muted px-4 rounded-lg flex items-center">
-                        <span className="text-muted-foreground">+966</span>
-                      </div>
                     </div>
                   </div>
                 </div>
                 
-                {/* صف واحد للبريد والمسمى الوظيفي */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="user_email">البريد الإلكتروني (اختياري)</Label>
-                    <Input
-                      id="user_email"
-                      name="user_email"
-                      type="email"
-                      placeholder="example@domain.com"
-                      className="form-input text-right"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="job_title">المسمى الوظيفي (اختياري)</Label>
-                    <Input
-                      id="job_title"
-                      name="job_title"
-                      placeholder="مثال: مدير تسويق، صاحب متجر"
-                      className="form-input text-right"
-                    />
-                  </div>
-                </div>
-                
-                {/* صف واحد لرابط المتجر والميزانية */}
-                <div className="grid md:grid-cols-2 gap-4">
+                {/* صف واحد لرابط المتجر */}
+                <div className="grid md:grid-cols-1 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="store_url">رابط المتجر</Label>
                     <Input
                       id="store_url"
                       name="store_url"
-                      type="url"
+                      type="text"
                       required
-                      placeholder="https://example.com"
+                      placeholder="مثال: اسم المتجر أو رابط الموقع"
                       className="form-input text-right"
-                      dir="ltr"
                     />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="monthly_budget">الميزانية التسويقية الشهرية (اختياري)</Label>
-                    <Select name="monthly_budget">
-                      <SelectTrigger>
-                        <SelectValue placeholder="اختر الميزانية" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="5k-10k">5,000 - 10,000 ريال</SelectItem>
-                        <SelectItem value="10k-25k">10,000 - 25,000 ريال</SelectItem>
-                        <SelectItem value="25k-50k">25,000 - 50,000 ريال</SelectItem>
-                        <SelectItem value="50k+">أكثر من 50,000 ريال</SelectItem>
-                      </SelectContent>
-                    </Select>
                   </div>
                 </div>
                 
-                {/* صف واحد للمبيعات وكيف عرفنا */}
-                <div className="grid md:grid-cols-2 gap-4">
+                {/* الميزانية أُزِيلت — يبقى حقل رابط المتجر الموجود أعلاه مرة واحدة */}
+                
+                {/* صف واحد للمبيعات */}
+                <div className="grid md:grid-cols-1 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="monthly_sales">المبيعات الشهرية</Label>
                     <Select name="monthly_sales" required>
@@ -189,55 +170,9 @@ const Form = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="store_age">عمر المتجر (اختياري)</Label>
-                    <Select name="store_age">
-                      <SelectTrigger>
-                        <SelectValue placeholder="اختر عمر المتجر" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="new">جديد (أقل من 6 أشهر)</SelectItem>
-                        <SelectItem value="6-12">من 6 إلى 12 شهر</SelectItem>
-                        <SelectItem value="1-2">من سنة إلى سنتين</SelectItem>
-                        <SelectItem value="2+">أكثر من سنتين</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
                 </div>
                 
-                {/* صف واحد للفريق الحالي وكيف عرفنا */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="current_team">تشتغل مع وكالة أو فريق داخلي (اختياري)</Label>
-                    <Select name="current_team">
-                      <SelectTrigger>
-                        <SelectValue placeholder="اختر الوضع الحالي" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="agency">نعم، مع وكالة</SelectItem>
-                        <SelectItem value="internal">نعم، فريق داخلي</SelectItem>
-                        <SelectItem value="freelancer">مع مستقلين</SelectItem>
-                        <SelectItem value="none">لا، بدون فريق تسويق</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="how_found">كيف عرفت انطلاقة؟ (اختياري)</Label>
-                    <Select name="how_found">
-                      <SelectTrigger>
-                        <SelectValue placeholder="كيف وصلت إلينا؟" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="social">وسائل التواصل</SelectItem>
-                        <SelectItem value="referral">ترشيح</SelectItem>
-                        <SelectItem value="search">بحث جوجل</SelectItem>
-                        <SelectItem value="other">أخرى</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
+                {/* removed optional team/how-found fields as requested */}
                 
                 <motion.div
                   whileHover={{ scale: 1.02 }}
