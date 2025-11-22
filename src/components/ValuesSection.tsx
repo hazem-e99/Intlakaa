@@ -3,6 +3,7 @@ import { FaUsers, FaBullseye, FaBookOpen, FaRocket } from "react-icons/fa";
 import { HiSparkles } from "react-icons/hi";
 import { useRef, memo } from "react";
 import { Link } from "react-router-dom";
+import prefetchForm from "@/lib/prefetchForm";
 
 const timelineSteps = [
   {
@@ -212,7 +213,7 @@ const ValuesSection = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-20 flex justify-center"
           >
-            <Link to="/form">
+            <Link to="/form" onMouseEnter={prefetchForm} onFocus={prefetchForm} onTouchStart={prefetchForm}>
               <motion.div
                 animate={{
                   y: [0, -10, 0],

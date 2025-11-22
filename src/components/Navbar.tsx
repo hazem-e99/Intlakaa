@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import prefetchForm from "@/lib/prefetchForm";
 import { useState, useEffect } from "react";
 import logo from "@/assets/logo.png";
 
@@ -41,7 +42,7 @@ const Navbar = () => {
               <span>966532759488+</span>
             </a>
 
-            <Link to="/form">
+            <Link to="/form" onMouseEnter={prefetchForm} onFocus={prefetchForm} onTouchStart={prefetchForm}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

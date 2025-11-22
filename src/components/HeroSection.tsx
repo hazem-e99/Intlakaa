@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
+import prefetchForm from "@/lib/prefetchForm";
 import { useState, useEffect, useMemo, memo } from "react";
 import { FaArrowLeft, FaPhoneAlt } from "react-icons/fa";
 import { HiSparkles } from "react-icons/hi";
@@ -204,7 +205,7 @@ const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.9 }}
               className="flex gap-4 justify-start items-center"
             >
-              <Link to="/form">
+              <Link to="/form" onMouseEnter={prefetchForm} onFocus={prefetchForm} onTouchStart={prefetchForm}>
                 <motion.button
                   whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.2)" }}
                   whileTap={{ scale: 0.95 }}

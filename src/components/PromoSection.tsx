@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import prefetchForm from "@/lib/prefetchForm";
 import { memo } from "react";
 
 const PromoSection = () => {
@@ -21,7 +22,7 @@ const PromoSection = () => {
             خطوة واحدة تفصلك عن النمو الحقيقي. شاركنا بياناتك وخل فريقنا يبدأ معك الرحلة
           </p>
           
-          <Link to="/form">
+          <Link to="/form" onMouseEnter={prefetchForm} onFocus={prefetchForm} onTouchStart={prefetchForm}>
             <motion.button
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
