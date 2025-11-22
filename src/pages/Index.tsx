@@ -2,6 +2,8 @@ import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
+import { useEffect } from "react";
+import prefetchForm from "@/lib/prefetchForm";
 
 // Lazy load non-critical sections
 const PlatformsSection = lazy(() => import("@/components/PlatformsSection"));
@@ -23,6 +25,16 @@ const SectionSkeleton = () => (
 );
 
 const Index = () => {
+  useEffect(() => {
+    // Defer prefetch until after initial paint to avoid blocking
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(() => prefetchForm());
+    } else {
+      // fallback after short delay
+      const id = setTimeout(() => prefetchForm(), 1500);
+      return () => clearTimeout(id);
+    }
+  }, []);
   return (
     <div className="min-h-screen">
       <Navbar />
