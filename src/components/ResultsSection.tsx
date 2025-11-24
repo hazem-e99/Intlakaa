@@ -4,10 +4,10 @@ import { FaUsers, FaShoppingCart, FaBullseye } from "react-icons/fa";
 import { memo } from "react";
 
 const metrics = [
-  { icon: IoTrendingUp, value: "+250%", label: "نمو في المبيعات" },
-  { icon: FaUsers, value: "500K+", label: "وصول شهري" },
-  { icon: FaShoppingCart, value: "15M+", label: "ريال مبيعات" },
-  { icon: FaBullseye, value: "95%", label: "معدل نجاح الحملات" },
+  { icon: IoTrendingUp, value: "+250%", label: "نمو بالمبيعات يوصل لـ 250%" },
+  { icon: FaUsers, value: "500K+", label: "وصول شهري يوصل لـ 500K" },
+  { icon: FaShoppingCart, value: "15M+", label: "مبيعات تتجاوز 15 M ريال" },
+  { icon: FaBullseye, value: "95%", label: "معدل نجاح الحملات بنسبة 95%" },
 ];
 
 const ResultsSection = () => {

@@ -38,9 +38,9 @@ const HeroSection = () => {
 
   // Memoize stats to prevent recreation on every render
   const stats = useMemo(() => [
-    { value: "+250%", label: "نمو في المبيعات" },
-    { value: "500K+", label: "وصول شهري" },
-    { value: "95%", label: "معدل نجاح الحملات" },
+    { value: "+250%", label: "نمو بالمبيعات يوصل لـ 250%" },
+    { value: "500K+", label: "وصول شهري يوصل لـ 500K" },
+    { value: "95%", label: "معدل نجاح الحملات بنسبة 95%" },
   ], []);
 
   // Floating elements animation
