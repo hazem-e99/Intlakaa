@@ -1,19 +1,11 @@
 import { Link } from "react-router-dom";
 import prefetchForm from "@/lib/prefetchForm";
-import { useMemo, memo } from "react";
+import { memo } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import logo from "@/assets/logo.png";
 
 const HeroSection = () => {
-  // Memoize stats to prevent recreation on every render
-  const stats = useMemo(
-    () => [
-      { value: "+250%", label: "نمو بالمبيعات يوصل لـ 250%" },
-      { value: "500K+", label: "وصول شهري يوصل لـ 500K" },
-      { value: "95%", label: "معدل نجاح الحملات بنسبة 95%" },
-    ],
-    []
-  );
+  // Stats removed — simplified hero layout
 
   return (
     <section className="relative min-h-screen flex items-center pt-28 md:pt-20 pb-6 px-4">
@@ -41,18 +33,8 @@ const HeroSection = () => {
               بخطط تسويقية قائمة على النتائج، واستراتيجيات عالمية مصممة خصيصًا لعلامتك التجارية، نوصلك لأفضل عائد بأقل مجهود..
             </p>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-3 gap-4">
-              {stats.map((stat) => (
-                <div key={stat.label} className="bg-card/50 backdrop-blur-sm rounded-2xl p-4 border border-primary/10 shadow-soft">
-                  <div className="text-2xl md:text-3xl font-black text-gradient tracking-tight">{stat.value}</div>
-                  <div className="text-sm md:text-base text-muted-foreground font-semibold mt-1">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex gap-4 justify-start items-center">
+            {/* CTA Buttons (moved up after removing stats) */}
+            <div className="flex gap-4 justify-start items-center mt-2">
               <Link to="/form" onMouseEnter={prefetchForm} onFocus={prefetchForm} onTouchStart={prefetchForm}>
                 <button className="group relative gradient-brand text-white px-10 py-4 rounded-full text-base md:text-lg font-black tracking-wide shadow-medium hover:shadow-lg transition-all overflow-hidden">
                   <span className="absolute inset-0 bg-white/20" />
