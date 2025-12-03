@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowRight } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 const Form = () => {
   const navigate = useNavigate();
@@ -20,31 +21,44 @@ const Form = () => {
       const formData = new FormData(e.currentTarget);
       const entries = Object.fromEntries(formData.entries());
 
+      // Payload for Supabase
       const payload = {
-        access_key: "3b3c60f6-dd04-4b27-a7ed-8de9cabe77de",
         name: entries.name,
         phone: entries.phone,
         store_url: entries.store_url,
         monthly_sales: entries.monthly_sales,
       };
 
-      const res = await fetch("https://api.web3forms.com/submit", {
+      // 1️⃣ — Insert into Supabase
+      const { data, error } = await supabase
+        .from("requests")
+        .insert([payload]);
+
+      if (error) throw error;
+
+      // 2️⃣ — Send email using Web3Forms
+      const web3Payload = {
+        access_key: "d613c536-7d3f-4478-9257-d8cb584ab88b",
+        name: entries.name,
+        phone: entries.phone,
+        store_url: entries.store_url,
+        monthly_sales: entries.monthly_sales,
+      };
+
+      await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(web3Payload),
       });
 
-      if (res.ok) {
-        toast({
-          title: "تم الإرسال بنجاح",
-          description: "سيتم إعادة توجيهك الآن...",
-        });
-        setTimeout(() => {
-          navigate("/thank-you");
-        }, 800);
-      } else {
-        throw new Error("فشل الإرسال");
-      }
+      // Success
+      toast({
+        title: "تم الإرسال بنجاح",
+        description: "سيتم إعادة توجيهك الآن...",
+      });
+
+      setTimeout(() => navigate("/thank-you"), 800);
+
     } catch (err) {
       console.error(err);
       toast({
@@ -56,6 +70,7 @@ const Form = () => {
       setIsSubmitting(false);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-background py-20 px-4">

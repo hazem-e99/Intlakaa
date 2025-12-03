@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ScrollToTop from "./lib/ScrollToTop";
 
@@ -11,12 +11,23 @@ const Index = lazy(() => import("./pages/Index"));
 const Form = lazy(() => import("./pages/Form"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Login = lazy(() => import("./pages/Login"));
+
+// Admin pages
+const AdminLayout = lazy(() => import("./layout/AdminLayout").then(m => ({ default: m.AdminLayout })));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Requests = lazy(() => import("./pages/Requests"));
+const Settings = lazy(() => import("./pages/Settings"));
+const ManageAdmins = lazy(() => import("./pages/ManageAdmins"));
+
+// Protected Route
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 60 * 1000, // 1 minute
-      cacheTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 5 * 60 * 1000, // 5 minutes
     },
   },
 });
@@ -40,12 +51,28 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/form" element={<Form />} />
             <Route path="/thank-you" element={<ThankYou />} />
+
+            {/* Admin Login Route */}
+            <Route path="/admin/login" element={<Login />} />
+
+            {/* Protected Admin Routes */}
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<Dashboard />} />
+              <Route path="requests" element={<Requests />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="manage-admins" element={<ManageAdmins />} />
+            </Route>
+
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
-        {/* CTA anchor removed as requested */}
+      {/* CTA anchor removed as requested */}
     </TooltipProvider>
   </QueryClientProvider>
 );
