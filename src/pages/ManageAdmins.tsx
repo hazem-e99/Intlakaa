@@ -94,7 +94,7 @@ export default function ManageAdmins() {
                 },
                 body: JSON.stringify({
                     email: inviteEmail,
-                    redirectTo: `${import.meta.env.VITE_SITE_URL}/admin/login`,
+                    redirectTo: `${import.meta.env.VITE_SITE_URL}/admin/accept-invite`,
                 }),
             });
 

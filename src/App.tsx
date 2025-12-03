@@ -12,6 +12,7 @@ const Form = lazy(() => import("./pages/Form"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Login = lazy(() => import("./pages/Login"));
+const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
 
 // Admin pages
 const AdminLayout = lazy(() => import("./layout/AdminLayout").then(m => ({ default: m.AdminLayout })));
@@ -54,6 +55,9 @@ const App = () => (
 
             {/* Admin Login Route */}
             <Route path="/admin/login" element={<Login />} />
+
+            {/* Admin Accept Invite Route */}
+            <Route path="/admin/accept-invite" element={<AcceptInvite />} />
 
             {/* Protected Admin Routes */}
             <Route path="/admin" element={
