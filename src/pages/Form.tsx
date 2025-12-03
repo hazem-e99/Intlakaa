@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
-import { useState, memo, useCallback } from "react";
+import { useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowRight } from "lucide-react";
 
@@ -13,62 +12,50 @@ const Form = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
       const formData = new FormData(e.currentTarget);
-      let entries = Array.from(formData.entries()) as [string, FormDataEntryValue][];
+      const entries = Object.fromEntries(formData.entries());
 
-      // Merge phone_code and phone into a single phone value before sending
-      const hasPhone = entries.some(([k]) => k === 'phone');
-      if (hasPhone) {
-        const phoneCode = entries.find(([k]) => k === 'phone_code')?.[1] ?? '';
-        const phoneNum = entries.find(([k]) => k === 'phone')?.[1] ?? '';
-        const codeStr = String(phoneCode).trim();
-        const numStr = String(phoneNum).trim();
-        const fullPhone = codeStr ? `${codeStr}${numStr}` : numStr;
+      const payload = {
+        access_key: "3b3c60f6-dd04-4b27-a7ed-8de9cabe77de",
+        name: entries.name,
+        phone: entries.phone,
+        store_url: entries.store_url,
+        monthly_sales: entries.monthly_sales,
+      };
 
-        // filter out old phone fields and replace with merged phone
-        entries = entries.filter(([k]) => k !== 'phone_code' && k !== 'phone');
-        entries.push(['phone', fullPhone]);
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        toast({
+          title: "تم الإرسال بنجاح",
+          description: "سيتم إعادة توجيهك الآن...",
+        });
+        setTimeout(() => {
+          navigate("/thank-you");
+        }, 800);
+      } else {
+        throw new Error("فشل الإرسال");
       }
-
-      const subject = 'طلب جديد من موقع انطلاقة';
-
-      // Build a readable email body from the form fields
-      const bodyLines = entries.map(([key, value]) => {
-        const label = key.replace(/_/g, ' ');
-        return `${label}: ${String(value)}`;
-      });
-      const body = bodyLines.join('\n');
-
-      const mailto = `mailto:Osama@intlakaa.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-      // Open the user's mail client with the prefilled email
-      window.location.href = mailto;
-
-      toast({
-        title: "تم فتح برنامج البريد",
-        description: "اكمل الإرسال من خلال برنامج البريد الخاص بك.",
-      });
-
-      // optional: navigate back after a short delay so user sees the toast
-      setTimeout(() => {
-        navigate('/');
-      }, 1500);
     } catch (err) {
-      console.error('mailto send failed', err);
+      console.error(err);
       toast({
-        title: 'حدث خطأ',
-        description: 'تعذر فتح برنامج البريد. جرب استخدام متصفح أو جهاز آخر.',
-        variant: 'destructive',
+        title: "حدث خطأ",
+        description: "تعذر إرسال البيانات. حاول مرة أخرى.",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
     }
-  }, [navigate, toast]);
+  };
 
   return (
     <div className="min-h-screen bg-background py-20 px-4">
@@ -86,7 +73,7 @@ const Form = () => {
             <ArrowRight className="ml-2 w-4 h-4" />
             العودة للرئيسية
           </Button>
-          
+
           <div className="gradient-brand rounded-3xl p-1 shadow-medium">
             <div className="bg-background rounded-3xl p-8 md:p-12">
               <h1 className="text-3xl md:text-4xl font-bold text-center mb-3">
@@ -95,13 +82,8 @@ const Form = () => {
               <p className="text-lg text-center text-muted-foreground mb-8">
                 عبّي البيانات وخلنا نبدأ معك خطوة النمو الحقيقي
               </p>
-              
-              <form onSubmit={handleSubmit} className="space-y-5" action="/api/submit-form" method="POST">
-                {/* Hidden field for recipient email (used by proxy) */}
-                <input type="hidden" name="to" value="Osama@intlakaa.com" />
-                <input type="hidden" name="redirect" value="https://antlaqa.com/thank-you" />
-                
-                {/* صف واحد للاسم والجوال */}
+
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">اسمك</Label>
@@ -113,64 +95,45 @@ const Form = () => {
                       className="form-input text-right"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="phone">رقم جوالك</Label>
-                    <div className="flex gap-2">
-                      <Input
-                        id="phone_code"
-                        name="phone_code"
-                        type="tel"
-                        placeholder="+966"
-                        className="form-input text-left w-28"
-                        dir="ltr"
-                      />
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        required
-                        placeholder="5XXXXXXXX"
-                        className="form-input text-right flex-1"
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                {/* صف واحد لرابط المتجر */}
-                <div className="grid md:grid-cols-1 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="store_url">رابط المتجر</Label>
                     <Input
-                      id="store_url"
-                      name="store_url"
-                      type="text"
+                      id="phone"
+                      name="phone"
+                      type="tel"
                       required
-                      placeholder="مثال: اسم المتجر أو رابط الموقع"
+                      placeholder="مثال: +966501234567 أو 0501234567"
                       className="form-input text-right"
+                      dir="ltr"
                     />
                   </div>
                 </div>
-                
-                {/* الميزانية أُزِيلت — يبقى حقل رابط المتجر الموجود أعلاه مرة واحدة */}
-                
-                {/* صف واحد للمبيعات (حقل نصي حر) */}
-                <div className="grid md:grid-cols-1 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="monthly_sales">المبيعات الشهرية</Label>
-                    <Input
-                      id="monthly_sales"
-                      name="monthly_sales"
-                      type="text"
-                      required
-                      placeholder="مثال: 50,000 ريال أو وصف المبيعات"
-                      className="form-input text-right"
-                    />
-                  </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="store_url">رابط المتجر</Label>
+                  <Input
+                    id="store_url"
+                    name="store_url"
+                    type="text"
+                    required
+                    placeholder="مثال: اسم المتجر أو رابط الموقع"
+                    className="form-input text-right"
+                  />
                 </div>
-                
-                {/* removed optional team/how-found fields as requested */}
-                
+
+                <div className="space-y-2">
+                  <Label htmlFor="monthly_sales">المبيعات الشهرية</Label>
+                  <Input
+                    id="monthly_sales"
+                    name="monthly_sales"
+                    type="text"
+                    required
+                    placeholder="مثال: 50,000 ريال أو وصف المبيعات"
+                    className="form-input text-right"
+                  />
+                </div>
+
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}

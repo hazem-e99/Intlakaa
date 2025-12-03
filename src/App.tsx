@@ -9,6 +9,7 @@ import ScrollToTop from "./lib/ScrollToTop";
 // Lazy load pages for code splitting
 const Index = lazy(() => import("./pages/Index"));
 const Form = lazy(() => import("./pages/Form"));
+const ThankYou = lazy(() => import("./pages/ThankYou"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient({
@@ -38,6 +39,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/form" element={<Form />} />
+            <Route path="/thank-you" element={<ThankYou />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
