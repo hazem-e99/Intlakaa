@@ -2,8 +2,9 @@ import { serve } from "https://deno.land/std/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 serve(async (req) => {
-  const SERVICE_ROLE_KEY = Deno.env.get("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4cGFwaG1sdGJuYW5nZHVidXRtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NDc1NzYwNCwiZXhwIjoyMDgwMzMzNjA0fQ.jeIdCDlJMO865do74ny-MReMZl8QJKVa2x5VSPiN4zA");
-  const SUPABASE_URL = Deno.env.get("https://sxpaphmltbnangdubutm.supabase.co");
+const SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY");
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+
 
   if (!SERVICE_ROLE_KEY || !SUPABASE_URL) {
     return new Response(JSON.stringify({ error: "Missing env vars" }), { status: 500 });
