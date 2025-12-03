@@ -38,7 +38,7 @@ const Form = () => {
 
       // 2️⃣ — Send email using Web3Forms
       const web3Payload = {
-        access_key: "d613c536-7d3f-4478-9257-d8cb584ab88b",
+        access_key: "3b3c60f6-dd04-4b27-a7ed-8de9cabe77de",
         name: entries.name,
         phone: entries.phone,
         store_url: entries.store_url,
