@@ -3,6 +3,14 @@ import { Link } from "react-router-dom";
 import prefetchForm from "@/lib/prefetchForm";
 import { useState, useEffect } from "react";
 import logo from "@/assets/logo.png";
+import { LogIn } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,6 +49,25 @@ const Navbar = () => {
             >
               <span>966532759488+</span>
             </a>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link to="/admin/login">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full hover:bg-primary/10 hover:text-primary transition-all"
+                    >
+                      <LogIn className="h-5 w-5" />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>تسجيل دخول الإدارة</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
             <Link to="/form" onMouseEnter={prefetchForm} onFocus={prefetchForm} onTouchStart={prefetchForm}>
               <motion.button
