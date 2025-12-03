@@ -1,13 +1,30 @@
 import { serve } from "https://deno.land/std/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-serve(async (req) => {
-const SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY");
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+// CORS headers
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
 
+serve(async (req) => {
+  // Handle CORS preflight requests
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders,
+    });
+  }
+
+  const SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY");
+  const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 
   if (!SERVICE_ROLE_KEY || !SUPABASE_URL) {
-    return new Response(JSON.stringify({ error: "Missing env vars" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Missing env vars" }), { 
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 
   const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
@@ -21,10 +38,15 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
   if (req.method === "GET" && action === "list") {
     const { data, error } = await supabase.auth.admin.listUsers();
 
-    if (error) return new Response(JSON.stringify(error), { status: 400 });
+    if (error) {
+      return new Response(JSON.stringify(error), { 
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     return new Response(JSON.stringify({ users: data.users }), {
-      headers: { "Content-Type": "application/json" },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
@@ -38,10 +60,15 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
       redirectTo,
     });
 
-    if (error) return new Response(JSON.stringify(error), { status: 400 });
+    if (error) {
+      return new Response(JSON.stringify(error), { 
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     return new Response(JSON.stringify(data), {
-      headers: { "Content-Type": "application/json" },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
@@ -53,13 +80,23 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 
     const { data, error } = await supabase.auth.admin.deleteUser(userId);
 
-    if (error) return new Response(JSON.stringify(error), { status: 400 });
+    if (error) {
+      return new Response(JSON.stringify(error), { 
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
-    return new Response(JSON.stringify({ success: true }));
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 
   // =========================================================
   // DEFAULT
   // =========================================================
-  return new Response(JSON.stringify({ error: "Invalid route" }), { status: 400 });
+  return new Response(JSON.stringify({ error: "Invalid route" }), { 
+    status: 400,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
 });
