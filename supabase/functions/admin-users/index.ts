@@ -17,11 +17,18 @@ serve(async (req) => {
     });
   }
 
-  const SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY");
+  // Supabase automatically provides these environment variables
+  const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 
   if (!SERVICE_ROLE_KEY || !SUPABASE_URL) {
-    return new Response(JSON.stringify({ error: "Missing env vars" }), { 
+    return new Response(JSON.stringify({ 
+      error: "Missing environment variables",
+      details: {
+        hasServiceRole: !!SERVICE_ROLE_KEY,
+        hasUrl: !!SUPABASE_URL
+      }
+    }), { 
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
