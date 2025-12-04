@@ -4,15 +4,9 @@ import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, CheckCircle2, XCircle } from "lucide-react";
+import { Loader2, Lock, CheckCircle2, XCircle } from "lucide-react";
 
 export default function AcceptInvite() {
   const [password, setPassword] = useState("");
@@ -24,18 +18,27 @@ export default function AcceptInvite() {
   const { toast } = useToast();
 
   // Extract tokens from URL HASH (#)
-  const extractHashParams = () => {
-    const hash = window.location.hash.substring(1);
-    return new URLSearchParams(hash);
+  const extractFromHash = () => {
+    const hash = window.location.hash.replace("#", ""); // remove #
+    const params = new URLSearchParams(hash);
+
+    return {
+      accessToken: params.get("access_token"),
+      refreshToken: params.get("refresh_token"),
+      type: params.get("type"),
+    };
   };
 
   useEffect(() => {
-    const params = extractHashParams();
-    const accessToken = params.get("access_token");
-    const refreshToken = params.get("refresh_token");
-    const type = params.get("type");
+    const { accessToken, refreshToken, type } = extractFromHash();
 
-    if (type !== "invite" || !accessToken || !refreshToken) {
+    // Check type === invite
+    if (type !== "invite") {
+      setIsValidInvite(false);
+      return;
+    }
+
+    if (!accessToken || !refreshToken) {
       setIsValidInvite(false);
       return;
     }
@@ -54,9 +57,10 @@ export default function AcceptInvite() {
           description: "رابط الدعوة غير صالح أو منتهي الصلاحية",
           variant: "destructive",
         });
-      } else {
-        setIsValidInvite(true);
+        return;
       }
+
+      setIsValidInvite(true);
     };
 
     setSession();
