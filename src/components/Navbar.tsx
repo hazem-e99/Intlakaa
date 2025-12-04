@@ -48,7 +48,7 @@ const Navbar = () => {
                 whileTap={{ scale: 0.95 }}
                 className="gradient-brand text-white px-6 py-2.5 rounded-full font-semibold shadow-soft hover:shadow-medium transition-all"
               >
-                ابدأ الآن
+                احجز استشارتك المجانية
               </motion.button>
             </Link>
           </div>

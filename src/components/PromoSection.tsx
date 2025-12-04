@@ -17,18 +17,18 @@ const PromoSection = () => {
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-8">
             عَبّي النموذج وخلنا نطلق متجرك سوا
           </h2>
-          
+
           <p className="text-xl text-white/90 mb-10 max-w-3xl mx-auto">
             خطوة واحدة تفصلك عن النمو الحقيقي. شاركنا بياناتك وخل فريقنا يبدأ معك الرحلة
           </p>
-          
+
           <Link to="/form" onMouseEnter={prefetchForm} onFocus={prefetchForm} onTouchStart={prefetchForm}>
             <motion.button
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
               className="bg-white text-primary px-12 py-5 rounded-full text-xl font-bold shadow-lg hover:shadow-xl transition-all"
             >
-              ابدأ الآن
+              احجز استشارتك المجانية
             </motion.button>
           </Link>
         </motion.div>

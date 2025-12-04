@@ -39,7 +39,7 @@ const HeroSection = () => {
                 <button className="group relative gradient-brand text-white px-10 py-4 rounded-full text-base md:text-lg font-black tracking-wide shadow-medium hover:shadow-lg transition-all overflow-hidden">
                   <span className="absolute inset-0 bg-white/20" />
                   <span className="relative flex items-center gap-2">
-                    ابدأ الآن
+                    احجز استشارتك المجانية
                     <span>
                       <FaArrowLeft className="w-5 h-5" />
                     </span>
