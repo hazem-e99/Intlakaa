@@ -199,15 +199,21 @@ export default function ManageAdmins() {
                 throw new Error("Not authenticated");
             }
 
-            const { data, error } = await supabase.auth.admin.updateUserById(userId, {
-                user_metadata: { role: newRole }
+            const response = await fetch(`${EDGE_FUNCTION_URL}?action=update-role`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${session.access_token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId, role: newRole }),
             });
 
-            if (error) {
-                throw error;
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || "Failed to update role");
             }
 
-            return data;
+            return await response.json();
         },
         onSuccess: () => {
             toast({

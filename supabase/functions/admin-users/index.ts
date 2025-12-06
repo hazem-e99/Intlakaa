@@ -320,6 +320,34 @@ serve(async (req) => {
   }
 
   // =========================================================
+  // 4- UPDATE USER ROLE
+  // =========================================================
+  if (req.method === "POST" && action === "update-role") {
+    const { userId, role } = await req.json();
+
+    const { data, error } = await supabase.auth.admin.updateUserById(userId, {
+      user_metadata: { role }
+    });
+
+    if (error) {
+      return new Response(JSON.stringify({ 
+        error: error.message,
+        details: error 
+      }), { 
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify({ 
+      success: true,
+      user: data.user
+    }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // =========================================================
   // DEFAULT
   // =========================================================
   return new Response(JSON.stringify({ error: "Invalid route" }), { 
