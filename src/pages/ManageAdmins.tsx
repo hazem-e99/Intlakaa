@@ -26,12 +26,23 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 interface AdminUser {
     id: string;
     email?: string;
     created_at: string;
     last_sign_in_at?: string;
+    user_metadata?: {
+        role?: string;
+        must_change_password?: boolean;
+    };
 }
 
 // Get the Edge Function URL
@@ -156,6 +167,41 @@ export default function ManageAdmins() {
         onError: (error: Error) => {
             toast({
                 title: "فشل حذف المستخدم",
+                description: error.message,
+                variant: "destructive",
+            });
+        },
+    });
+
+    // Update user role mutation
+    const updateRoleMutation = useMutation({
+        mutationFn: async ({ userId, newRole }: { userId: string; newRole: string }) => {
+            const { data: { session } } = await supabase.auth.getSession();
+
+            if (!session) {
+                throw new Error("Not authenticated");
+            }
+
+            const { data, error } = await supabase.auth.admin.updateUserById(userId, {
+                user_metadata: { role: newRole }
+            });
+
+            if (error) {
+                throw error;
+            }
+
+            return data;
+        },
+        onSuccess: () => {
+            toast({
+                title: "تم تحديث الدور",
+                description: "تم تحديث دور المستخدم بنجاح",
+            });
+            queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "فشل تحديث الدور",
                 description: error.message,
                 variant: "destructive",
             });
@@ -303,6 +349,9 @@ export default function ManageAdmins() {
                                                         البريد الإلكتروني
                                                     </TableHead>
                                                     <TableHead className="text-right">
+                                                        الدور
+                                                    </TableHead>
+                                                    <TableHead className="text-right">
                                                         تاريخ الإنشاء
                                                     </TableHead>
                                                     <TableHead className="text-right">
@@ -318,6 +367,26 @@ export default function ManageAdmins() {
                                                     <TableRow key={user.id}>
                                                         <TableCell className="font-medium" dir="ltr">
                                                             {user.email || "N/A"}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Select
+                                                                value={user.user_metadata?.role || "admin"}
+                                                                onValueChange={(newRole) => {
+                                                                    updateRoleMutation.mutate({
+                                                                        userId: user.id,
+                                                                        newRole
+                                                                    });
+                                                                }}
+                                                                disabled={updateRoleMutation.isPending}
+                                                            >
+                                                                <SelectTrigger className="w-[120px]">
+                                                                    <SelectValue />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectItem value="owner">Owner</SelectItem>
+                                                                    <SelectItem value="admin">Admin</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
                                                         </TableCell>
                                                         <TableCell>
                                                             {formatDate(user.created_at)}
