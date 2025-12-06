@@ -10,6 +10,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+
+# Environment files with sensitive data
+# .env.local, .env.*.local are automatically ignored by *.local pattern
 *.local
 
 # Editor directories and files
