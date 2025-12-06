@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,45 +9,11 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Lock, Mail } from "lucide-react";
 
 export default function Login() {
-  const [searchParams] = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  // Handle tokens from URL (magic link or other auth flows)
-  useEffect(() => {
-    const accessToken = searchParams.get("access_token");
-    const refreshToken = searchParams.get("refresh_token");
-    const type = searchParams.get("type");
-
-    // If we have tokens and it's NOT an invite (invites go to /admin/accept-invite)
-    if (accessToken && refreshToken && type !== "invite") {
-      setIsLoading(true);
-
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      }).then(({ data, error }) => {
-        if (error) {
-          console.error("Session error:", error);
-          toast({
-            title: "خطأ",
-            description: "فشل تسجيل الدخول تلقائياً",
-            variant: "destructive",
-          });
-          setIsLoading(false);
-        } else if (data.session) {
-          toast({
-            title: "نجح تسجيل الدخول",
-            description: "تم تسجيل الدخول بنجاح",
-          });
-          navigate("/admin");
-        }
-      });
-    }
-  }, [searchParams, navigate, toast]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,12 +39,23 @@ export default function Login() {
         throw error;
       }
 
-      if (data.session) {
-        toast({
-          title: "نجح تسجيل الدخول",
-          description: "تم تسجيل الدخول بنجاح",
-        });
-        navigate("/admin");
+      if (data.session && data.user) {
+        // Check if user must change password
+        const mustChangePassword = data.user.user_metadata?.must_change_password;
+
+        if (mustChangePassword === true) {
+          toast({
+            title: "تغيير كلمة المرور مطلوب",
+            description: "يرجى تعيين كلمة مرور جديدة",
+          });
+          navigate("/admin/change-password");
+        } else {
+          toast({
+            title: "نجح تسجيل الدخول",
+            description: "تم تسجيل الدخول بنجاح",
+          });
+          navigate("/admin");
+        }
       }
     } catch (error) {
       console.error("Login error:", error);

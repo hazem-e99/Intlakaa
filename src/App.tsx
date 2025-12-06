@@ -2,9 +2,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
 import ScrollToTop from "./lib/ScrollToTop";
+import { supabase } from "@/lib/supabase";
 
 // Lazy load pages for code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -12,7 +13,7 @@ const Form = lazy(() => import("./pages/Form"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Login = lazy(() => import("./pages/Login"));
-const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
+const ChangePassword = lazy(() => import("./pages/ChangePassword"));
 
 // Admin pages
 const AdminLayout = lazy(() => import("./layout/AdminLayout").then(m => ({ default: m.AdminLayout })));
@@ -40,6 +41,36 @@ const LoadingFallback = () => (
   </div>
 );
 
+// Global session check component
+const SessionCheck = ({ children }: { children: React.ReactNode }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check session on mount
+    supabase.auth.getUser().then(({ data }) => {
+      if (data?.user?.user_metadata?.must_change_password === true) {
+        // Only redirect if not already on change-password page
+        if (window.location.pathname !== "/admin/change-password") {
+          navigate("/admin/change-password");
+        }
+      }
+    });
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user?.user_metadata?.must_change_password === true) {
+        if (window.location.pathname !== "/admin/change-password") {
+          navigate("/admin/change-password");
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  return <>{children}</>;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -47,34 +78,36 @@ const App = () => (
       <Sonner />
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ScrollToTop />
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/form" element={<Form />} />
-            <Route path="/thank-you" element={<ThankYou />} />
+        <SessionCheck>
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/form" element={<Form />} />
+              <Route path="/thank-you" element={<ThankYou />} />
 
-            {/* Admin Login Route */}
-            <Route path="/admin/login" element={<Login />} />
+              {/* Admin Login Route */}
+              <Route path="/admin/login" element={<Login />} />
 
-            {/* Admin Accept Invite Route */}
-            <Route path="/admin/accept-invite" element={<AcceptInvite />} />
+              {/* Admin Change Password Route */}
+              <Route path="/admin/change-password" element={<ChangePassword />} />
 
-            {/* Protected Admin Routes */}
-            <Route path="/admin" element={
-              <ProtectedRoute>
-                <AdminLayout />
-              </ProtectedRoute>
-            }>
-              <Route index element={<Dashboard />} />
-              <Route path="requests" element={<Requests />} />
-              <Route path="settings" element={<Settings />} />
-              <Route path="manage-admins" element={<ManageAdmins />} />
-            </Route>
+              {/* Protected Admin Routes */}
+              <Route path="/admin" element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }>
+                <Route index element={<Dashboard />} />
+                <Route path="requests" element={<Requests />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="manage-admins" element={<ManageAdmins />} />
+              </Route>
 
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </SessionCheck>
       </BrowserRouter>
       {/* CTA anchor removed as requested */}
     </TooltipProvider>
