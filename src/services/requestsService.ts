@@ -142,3 +142,18 @@ export const searchAndPaginateRequests = async (
     totalPages: Math.ceil((count || 0) / limit),
   };
 };
+
+/**
+ * Delete a request by ID
+ */
+export const deleteRequest = async (id: number): Promise<void> => {
+  const { error } = await supabase
+    .from("requests")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error deleting request:", error);
+    throw new Error(error.message);
+  }
+};

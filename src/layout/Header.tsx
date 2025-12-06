@@ -21,23 +21,24 @@ export function Header({ title = "لوحة التحكم" }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
+    <header className="sticky top-0 z-30 flex h-14 sm:h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6">
       <div className="flex items-center gap-4">
-        <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+        <h2 className="text-lg sm:text-2xl font-semibold tracking-tight truncate">{title}</h2>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4">
         {/* Theme Toggle */}
         <Button
           variant="ghost"
           size="icon"
           onClick={toggleTheme}
           aria-label="Toggle theme"
+          className="h-9 w-9 sm:h-10 sm:w-10"
         >
           {theme === "light" ? (
-            <Moon className="h-5 w-5" />
+            <Moon className="h-4 w-4 sm:h-5 sm:w-5" />
           ) : (
-            <Sun className="h-5 w-5" />
+            <Sun className="h-4 w-4 sm:h-5 sm:w-5" />
           )}
         </Button>
       </div>

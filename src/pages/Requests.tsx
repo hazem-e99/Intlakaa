@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   searchAndPaginateRequests,
   getRequests,
+  deleteRequest,
   type Request,
   type PaginatedResponse,
 } from "@/services/requestsService";
@@ -24,11 +25,23 @@ import {
   ChevronRight,
   Loader2,
   Download,
+  Trash2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { exportToExcel } from "@/utils/excelExport";
 import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function Requests() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,6 +49,7 @@ export default function Requests() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isExporting, setIsExporting] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const itemsPerPage = 10;
 
   // Debounce search query
@@ -61,6 +75,27 @@ export default function Requests() {
     queryFn: () =>
       searchAndPaginateRequests(debouncedSearch, currentPage, itemsPerPage),
     staleTime: 30000, // 30 seconds
+  });
+
+  // Delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: deleteRequest,
+    onSuccess: () => {
+      toast({
+        title: "تم الحذف بنجاح",
+        description: "تم حذف الطلب بنجاح",
+      });
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["requests"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-requests"] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "فشل الحذف",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
   });
 
   const handleRefresh = () => {
@@ -121,10 +156,14 @@ export default function Requests() {
     }
   };
 
+  const handleDelete = (id: number) => {
+    deleteMutation.mutate(id);
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -164,11 +203,11 @@ export default function Requests() {
       {/* Main Table Card */}
       <Card>
         <CardHeader>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <CardTitle>طلبات العملاء</CardTitle>
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="flex flex-col gap-4">
+            <CardTitle className="text-lg sm:text-xl">طلبات العملاء</CardTitle>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap">
               {/* Search Input */}
-              <div className="relative w-full sm:w-64">
+              <div className="relative w-full sm:flex-1 sm:max-w-xs">
                 <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   placeholder="ابحث بالاسم أو رقم الهاتف..."
@@ -177,36 +216,42 @@ export default function Requests() {
                   className="pr-9"
                 />
               </div>
-              {/* Export Button */}
-              <Button
-                variant="default"
-                onClick={handleExportToExcel}
-                disabled={isExporting || isLoading}
-                className="gap-2"
-              >
-                {isExporting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    جاري التصدير...
-                  </>
-                ) : (
-                  <>
-                    <Download className="h-4 w-4" />
-                    تصدير كملف Excel
-                  </>
-                )}
-              </Button>
-              {/* Refresh Button */}
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleRefresh}
-                disabled={isFetching}
-              >
-                <RefreshCw
-                  className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`}
-                />
-              </Button>
+              <div className="flex gap-2">
+                {/* Export Button */}
+                <Button
+                  variant="default"
+                  onClick={handleExportToExcel}
+                  disabled={isExporting || isLoading}
+                  className="gap-2 flex-1 sm:flex-initial"
+                  size="sm"
+                >
+                  {isExporting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span className="hidden sm:inline">جاري التصدير...</span>
+                      <span className="sm:hidden">تصدير...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Download className="h-4 w-4" />
+                      <span className="hidden sm:inline">تصدير كملف Excel</span>
+                      <span className="sm:hidden">تصدير</span>
+                    </>
+                  )}
+                </Button>
+                {/* Refresh Button */}
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleRefresh}
+                  disabled={isFetching}
+                  className="h-9 w-9"
+                >
+                  <RefreshCw
+                    className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`}
+                  />
+                </Button>
+              </div>
             </div>
           </div>
         </CardHeader>
@@ -238,55 +283,169 @@ export default function Requests() {
           {!isLoading && !isError && (
             <>
               {requestsData && requestsData.data.length > 0 ? (
-                <div className="rounded-md border">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
+                <>
+                  {/* Desktop Table View */}
+                  <div className="hidden md:block rounded-md border overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="text-right">الاسم</TableHead>
+                          <TableHead className="text-right">الهاتف</TableHead>
+                          <TableHead className="text-right">رابط المتجر</TableHead>
+                          <TableHead className="text-right">المبيعات الشهرية</TableHead>
+                          <TableHead className="text-right">تاريخ الإنشاء</TableHead>
+                          <TableHead className="text-right w-24">الإجراءات</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {requestsData.data.map((request: Request) => (
+                          <TableRow key={request.id}>
+                            <TableCell>{request.name}</TableCell>
+                            <TableCell dir="ltr" className="text-right">{request.phone}</TableCell>
+                            <TableCell>
+                              {request.store_url ? (
+                                <a
+                                  href={request.store_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-primary hover:underline"
+                                >
+                                  {request.store_url.substring(0, 30)}
+                                  {request.store_url.length > 30 ? "..." : ""}
+                                </a>
+                              ) : (
+                                <span className="text-muted-foreground">N/A</span>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="secondary">
+                                {request.monthly_sales}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm text-muted-foreground">
+                              {formatDate(request.created_at)}
+                            </TableCell>
+                            <TableCell>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                    disabled={deleteMutation.isPending}
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                      هل أنت متأكد؟
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      سيتم حذف طلب{" "}
+                                      <span className="font-semibold">
+                                        {request.name}
+                                      </span>{" "}
+                                      نهائياً. لا يمكن التراجع عن هذا الإجراء.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>إلغاء</AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() => handleDelete(request.id)}
+                                      className="bg-red-600 hover:bg-red-700"
+                                    >
+                                      حذف
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
 
-                        <TableHead className="text-right">الاسم</TableHead>
-                        <TableHead className="text-right">الهاتف</TableHead>
-                        <TableHead className="text-right">رابط المتجر</TableHead>
-                        <TableHead className="text-right">المبيعات الشهرية</TableHead>
-                        <TableHead className="text-right">تاريخ الإنشاء</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {requestsData.data.map((request: Request) => (
-                        <TableRow key={request.id}>
-
-                          <TableCell>{request.name}</TableCell>
-                          <TableCell>{request.phone}</TableCell>
-                          <TableCell>
-                            {request.store_url ? (
-                              <a
-                                href={request.store_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-primary hover:underline"
-                              >
-                                {request.store_url.substring(0, 30)}
-                                {request.store_url.length > 30 ? "..." : ""}
-                              </a>
-                            ) : (
-                              <span className="text-muted-foreground">N/A</span>
-                            )}
-                          </TableCell>
-                          <TableCell>
+                  {/* Mobile Card View */}
+                  <div className="md:hidden space-y-3">
+                    {requestsData.data.map((request: Request) => (
+                      <div
+                        key={request.id}
+                        className="rounded-lg border p-4 space-y-3"
+                      >
+                        <div className="flex justify-between items-start gap-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium truncate">{request.name}</p>
+                            <p className="text-sm text-muted-foreground" dir="ltr">
+                              {request.phone}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
                             <Badge variant="secondary">
                               {request.monthly_sales}
                             </Badge>
-                          </TableCell>
-                          <TableCell className="text-sm text-muted-foreground">
-                            {formatDate(request.created_at)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50 h-8 w-8"
+                                  disabled={deleteMutation.isPending}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent className="max-w-[90vw] sm:max-w-lg">
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    هل أنت متأكد؟
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    سيتم حذف طلب{" "}
+                                    <span className="font-semibold">
+                                      {request.name}
+                                    </span>{" "}
+                                    نهائياً. لا يمكن التراجع عن هذا الإجراء.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+                                  <AlertDialogCancel className="w-full sm:w-auto">إلغاء</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => handleDelete(request.id)}
+                                    className="bg-red-600 hover:bg-red-700 w-full sm:w-auto"
+                                  >
+                                    حذف
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        </div>
+                        {request.store_url && (
+                          <div>
+                            <p className="text-xs text-muted-foreground mb-1">رابط المتجر:</p>
+                            <a
+                              href={request.store_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm text-primary hover:underline break-all"
+                            >
+                              {request.store_url}
+                            </a>
+                          </div>
+                        )}
+                        <div className="text-xs text-muted-foreground pt-2 border-t">
+                          {formatDate(request.created_at)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
               ) : (
                 <div className="rounded-md border border-dashed p-12 text-center">
-                  <p className="text-muted-foreground">
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     {debouncedSearch
                       ? "لم يتم العثور على طلبات مطابقة لبحثك."
                       : "لا توجد طلبات متاحة."}
@@ -296,8 +455,8 @@ export default function Requests() {
 
               {/* Pagination */}
               {requestsData && requestsData.totalPages > 1 && (
-                <div className="mt-4 flex items-center justify-between">
-                  <p className="text-sm text-muted-foreground">
+                <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <p className="text-xs sm:text-sm text-muted-foreground text-center sm:text-right">
                     عرض{" "}
                     {(currentPage - 1) * itemsPerPage + 1} إلى{" "}
                     {Math.min(

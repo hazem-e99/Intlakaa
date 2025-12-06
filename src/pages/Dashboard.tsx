@@ -42,20 +42,20 @@ export default function Dashboard() {
       color: "text-purple-600",
       bgColor: "bg-purple-100 dark:bg-purple-950",
     },
-   
+
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">لوحة التحكم</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">لوحة التحكم</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">
           نظرة عامة على طلبات العملاء والإحصائيات
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <Card key={stat.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -82,7 +82,7 @@ export default function Dashboard() {
       {/* Recent Requests */}
       <Card>
         <CardHeader>
-          <CardTitle>الطلبات الأخيرة</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">الطلبات الأخيرة</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -99,16 +99,16 @@ export default function Dashboard() {
               {requests.slice(0, 5).map((request) => (
                 <div
                   key={request.id}
-                  className="flex items-center justify-between rounded-lg border p-4"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 rounded-lg border p-3 sm:p-4"
                 >
-                  <div>
-                    <p className="font-medium">{request.name}</p>
-                    <p className="text-sm text-muted-foreground">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate">{request.name}</p>
+                    <p className="text-sm text-muted-foreground truncate">
                       {request.phone} • {request.monthly_sales}
                     </p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm text-muted-foreground">
+                  <div className="text-right sm:text-left">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       {new Date(request.created_at).toLocaleDateString("ar-SA")}
                     </p>
                   </div>
@@ -116,7 +116,7 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <p className="text-center text-muted-foreground">
+            <p className="text-center text-sm sm:text-base text-muted-foreground py-8">
               لا توجد طلبات بعد
             </p>
           )}

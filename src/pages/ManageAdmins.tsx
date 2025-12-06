@@ -208,11 +208,11 @@ export default function ManageAdmins() {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
             {/* Page Header */}
             <div>
-                <h1 className="text-3xl font-bold tracking-tight">إدارة الأدمنز</h1>
-                <p className="text-muted-foreground">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">إدارة الأدمنز</h1>
+                <p className="text-sm sm:text-base text-muted-foreground">
                     إضافة وإدارة مستخدمي لوحة التحكم
                 </p>
             </div>
@@ -220,7 +220,7 @@ export default function ManageAdmins() {
             {/* Invite Form */}
             <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                         <UserPlus className="h-5 w-5" />
                         دعوة أدمن جديد
                     </CardTitle>
@@ -229,7 +229,7 @@ export default function ManageAdmins() {
                     <form onSubmit={handleInvite} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="email">البريد الإلكتروني</Label>
-                            <div className="flex gap-2">
+                            <div className="flex flex-col sm:flex-row gap-2">
                                 <div className="relative flex-1">
                                     <Mail className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                     <Input
@@ -246,7 +246,7 @@ export default function ManageAdmins() {
                                 <Button
                                     type="submit"
                                     disabled={inviteMutation.isPending}
-                                    className="gap-2"
+                                    className="gap-2 w-full sm:w-auto"
                                 >
                                     {inviteMutation.isPending ? (
                                         <>
@@ -261,7 +261,7 @@ export default function ManageAdmins() {
                                     )}
                                 </Button>
                             </div>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-xs sm:text-sm text-muted-foreground">
                                 سيتم إرسال رسالة دعوة إلى البريد الإلكتروني المدخل
                             </p>
                         </div>
@@ -272,7 +272,7 @@ export default function ManageAdmins() {
             {/* Users Table */}
             <Card>
                 <CardHeader>
-                    <CardTitle>قائمة المستخدمين</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl">قائمة المستخدمين</CardTitle>
                 </CardHeader>
                 <CardContent>
                     {/* Loading State */}
@@ -294,83 +294,155 @@ export default function ManageAdmins() {
                     {!isLoading && !isError && (
                         <>
                             {users && users.length > 0 ? (
-                                <div className="rounded-md border">
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow>
-                                                <TableHead className="text-right">
-                                                    البريد الإلكتروني
-                                                </TableHead>
-                                                <TableHead className="text-right">
-                                                    تاريخ الإنشاء
-                                                </TableHead>
-                                                <TableHead className="text-right">
-                                                    آخر تسجيل دخول
-                                                </TableHead>
-                                                <TableHead className="text-right w-24">
-                                                    الإجراءات
-                                                </TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {users.map((user) => (
-                                                <TableRow key={user.id}>
-                                                    <TableCell className="font-medium" dir="ltr">
-                                                        {user.email || "N/A"}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {formatDate(user.created_at)}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {user.last_sign_in_at
-                                                            ? formatDate(user.last_sign_in_at)
-                                                            : "لم يسجل دخول بعد"}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <AlertDialog>
-                                                            <AlertDialogTrigger asChild>
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="icon"
-                                                                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                                                                    disabled={deleteMutation.isPending}
-                                                                >
-                                                                    <Trash2 className="h-4 w-4" />
-                                                                </Button>
-                                                            </AlertDialogTrigger>
-                                                            <AlertDialogContent>
-                                                                <AlertDialogHeader>
-                                                                    <AlertDialogTitle>
-                                                                        هل أنت متأكد؟
-                                                                    </AlertDialogTitle>
-                                                                    <AlertDialogDescription>
-                                                                        سيتم حذف المستخدم{" "}
-                                                                        <span className="font-semibold">
-                                                                            {user.email}
-                                                                        </span>{" "}
-                                                                        نهائياً. لا يمكن التراجع عن هذا الإجراء.
-                                                                    </AlertDialogDescription>
-                                                                </AlertDialogHeader>
-                                                                <AlertDialogFooter>
-                                                                    <AlertDialogCancel>إلغاء</AlertDialogCancel>
-                                                                    <AlertDialogAction
-                                                                        onClick={() => handleDelete(user.id)}
-                                                                        className="bg-red-600 hover:bg-red-700"
-                                                                    >
-                                                                        حذف
-                                                                    </AlertDialogAction>
-                                                                </AlertDialogFooter>
-                                                            </AlertDialogContent>
-                                                        </AlertDialog>
-                                                    </TableCell>
+                                <>
+                                    {/* Desktop Table View */}
+                                    <div className="hidden md:block rounded-md border overflow-x-auto">
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow>
+                                                    <TableHead className="text-right">
+                                                        البريد الإلكتروني
+                                                    </TableHead>
+                                                    <TableHead className="text-right">
+                                                        تاريخ الإنشاء
+                                                    </TableHead>
+                                                    <TableHead className="text-right">
+                                                        آخر تسجيل دخول
+                                                    </TableHead>
+                                                    <TableHead className="text-right w-24">
+                                                        الإجراءات
+                                                    </TableHead>
                                                 </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </div>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {users.map((user) => (
+                                                    <TableRow key={user.id}>
+                                                        <TableCell className="font-medium" dir="ltr">
+                                                            {user.email || "N/A"}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {formatDate(user.created_at)}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {user.last_sign_in_at
+                                                                ? formatDate(user.last_sign_in_at)
+                                                                : "لم يسجل دخول بعد"}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <AlertDialog>
+                                                                <AlertDialogTrigger asChild>
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                                                        disabled={deleteMutation.isPending}
+                                                                    >
+                                                                        <Trash2 className="h-4 w-4" />
+                                                                    </Button>
+                                                                </AlertDialogTrigger>
+                                                                <AlertDialogContent>
+                                                                    <AlertDialogHeader>
+                                                                        <AlertDialogTitle>
+                                                                            هل أنت متأكد؟
+                                                                        </AlertDialogTitle>
+                                                                        <AlertDialogDescription>
+                                                                            سيتم حذف المستخدم{" "}
+                                                                            <span className="font-semibold">
+                                                                                {user.email}
+                                                                            </span>{" "}
+                                                                            نهائياً. لا يمكن التراجع عن هذا الإجراء.
+                                                                        </AlertDialogDescription>
+                                                                    </AlertDialogHeader>
+                                                                    <AlertDialogFooter>
+                                                                        <AlertDialogCancel>إلغاء</AlertDialogCancel>
+                                                                        <AlertDialogAction
+                                                                            onClick={() => handleDelete(user.id)}
+                                                                            className="bg-red-600 hover:bg-red-700"
+                                                                        >
+                                                                            حذف
+                                                                        </AlertDialogAction>
+                                                                    </AlertDialogFooter>
+                                                                </AlertDialogContent>
+                                                            </AlertDialog>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+
+                                    {/* Mobile Card View */}
+                                    <div className="md:hidden space-y-3">
+                                        {users.map((user) => (
+                                            <div
+                                                key={user.id}
+                                                className="rounded-lg border p-4 space-y-3"
+                                            >
+                                                <div className="flex justify-between items-start gap-2">
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="font-medium text-sm break-all" dir="ltr">
+                                                            {user.email || "N/A"}
+                                                        </p>
+                                                    </div>
+                                                    <AlertDialog>
+                                                        <AlertDialogTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="text-red-600 hover:text-red-700 hover:bg-red-50 h-8 w-8 shrink-0"
+                                                                disabled={deleteMutation.isPending}
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </Button>
+                                                        </AlertDialogTrigger>
+                                                        <AlertDialogContent className="max-w-[90vw] sm:max-w-lg">
+                                                            <AlertDialogHeader>
+                                                                <AlertDialogTitle>
+                                                                    هل أنت متأكد؟
+                                                                </AlertDialogTitle>
+                                                                <AlertDialogDescription>
+                                                                    سيتم حذف المستخدم{" "}
+                                                                    <span className="font-semibold break-all">
+                                                                        {user.email}
+                                                                    </span>{" "}
+                                                                    نهائياً. لا يمكن التراجع عن هذا الإجراء.
+                                                                </AlertDialogDescription>
+                                                            </AlertDialogHeader>
+                                                            <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+                                                                <AlertDialogCancel className="w-full sm:w-auto">إلغاء</AlertDialogCancel>
+                                                                <AlertDialogAction
+                                                                    onClick={() => handleDelete(user.id)}
+                                                                    className="bg-red-600 hover:bg-red-700 w-full sm:w-auto"
+                                                                >
+                                                                    حذف
+                                                                </AlertDialogAction>
+                                                            </AlertDialogFooter>
+                                                        </AlertDialogContent>
+                                                    </AlertDialog>
+                                                </div>
+                                                <div className="space-y-2 text-sm">
+                                                    <div className="flex justify-between items-center pb-2 border-b">
+                                                        <span className="text-muted-foreground">تاريخ الإنشاء:</span>
+                                                        <span className="font-medium text-xs sm:text-sm">
+                                                            {formatDate(user.created_at)}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-muted-foreground">آخر تسجيل دخول:</span>
+                                                        <span className="font-medium text-xs sm:text-sm">
+                                                            {user.last_sign_in_at
+                                                                ? formatDate(user.last_sign_in_at)
+                                                                : "لم يسجل دخول بعد"}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
                             ) : (
                                 <div className="rounded-md border border-dashed p-12 text-center">
-                                    <p className="text-muted-foreground">
+                                    <p className="text-sm sm:text-base text-muted-foreground">
                                         لا يوجد مستخدمون حالياً
                                     </p>
                                 </div>

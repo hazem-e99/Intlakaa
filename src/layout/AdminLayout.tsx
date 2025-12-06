@@ -21,9 +21,9 @@ export function AdminLayout() {
       {/* Main Content */}
       <div className="flex flex-1 flex-col md:pr-64">
         <Header />
-        
-        <main className="flex-1 overflow-y-auto bg-muted/10 p-6">
-          <div className="mx-auto max-w-7xl">
+
+        <main className="flex-1 overflow-y-auto bg-muted/10 p-4 sm:p-6">
+          <div className="mx-auto max-w-7xl w-full">
             <Outlet />
           </div>
         </main>
