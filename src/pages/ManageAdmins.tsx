@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -53,6 +54,22 @@ export default function ManageAdmins() {
     const [email, setEmail] = useState("");
     const { toast } = useToast();
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
+
+    // Check if user is owner
+    useEffect(() => {
+        supabase.auth.getUser().then(({ data }) => {
+            const role = data.user?.user_metadata?.role;
+            if (role !== "owner") {
+                toast({
+                    title: "غير مصرح",
+                    description: "ليس لديك صلاحية للوصول إلى هذه الصفحة",
+                    variant: "destructive",
+                });
+                navigate("/admin");
+            }
+        });
+    }, [navigate, toast]);
 
     // Fetch all admin users via Edge Function
     const {

@@ -9,7 +9,7 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 
@@ -40,6 +40,23 @@ export function Sidebar({ className }: SidebarProps) {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  // Get user role on mount
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUserRole(data.user?.user_metadata?.role || "admin");
+    });
+  }, []);
+
+  // Filter navigation based on role
+  const filteredNavigation = navigation.filter(item => {
+    // Hide "إدارة الأدمنز" for non-owners
+    if (item.href === "/admin/manage-admins" && userRole !== "owner") {
+      return false;
+    }
+    return true;
+  });
 
   const handleLogout = async () => {
     try {
@@ -76,7 +93,7 @@ export function Sidebar({ className }: SidebarProps) {
 
       {/* Navigation */}
       <nav className="flex-1 space-y-1 px-3 py-4">
-        {navigation.map((item) => {
+        {filteredNavigation.map((item) => {
           const isActive = location.pathname === item.href;
           return (
             <Link
