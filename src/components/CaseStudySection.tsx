@@ -2,11 +2,11 @@ import { motion } from "framer-motion";
 import { memo } from "react";
 
 const videos = [
-  { id: 1, title: "حملة إعلانية ناجحة", src: "/v1.mp4" },
+  { id: 1, title: "حملة إعلانية ناجحة", src: "/v5.mp4" },
   { id: 2, title: "نمو مبيعات متجر", src: "/v2.mp4" },
   { id: 3, title: "استراتيجية محتوى", src: "/v3.mp4" },
-  { id: 4, title: "تحسين معدل التحويل", src: "/v4.mp4" },
-  { id: 5, title: "إدارة حملات سناب", src: "/v5.mp4" },
+  { id: 4, title: "تحسين معدل التحويل", src: "/v1.mp4" },
+  { id: 5, title: "إدارة حملات سناب", src: "/v4.mp4" },
 ];
 
 const CaseStudySection = () => {
@@ -24,7 +24,7 @@ const CaseStudySection = () => {
             هدفنا مو بس نسوّي حملات… نسوّي حملات تنذكر كـ Case Study
           </h2>
         </motion.div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {videos.map((video, index) => (
             <motion.div
