@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import prefetchForm from "@/lib/prefetchForm";
 import { memo } from "react";
+import { pushGTMEvent } from "@/utils/gtm";
 
 const PromoSection = () => {
   return (
@@ -26,6 +27,7 @@ const PromoSection = () => {
             <motion.button
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => pushGTMEvent('cta_click', { button_name: 'احجز استشارتك المجانية', location: 'promo_section' })}
               className="bg-white text-primary px-12 py-5 rounded-full text-xl font-bold shadow-lg hover:shadow-xl transition-all"
             >
               احجز استشارتك المجانية

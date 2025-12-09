@@ -3,6 +3,7 @@ import prefetchForm from "@/lib/prefetchForm";
 import { memo } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import logo from "@/assets/logo.png";
+import { pushGTMEvent } from "@/utils/gtm";
 
 const HeroSection = () => {
   // Stats removed — simplified hero layout
@@ -36,7 +37,10 @@ const HeroSection = () => {
             {/* CTA Buttons (moved up after removing stats) */}
             <div className="flex gap-4 justify-start items-center mt-2">
               <Link to="/form" onMouseEnter={prefetchForm} onFocus={prefetchForm} onTouchStart={prefetchForm}>
-                <button className="group relative gradient-brand text-white px-10 py-4 rounded-full text-base md:text-lg font-black tracking-wide shadow-medium hover:shadow-lg transition-all overflow-hidden">
+                <button
+                  onClick={() => pushGTMEvent('cta_click', { button_name: 'احجز استشارتك المجانية', location: 'hero_section' })}
+                  className="group relative gradient-brand text-white px-10 py-4 rounded-full text-base md:text-lg font-black tracking-wide shadow-medium hover:shadow-lg transition-all overflow-hidden"
+                >
                   <span className="absolute inset-0 bg-white/20" />
                   <span className="relative flex items-center gap-2">
                     احجز استشارتك المجانية

@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from
 import { lazy, Suspense, useEffect } from "react";
 import ScrollToTop from "./lib/ScrollToTop";
 import { supabase } from "@/lib/supabase";
+import { pushGTMEvent } from "./utils/gtm";
 
 // Lazy load pages for code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -45,6 +46,15 @@ const LoadingFallback = () => (
 const SessionCheck = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Track page views on route change
+  useEffect(() => {
+    pushGTMEvent('page_view', {
+      page_path: location.pathname,
+      page_title: document.title,
+      page_location: window.location.href,
+    });
+  }, [location]);
 
   useEffect(() => {
     // Only check if on admin routes

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import prefetchForm from "@/lib/prefetchForm";
 import { useState, useEffect } from "react";
 import logo from "@/assets/logo.png";
+import { pushGTMEvent } from "@/utils/gtm";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -46,6 +47,7 @@ const Navbar = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => pushGTMEvent('cta_click', { button_name: 'احجز استشارتك المجانية', location: 'navbar' })}
                 className="gradient-brand text-white px-6 py-2.5 rounded-full font-semibold shadow-soft hover:shadow-medium transition-all"
               >
                 احجز استشارتك المجانية

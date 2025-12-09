@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { pushGTMEvent } from "@/utils/gtm";
 
 const Form = () => {
   const navigate = useNavigate();
@@ -55,6 +56,20 @@ const Form = () => {
       toast({
         title: "تم الإرسال بنجاح",
         description: "سيتم إعادة توجيهك الآن...",
+      });
+
+      // Track form submission in GTM
+      pushGTMEvent('form_submit', {
+        form_name: 'contact_form',
+        form_fields: Object.keys(entries).length,
+        timestamp: new Date().toISOString(),
+      });
+
+      // Track as lead/conversion event
+      pushGTMEvent('generate_lead', {
+        currency: 'SAR',
+        value: 0,
+        lead_source: 'website_form',
       });
 
       setTimeout(() => navigate("/thank-you"), 800);
