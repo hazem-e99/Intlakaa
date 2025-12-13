@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
 // List of available video IDs based on actual files
-const clientVideos = [1, 2, 3, 4, 6, 13].map((id) => ({
+const clientVideos = [1, 2, 3, 4, 6,7, 13].map((id) => ({
   id,
   src: `/clients/${id}.mp4`,
 }));
