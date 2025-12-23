@@ -15,6 +15,9 @@ export const exportToExcel = (data: Request[], filename: string = "requests_expo
       "رقم الهاتف": request.phone,
       "رابط المتجر": request.store_url,
       "المبيعات الشهرية": request.monthly_sales,
+      "عنوان الجهاز": request.ip_address || "-",
+      "الدولة": request.country || "-",
+      "مفتاح الدولة": request.phone_country || "-",
       "تاريخ الإنشاء": new Date(request.created_at).toLocaleString("ar-SA", {
         year: "numeric",
         month: "long",
@@ -37,6 +40,9 @@ export const exportToExcel = (data: Request[], filename: string = "requests_expo
       { wch: 20 }, // رقم الهاتف
       { wch: 35 }, // رابط المتجر
       { wch: 20 }, // المبيعات الشهرية
+      { wch: 18 }, // عنوان الجهاز
+      { wch: 20 }, // الدولة
+      { wch: 20 }, // مفتاح الدولة
       { wch: 30 }, // تاريخ الإنشاء
     ];
     worksheet["!cols"] = columnWidths;

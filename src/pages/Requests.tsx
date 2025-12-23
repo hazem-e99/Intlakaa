@@ -293,6 +293,9 @@ export default function Requests() {
                           <TableHead className="text-right">الهاتف</TableHead>
                           <TableHead className="text-right">رابط المتجر</TableHead>
                           <TableHead className="text-right">المبيعات الشهرية</TableHead>
+                          <TableHead className="text-right">عنوان الجهاز</TableHead>
+                          <TableHead className="text-right">الدولة</TableHead>
+                          <TableHead className="text-right">مفتاح الدولة</TableHead>
                           <TableHead className="text-right">تاريخ الإنشاء</TableHead>
                           <TableHead className="text-right w-24">الإجراءات</TableHead>
                         </TableRow>
@@ -321,6 +324,15 @@ export default function Requests() {
                               <Badge variant="secondary">
                                 {request.monthly_sales}
                               </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm text-muted-foreground font-mono" dir="ltr">
+                              {request.ip_address || '-'}
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              {request.country || '-'}
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              {request.phone_country || '-'}
                             </TableCell>
                             <TableCell className="text-sm text-muted-foreground">
                               {formatDate(request.created_at)}
@@ -434,6 +446,24 @@ export default function Requests() {
                             >
                               {request.store_url}
                             </a>
+                          </div>
+                        )}
+                        {request.ip_address && (
+                          <div>
+                            <p className="text-xs text-muted-foreground mb-1">عنوان الجهاز:</p>
+                            <p className="text-sm font-mono" dir="ltr">{request.ip_address}</p>
+                          </div>
+                        )}
+                        {request.country && (
+                          <div>
+                            <p className="text-xs text-muted-foreground mb-1">الدولة:</p>
+                            <p className="text-sm">{request.country}</p>
+                          </div>
+                        )}
+                        {request.phone_country && (
+                          <div>
+                            <p className="text-xs text-muted-foreground mb-1">مفتاح الدولة:</p>
+                            <p className="text-sm">{request.phone_country}</p>
                           </div>
                         )}
                         <div className="text-xs text-muted-foreground pt-2 border-t">

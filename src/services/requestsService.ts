@@ -6,6 +6,9 @@ export interface Request {
   phone: string;
   store_url: string;
   monthly_sales: string;
+  ip_address: string | null;
+  country: string | null;
+  phone_country: string | null;
   created_at: string;
 }
 
