@@ -14,6 +14,7 @@ const ThankYou = lazy(() => import("./pages/ThankYou"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Login = lazy(() => import("./pages/Login"));
 const ChangePassword = lazy(() => import("./pages/ChangePassword"));
+const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
 
 // Admin pages
 const AdminLayout = lazy(() => import("./layout/AdminLayout").then(m => ({ default: m.AdminLayout })));
@@ -76,6 +77,9 @@ const App = () => (
 
               {/* Admin Change Password Route */}
               <Route path="/admin/change-password" element={<ChangePassword />} />
+
+              {/* Admin Accept Invite Route */}
+              <Route path="/admin/accept-invite" element={<AcceptInvite />} />
 
               {/* Protected Admin Routes */}
               <Route path="/admin" element={
