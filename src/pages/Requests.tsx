@@ -156,7 +156,7 @@ export default function Requests() {
     }
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     deleteMutation.mutate(id);
   };
 
@@ -302,19 +302,19 @@ export default function Requests() {
                       </TableHeader>
                       <TableBody>
                         {requestsData.data.map((request: Request) => (
-                          <TableRow key={request.id}>
+                          <TableRow key={request._id}>
                             <TableCell>{request.name}</TableCell>
                             <TableCell dir="ltr" className="text-right">{request.phone}</TableCell>
                             <TableCell>
-                              {request.store_url ? (
+                              {request.storeUrl ? (
                                 <a
-                                  href={request.store_url}
+                                  href={request.storeUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="text-primary hover:underline"
                                 >
-                                  {request.store_url.substring(0, 30)}
-                                  {request.store_url.length > 30 ? "..." : ""}
+                                  {request.storeUrl.substring(0, 30)}
+                                  {request.storeUrl.length > 30 ? "..." : ""}
                                 </a>
                               ) : (
                                 <span className="text-muted-foreground">N/A</span>
@@ -322,20 +322,20 @@ export default function Requests() {
                             </TableCell>
                             <TableCell>
                               <Badge variant="secondary">
-                                {request.monthly_sales}
+                                {request.monthlySales}
                               </Badge>
                             </TableCell>
                             <TableCell className="text-sm text-muted-foreground font-mono" dir="ltr">
-                              {request.ip_address || '-'}
+                              {request.ipAddress || '-'}
                             </TableCell>
                             <TableCell className="text-sm">
                               {request.country || '-'}
                             </TableCell>
                             <TableCell className="text-sm">
-                              {request.phone_country || '-'}
+                              {request.phoneCountry || '-'}
                             </TableCell>
                             <TableCell className="text-sm text-muted-foreground">
-                              {formatDate(request.created_at)}
+                              {formatDate(request.createdAt)}
                             </TableCell>
                             <TableCell>
                               <AlertDialog>
@@ -365,7 +365,7 @@ export default function Requests() {
                                   <AlertDialogFooter>
                                     <AlertDialogCancel>إلغاء</AlertDialogCancel>
                                     <AlertDialogAction
-                                      onClick={() => handleDelete(request.id)}
+                                      onClick={() => handleDelete(request._id)}
                                       className="bg-red-600 hover:bg-red-700"
                                     >
                                       حذف
@@ -384,7 +384,7 @@ export default function Requests() {
                   <div className="md:hidden space-y-3">
                     {requestsData.data.map((request: Request) => (
                       <div
-                        key={request.id}
+                        key={request._id}
                         className="rounded-lg border p-4 space-y-3"
                       >
                         <div className="flex justify-between items-start gap-2">
@@ -396,7 +396,7 @@ export default function Requests() {
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             <Badge variant="secondary">
-                              {request.monthly_sales}
+                              {request.monthlySales}
                             </Badge>
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
@@ -425,7 +425,7 @@ export default function Requests() {
                                 <AlertDialogFooter className="flex-col sm:flex-row gap-2">
                                   <AlertDialogCancel className="w-full sm:w-auto">إلغاء</AlertDialogCancel>
                                   <AlertDialogAction
-                                    onClick={() => handleDelete(request.id)}
+                                    onClick={() => handleDelete(request._id)}
                                     className="bg-red-600 hover:bg-red-700 w-full sm:w-auto"
                                   >
                                     حذف
@@ -435,23 +435,23 @@ export default function Requests() {
                             </AlertDialog>
                           </div>
                         </div>
-                        {request.store_url && (
+                        {request.storeUrl && (
                           <div>
                             <p className="text-xs text-muted-foreground mb-1">رابط المتجر:</p>
                             <a
-                              href={request.store_url}
+                              href={request.storeUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-sm text-primary hover:underline break-all"
                             >
-                              {request.store_url}
+                              {request.storeUrl}
                             </a>
                           </div>
                         )}
-                        {request.ip_address && (
+                        {request.ipAddress && (
                           <div>
                             <p className="text-xs text-muted-foreground mb-1">عنوان الجهاز:</p>
-                            <p className="text-sm font-mono" dir="ltr">{request.ip_address}</p>
+                            <p className="text-sm font-mono" dir="ltr">{request.ipAddress}</p>
                           </div>
                         )}
                         {request.country && (
@@ -460,14 +460,14 @@ export default function Requests() {
                             <p className="text-sm">{request.country}</p>
                           </div>
                         )}
-                        {request.phone_country && (
+                        {request.phoneCountry && (
                           <div>
                             <p className="text-xs text-muted-foreground mb-1">مفتاح الدولة:</p>
-                            <p className="text-sm">{request.phone_country}</p>
+                            <p className="text-sm">{request.phoneCountry}</p>
                           </div>
                         )}
                         <div className="text-xs text-muted-foreground pt-2 border-t">
-                          {formatDate(request.created_at)}
+                          {formatDate(request.createdAt)}
                         </div>
                       </div>
                     ))}

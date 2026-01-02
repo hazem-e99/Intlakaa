@@ -10,15 +10,14 @@ export const exportToExcel = (data: Request[], filename: string = "requests_expo
   try {
     // Prepare data for Excel - transform to Arabic headers
     const excelData = data.map((request) => ({
-
       "الاسم": request.name,
       "رقم الهاتف": request.phone,
-      "رابط المتجر": request.store_url,
-      "المبيعات الشهرية": request.monthly_sales,
-      "عنوان الجهاز": request.ip_address || "-",
+      "رابط المتجر": request.storeUrl,
+      "المبيعات الشهرية": request.monthlySales,
+      "عنوان الجهاز": request.ipAddress || "-",
       "الدولة": request.country || "-",
-      "مفتاح الدولة": request.phone_country || "-",
-      "تاريخ الإنشاء": new Date(request.created_at).toLocaleString("ar-SA", {
+      "مفتاح الدولة": request.phoneCountry || "-",
+      "تاريخ الإنشاء": new Date(request.createdAt).toLocaleString("ar-SA", {
         year: "numeric",
         month: "long",
         day: "numeric",

@@ -88,7 +88,7 @@ export const searchAndPaginateRequests = async (
 /**
  * Delete a request by ID
  */
-export const deleteRequest = async (id: string): Promise<void> => {
+export const deleteRequest = async (id: string | number): Promise<void> => {
   try {
     const response = await api.delete(`/requests/${id}`);
 
