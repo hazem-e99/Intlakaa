@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { logout, getUserRole } from "@/services/authService";
 import { useToast } from "@/hooks/use-toast";
 
 interface SidebarProps {
@@ -44,9 +44,8 @@ export function Sidebar({ className }: SidebarProps) {
 
   // Get user role on mount
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUserRole(data.user?.user_metadata?.role || "admin");
-    });
+    const role = getUserRole();
+    setUserRole(role || "admin");
   }, []);
 
   // Filter navigation based on role
@@ -58,28 +57,12 @@ export function Sidebar({ className }: SidebarProps) {
     return true;
   });
 
-  const handleLogout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-
-      if (error) {
-        throw error;
-      }
-
-      toast({
-        title: "تم تسجيل الخروج",
-        description: "تم تسجيل الخروج بنجاح",
-      });
-
-      navigate("/admin/login");
-    } catch (error) {
-      console.error("Logout error:", error);
-      toast({
-        title: "خطأ",
-        description: "حدث خطأ أثناء تسجيل الخروج",
-        variant: "destructive",
-      });
-    }
+  const handleLogout = () => {
+    toast({
+      title: "تم تسجيل الخروج",
+      description: "تم تسجيل الخروج بنجاح",
+    });
+    logout();
   };
 
   const SidebarContent = () => (

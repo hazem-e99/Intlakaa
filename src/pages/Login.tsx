@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/lib/supabase";
+import { login } from "@/services/authService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,18 +30,11 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const result = await login(email, password);
 
-      if (error) {
-        throw error;
-      }
-
-      if (data.session && data.user) {
+      if (result.success && result.user) {
         // Check if user must change password
-        const mustChangePassword = data.user.user_metadata?.must_change_password;
+        const mustChangePassword = result.user.mustChangePassword;
 
         if (mustChangePassword === true) {
           toast({
@@ -56,6 +49,12 @@ export default function Login() {
           });
           navigate("/admin");
         }
+      } else {
+        toast({
+          title: "خطأ في تسجيل الدخول",
+          description: result.message || "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error("Login error:", error);

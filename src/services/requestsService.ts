@@ -1,15 +1,16 @@
-import { supabase } from "@/lib/supabase";
+import api from '@/lib/api';
 
 export interface Request {
-  id: number;
+  _id: string;
   name: string;
   phone: string;
-  store_url: string;
-  monthly_sales: string;
-  ip_address: string | null;
+  storeUrl: string;
+  monthlySales: string;
+  ipAddress: string | null;
   country: string | null;
-  phone_country: string | null;
-  created_at: string;
+  phoneCountry: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface PaginatedResponse {
@@ -21,83 +22,56 @@ export interface PaginatedResponse {
 }
 
 /**
- * Fetch all requests from Supabase
+ * Fetch requests with pagination and search
  */
-export const getRequests = async (): Promise<Request[]> => {
-  const { data, error } = await supabase
-    .from("requests")
-    .select("*")
-    .order("id", { ascending: false });
+export const getRequests = async (
+  page: number = 1,
+  limit: number = 10,
+  search: string = ''
+): Promise<PaginatedResponse> => {
+  try {
+    const response = await api.get('/requests', {
+      params: { page, limit, search }
+    });
 
-  if (error) {
-    console.error("Error fetching requests:", error);
-    throw new Error(error.message);
+    if (response.data.success) {
+      return {
+        data: response.data.data,
+        count: response.data.count,
+        page: response.data.page,
+        limit: response.data.limit,
+        totalPages: response.data.totalPages
+      };
+    }
+
+    throw new Error(response.data.message);
+  } catch (error: any) {
+    console.error('Error fetching requests:', error);
+    throw new Error(error.response?.data?.message || 'خطأ في جلب الطلبات');
   }
-
-  return data || [];
 };
 
 /**
  * Search requests by name or phone
  */
 export const searchRequests = async (query: string): Promise<Request[]> => {
-  if (!query.trim()) {
-    return getRequests();
+  try {
+    const response = await getRequests(1, 1000, query);
+    return response.data;
+  } catch (error) {
+    console.error('Error searching requests:', error);
+    throw error;
   }
-
-  const { data, error } = await supabase
-    .from("requests")
-    .select("*")
-    .or(`name.ilike.%${query}%,phone.ilike.%${query}%`)
-    .order("id", { ascending: false });
-
-  if (error) {
-    console.error("Error searching requests:", error);
-    throw new Error(error.message);
-  }
-
-  return data || [];
 };
 
 /**
- * Fetch paginated requests
+ * Fetch paginated requests (alias for getRequests)
  */
 export const paginateRequests = async (
   page: number = 1,
   limit: number = 10
 ): Promise<PaginatedResponse> => {
-  const from = (page - 1) * limit;
-  const to = from + limit - 1;
-
-  // Get total count
-  const { count, error: countError } = await supabase
-    .from("requests")
-    .select("*", { count: "exact", head: true });
-
-  if (countError) {
-    console.error("Error counting requests:", countError);
-    throw new Error(countError.message);
-  }
-
-  // Get paginated data
-  const { data, error } = await supabase
-    .from("requests")
-    .select("*")
-    .order("id", { ascending: false })
-    .range(from, to);
-
-  if (error) {
-    console.error("Error fetching paginated requests:", error);
-    throw new Error(error.message);
-  }
-
-  return {
-    data: data || [],
-    count: count || 0,
-    page,
-    limit,
-    totalPages: Math.ceil((count || 0) / limit),
-  };
+  return getRequests(page, limit);
 };
 
 /**
@@ -108,55 +82,65 @@ export const searchAndPaginateRequests = async (
   page: number = 1,
   limit: number = 10
 ): Promise<PaginatedResponse> => {
-  const from = (page - 1) * limit;
-  const to = from + limit - 1;
-
-  let countQuery = supabase.from("requests").select("*", { count: "exact", head: true });
-  let dataQuery = supabase.from("requests").select("*").order("id", { ascending: false });
-
-  // Apply search filter if query exists
-  if (query.trim()) {
-    const searchFilter = `name.ilike.%${query}%,phone.ilike.%${query}%`;
-    countQuery = countQuery.or(searchFilter);
-    dataQuery = dataQuery.or(searchFilter);
-  }
-
-  // Get total count
-  const { count, error: countError } = await countQuery;
-
-  if (countError) {
-    console.error("Error counting requests:", countError);
-    throw new Error(countError.message);
-  }
-
-  // Get paginated data
-  const { data, error } = await dataQuery.range(from, to);
-
-  if (error) {
-    console.error("Error fetching paginated requests:", error);
-    throw new Error(error.message);
-  }
-
-  return {
-    data: data || [],
-    count: count || 0,
-    page,
-    limit,
-    totalPages: Math.ceil((count || 0) / limit),
-  };
+  return getRequests(page, limit, query);
 };
 
 /**
  * Delete a request by ID
  */
-export const deleteRequest = async (id: number): Promise<void> => {
-  const { error } = await supabase
-    .from("requests")
-    .delete()
-    .eq("id", id);
+export const deleteRequest = async (id: string): Promise<void> => {
+  try {
+    const response = await api.delete(`/requests/${id}`);
 
-  if (error) {
-    console.error("Error deleting request:", error);
-    throw new Error(error.message);
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+  } catch (error: any) {
+    console.error('Error deleting request:', error);
+    throw new Error(error.response?.data?.message || 'خطأ في حذف الطلب');
+  }
+};
+
+/**
+ * Create a new request (public endpoint)
+ */
+export const createRequest = async (requestData: {
+  name: string;
+  phone: string;
+  storeUrl: string;
+  monthlySales: string;
+  ipAddress?: string;
+  country?: string;
+  phoneCountry?: string;
+}): Promise<Request> => {
+  try {
+    const response = await api.post('/requests', requestData);
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message);
+  } catch (error: any) {
+    console.error('Error creating request:', error);
+    throw new Error(error.response?.data?.message || 'خطأ في إنشاء الطلب');
+  }
+};
+
+/**
+ * Export all requests
+ */
+export const exportRequests = async (): Promise<Request[]> => {
+  try {
+    const response = await api.get('/requests/export');
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message);
+  } catch (error: any) {
+    console.error('Error exporting requests:', error);
+    throw new Error(error.response?.data?.message || 'خطأ في تصدير الطلبات');
   }
 };

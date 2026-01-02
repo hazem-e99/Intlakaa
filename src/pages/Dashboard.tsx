@@ -4,15 +4,17 @@ import { useQuery } from "@tanstack/react-query";
 import { getRequests } from "@/services/requestsService";
 
 export default function Dashboard() {
-  const { data: requests, isLoading } = useQuery({
+  const { data: response, isLoading } = useQuery({
     queryKey: ["dashboard-requests"],
-    queryFn: getRequests,
+    queryFn: () => getRequests(1, 1000), // Get all requests for dashboard
   });
+
+  const requests = response?.data || [];
 
   const stats = [
     {
       title: "إجمالي الطلبات",
-      value: requests?.length || 0,
+      value: response?.count || 0,
       icon: Users,
       color: "text-blue-600",
       bgColor: "bg-blue-100 dark:bg-blue-950",
@@ -20,7 +22,7 @@ export default function Dashboard() {
     {
       title: "هذا الشهر",
       value: requests?.filter((r) => {
-        const requestDate = new Date(r.created_at);
+        const requestDate = new Date(r.createdAt);
         const now = new Date();
         return (
           requestDate.getMonth() === now.getMonth() &&
@@ -34,7 +36,7 @@ export default function Dashboard() {
     {
       title: "اليوم",
       value: requests?.filter((r) => {
-        const requestDate = new Date(r.created_at);
+        const requestDate = new Date(r.createdAt);
         const now = new Date();
         return requestDate.toDateString() === now.toDateString();
       }).length || 0,
@@ -98,18 +100,18 @@ export default function Dashboard() {
             <div className="space-y-3">
               {requests.slice(0, 5).map((request) => (
                 <div
-                  key={request.id}
+                  key={request._id}
                   className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 rounded-lg border p-3 sm:p-4"
                 >
                   <div className="flex-1 min-w-0">
                     <p className="font-medium truncate">{request.name}</p>
                     <p className="text-sm text-muted-foreground truncate">
-                      {request.phone} • {request.monthly_sales}
+                      {request.phone} • {request.monthlySales}
                     </p>
                   </div>
                   <div className="text-right sm:text-left">
                     <p className="text-xs sm:text-sm text-muted-foreground">
-                      {new Date(request.created_at).toLocaleDateString("ar-SA")}
+                      {new Date(request.createdAt).toLocaleDateString("ar-SA")}
                     </p>
                   </div>
                 </div>

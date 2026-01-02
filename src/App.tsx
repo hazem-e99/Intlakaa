@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect } from "react";
 import ScrollToTop from "./lib/ScrollToTop";
-import { supabase } from "@/lib/supabase";
 import { pushGTMEvent } from "./utils/gtm";
 
 // Lazy load pages for code splitting
@@ -42,9 +41,8 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Global session check component
-const SessionCheck = ({ children }: { children: React.ReactNode }) => {
-  const navigate = useNavigate();
+// Page view tracking component
+const PageViewTracker = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
 
   // Track page views on route change
@@ -56,36 +54,6 @@ const SessionCheck = ({ children }: { children: React.ReactNode }) => {
     });
   }, [location]);
 
-  useEffect(() => {
-    // Only check if on admin routes
-    if (!location.pathname.startsWith('/admin')) {
-      return;
-    }
-
-    // Check session on mount
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      // Only redirect if user is authenticated AND has must_change_password flag
-      if (session?.user?.user_metadata?.must_change_password === true) {
-        // Only redirect if not already on change-password or login page
-        if (location.pathname !== "/admin/change-password" && location.pathname !== "/admin/login") {
-          navigate("/admin/change-password");
-        }
-      }
-    });
-
-    // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      // Only redirect if user is authenticated AND has must_change_password flag
-      if (session?.user?.user_metadata?.must_change_password === true) {
-        if (location.pathname !== "/admin/change-password" && location.pathname !== "/admin/login") {
-          navigate("/admin/change-password");
-        }
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate, location.pathname]);
-
   return <>{children}</>;
 };
 
@@ -96,7 +64,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ScrollToTop />
-        <SessionCheck>
+        <PageViewTracker>
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -125,7 +93,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
-        </SessionCheck>
+        </PageViewTracker>
       </BrowserRouter>
       {/* CTA anchor removed as requested */}
     </TooltipProvider>

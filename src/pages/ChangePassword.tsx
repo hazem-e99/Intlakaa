@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/lib/supabase";
+import { changePassword, logout } from "@/services/authService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Lock, CheckCircle2 } from "lucide-react";
 
 export default function ChangePassword() {
+    const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -19,6 +20,15 @@ export default function ChangePassword() {
         e.preventDefault();
 
         // Validation
+        if (!currentPassword) {
+            toast({
+                title: "خطأ",
+                description: "يرجى إدخال كلمة المرور الحالية",
+                variant: "destructive",
+            });
+            return;
+        }
+
         if (newPassword.length < 6) {
             toast({
                 title: "خطأ",
@@ -40,32 +50,25 @@ export default function ChangePassword() {
         setIsLoading(true);
 
         try {
-            // Update password
-            const { error: passwordError } = await supabase.auth.updateUser({
-                password: newPassword,
-            });
+            const result = await changePassword(currentPassword, newPassword);
 
-            if (passwordError) {
-                throw passwordError;
+            if (result.success) {
+                toast({
+                    title: "تم بنجاح",
+                    description: "تم تحديث كلمة المرور بنجاح",
+                });
+
+                // Logout and redirect to login
+                setTimeout(() => {
+                    logout();
+                }, 1500);
+            } else {
+                toast({
+                    title: "خطأ",
+                    description: result.message || "حدث خطأ أثناء تحديث كلمة المرور",
+                    variant: "destructive",
+                });
             }
-
-            // Remove must_change_password flag
-            const { error: metadataError } = await supabase.auth.updateUser({
-                data: { must_change_password: false },
-            });
-
-            if (metadataError) {
-                throw metadataError;
-            }
-
-            toast({
-                title: "تم بنجاح",
-                description: "تم تحديث كلمة المرور بنجاح",
-            });
-
-            // Sign out and redirect to login
-            await supabase.auth.signOut();
-            navigate("/admin/login");
         } catch (error: any) {
             console.error("Password change error:", error);
             toast({
@@ -87,11 +90,29 @@ export default function ChangePassword() {
                     </div>
                     <CardTitle className="text-2xl font-bold">تغيير كلمة المرور</CardTitle>
                     <CardDescription>
-                        يرجى إدخال كلمة مرور جديدة وآمنة
+                        يرجى إدخال كلمة المرور الحالية والجديدة
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="currentPassword">كلمة المرور الحالية</Label>
+                            <div className="relative">
+                                <Lock className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <Input
+                                    id="currentPassword"
+                                    type="password"
+                                    placeholder="••••••••"
+                                    value={currentPassword}
+                                    onChange={(e) => setCurrentPassword(e.target.value)}
+                                    disabled={isLoading}
+                                    className="pr-10"
+                                    required
+                                    autoComplete="current-password"
+                                />
+                            </div>
+                        </div>
+
                         <div className="space-y-2">
                             <Label htmlFor="newPassword">كلمة المرور الجديدة</Label>
                             <div className="relative">

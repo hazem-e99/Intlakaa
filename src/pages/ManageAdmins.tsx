@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
+import { getAllUsers, inviteUser, updateUserRole, deleteUser } from "@/services/userService";
+import { getUserRole } from "@/services/authService";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Table,
@@ -35,20 +36,15 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-interface AdminUser {
+interface User {
     id: string;
-    email?: string;
-    created_at: string;
-    last_sign_in_at?: string;
-    user_metadata?: {
-        role?: string;
-        must_change_password?: boolean;
-    };
+    email: string;
+    role: 'owner' | 'admin';
+    createdAt: string;
+    lastSignInAt?: string;
+    isActive: boolean;
+    mustChangePassword: boolean;
 }
-
-// Get the Edge Function URL
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const EDGE_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/admin-users`;
 
 export default function ManageAdmins() {
     const [email, setEmail] = useState("");
@@ -58,80 +54,32 @@ export default function ManageAdmins() {
 
     // Check if user is owner
     useEffect(() => {
-        supabase.auth.getUser().then(({ data }) => {
-            const role = data.user?.user_metadata?.role;
-            if (role !== "owner") {
-                toast({
-                    title: "غير مصرح",
-                    description: "ليس لديك صلاحية للوصول إلى هذه الصفحة",
-                    variant: "destructive",
-                });
-                navigate("/admin");
-            }
-        });
+        const role = getUserRole();
+        if (role !== "owner") {
+            toast({
+                title: "غير مصرح",
+                description: "ليس لديك صلاحية للوصول إلى هذه الصفحة",
+                variant: "destructive",
+            });
+            navigate("/admin");
+        }
     }, [navigate, toast]);
 
-    // Fetch all admin users via Edge Function
+    // Fetch all admin users
     const {
         data: users,
         isLoading,
         isError,
         error,
-    } = useQuery<AdminUser[]>({
+    } = useQuery<User[]>({
         queryKey: ["admin-users"],
-        queryFn: async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-
-            if (!session) {
-                throw new Error("Not authenticated");
-            }
-
-            const response = await fetch(`${EDGE_FUNCTION_URL}?action=list`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${session.access_token}`,
-                    "Content-Type": "application/json",
-                },
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || "Failed to fetch users");
-            }
-
-            const data = await response.json();
-            return data.users || [];
-        },
+        queryFn: getAllUsers,
         staleTime: 30000,
     });
 
-    // Invite user mutation via Edge Function
+    // Invite user mutation
     const inviteMutation = useMutation({
-        mutationFn: async (inviteEmail: string) => {
-            const { data: { session } } = await supabase.auth.getSession();
-
-            if (!session) {
-                throw new Error("Not authenticated");
-            }
-
-            const response = await fetch(`${EDGE_FUNCTION_URL}?action=invite`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${session.access_token}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email: inviteEmail,
-                }),
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || "Failed to invite user");
-            }
-
-            return await response.json();
-        },
+        mutationFn: inviteUser,
         onSuccess: () => {
             toast({
                 title: "تم إرسال الدعوة بنجاح",
@@ -149,31 +97,9 @@ export default function ManageAdmins() {
         },
     });
 
-    // Delete user mutation via Edge Function
+    // Delete user mutation
     const deleteMutation = useMutation({
-        mutationFn: async (userId: string) => {
-            const { data: { session } } = await supabase.auth.getSession();
-
-            if (!session) {
-                throw new Error("Not authenticated");
-            }
-
-            const response = await fetch(`${EDGE_FUNCTION_URL}?action=delete`, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${session.access_token}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ userId }),
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || "Failed to delete user");
-            }
-
-            return await response.json();
-        },
+        mutationFn: deleteUser,
         onSuccess: () => {
             toast({
                 title: "تم حذف المستخدم",
@@ -192,29 +118,8 @@ export default function ManageAdmins() {
 
     // Update user role mutation
     const updateRoleMutation = useMutation({
-        mutationFn: async ({ userId, newRole }: { userId: string; newRole: string }) => {
-            const { data: { session } } = await supabase.auth.getSession();
-
-            if (!session) {
-                throw new Error("Not authenticated");
-            }
-
-            const response = await fetch(`${EDGE_FUNCTION_URL}?action=update-role`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${session.access_token}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ userId, role: newRole }),
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || "Failed to update role");
-            }
-
-            return await response.json();
-        },
+        mutationFn: ({ userId, newRole }: { userId: string; newRole: 'owner' | 'admin' }) =>
+            updateUserRole(userId, newRole),
         onSuccess: () => {
             toast({
                 title: "تم تحديث الدور",
@@ -389,12 +294,12 @@ export default function ManageAdmins() {
                                                 {users.map((user) => (
                                                     <TableRow key={user.id}>
                                                         <TableCell className="font-medium" dir="ltr">
-                                                            {user.email || "N/A"}
+                                                            {user.email}
                                                         </TableCell>
                                                         <TableCell>
                                                             <Select
-                                                                value={user.user_metadata?.role || "admin"}
-                                                                onValueChange={(newRole) => {
+                                                                value={user.role}
+                                                                onValueChange={(newRole: 'owner' | 'admin') => {
                                                                     updateRoleMutation.mutate({
                                                                         userId: user.id,
                                                                         newRole
@@ -412,11 +317,11 @@ export default function ManageAdmins() {
                                                             </Select>
                                                         </TableCell>
                                                         <TableCell>
-                                                            {formatDate(user.created_at)}
+                                                            {formatDate(user.createdAt)}
                                                         </TableCell>
                                                         <TableCell>
-                                                            {user.last_sign_in_at
-                                                                ? formatDate(user.last_sign_in_at)
+                                                            {user.lastSignInAt
+                                                                ? formatDate(user.lastSignInAt)
                                                                 : "لم يسجل دخول بعد"}
                                                         </TableCell>
                                                         <TableCell>
@@ -472,7 +377,7 @@ export default function ManageAdmins() {
                                                 <div className="flex justify-between items-start gap-2">
                                                     <div className="flex-1 min-w-0">
                                                         <p className="font-medium text-sm break-all" dir="ltr">
-                                                            {user.email || "N/A"}
+                                                            {user.email}
                                                         </p>
                                                     </div>
                                                     <AlertDialog>
@@ -515,14 +420,14 @@ export default function ManageAdmins() {
                                                     <div className="flex justify-between items-center pb-2 border-b">
                                                         <span className="text-muted-foreground">تاريخ الإنشاء:</span>
                                                         <span className="font-medium text-xs sm:text-sm">
-                                                            {formatDate(user.created_at)}
+                                                            {formatDate(user.createdAt)}
                                                         </span>
                                                     </div>
                                                     <div className="flex justify-between items-center">
                                                         <span className="text-muted-foreground">آخر تسجيل دخول:</span>
                                                         <span className="font-medium text-xs sm:text-sm">
-                                                            {user.last_sign_in_at
-                                                                ? formatDate(user.last_sign_in_at)
+                                                            {user.lastSignInAt
+                                                                ? formatDate(user.lastSignInAt)
                                                                 : "لم يسجل دخول بعد"}
                                                         </span>
                                                     </div>

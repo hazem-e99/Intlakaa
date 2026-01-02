@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowRight } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { createRequest } from "@/services/requestsService";
 import { pushGTMEvent } from "@/utils/gtm";
 
 const Form = () => {
@@ -65,7 +65,7 @@ const Form = () => {
 
       let phoneCountry = null;
       const phone = String(entries.phone).replace(/\s/g, '');
-      
+
       // Check for country code matches (sorted by length to match longer codes first)
       const sortedCodes = phoneCountryCodes.sort((a, b) => b.length - a.length);
       for (const code of sortedCodes) {
@@ -75,29 +75,22 @@ const Form = () => {
           break;
         }
       }
-      
+
       // If starts with 05 and no country detected, assume Saudi Arabia
       if (!phoneCountry && phone.startsWith('05')) {
         phoneCountry = '+966';
       }
 
-      // Payload for Supabase
-      const payload = {
-        name: entries.name,
-        phone: entries.phone,
-        store_url: entries.store_url,
-        monthly_sales: entries.monthly_sales,
-        ip_address: ipAddress,
-        country: country,
-        phone_country: phoneCountry,
-      };
-
-      // 1️⃣ — Insert into Supabase
-      const { data, error } = await supabase
-        .from("requests")
-        .insert([payload]);
-
-      if (error) throw error;
+      // 1️⃣ — Insert into Backend API
+      await createRequest({
+        name: String(entries.name),
+        phone: String(entries.phone),
+        storeUrl: String(entries.store_url),
+        monthlySales: String(entries.monthly_sales),
+        ipAddress,
+        country,
+        phoneCountry,
+      });
 
       // 2️⃣ — Send email using Web3Forms
       const web3Payload = {
