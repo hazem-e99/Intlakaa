@@ -25,60 +25,16 @@ const Form = () => {
       // Get user's IP address and country
       let ipAddress = null;
       let country = null;
+      let phoneCountry = null;
       try {
         const ipResponse = await fetch('https://ipapi.co/json/');
         const ipData = await ipResponse.json();
         ipAddress = ipData.ip;
         country = ipData.country_name;
+        // Get country calling code from IP data
+        phoneCountry = ipData.country_calling_code || null;
       } catch (ipError) {
         console.warn('Could not fetch IP address:', ipError);
-      }
-
-      // Detect phone country code from phone number prefix
-      const phoneCountryCodes = [
-        '+966', '00966',
-        '+971', '00971',
-        '+20', '0020',
-        '+962', '00962',
-        '+965', '00965',
-        '+973', '00973',
-        '+974', '00974',
-        '+968', '00968',
-        '+961', '00961',
-        '+963', '00963',
-        '+964', '00964',
-        '+967', '00967',
-        '+212', '00212',
-        '+213', '00213',
-        '+216', '00216',
-        '+218', '00218',
-        '+249', '00249',
-        '+970', '00970',
-        '+1', '001',
-        '+44', '0044',
-        '+33', '0033',
-        '+49', '0049',
-        '+90', '0090',
-        '+92', '0092',
-        '+91', '0091',
-      ];
-
-      let phoneCountry = null;
-      const phone = String(entries.phone).replace(/\s/g, '');
-
-      // Check for country code matches (sorted by length to match longer codes first)
-      const sortedCodes = phoneCountryCodes.sort((a, b) => b.length - a.length);
-      for (const code of sortedCodes) {
-        if (phone.startsWith(code)) {
-          // Normalize to + format
-          phoneCountry = code.startsWith('00') ? '+' + code.slice(2) : code;
-          break;
-        }
-      }
-
-      // If starts with 05 and no country detected, assume Saudi Arabia
-      if (!phoneCountry && phone.startsWith('05')) {
-        phoneCountry = '+966';
       }
 
       // 1️⃣ — Insert into Backend API
