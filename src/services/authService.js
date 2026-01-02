@@ -24,7 +24,7 @@ export const login = async (email, password) => {
 // Logout
 export const logout = () => {
   clearAuth();
-  window.location.href = '/login';
+  window.location.href = '/admin/login';
 };
 
 // Get current user
