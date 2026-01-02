@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 // Base Backend URL (without /api)
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+let BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+// Remove trailing /api if accidentally included in env variable
+BACKEND_URL = BACKEND_URL.replace(/\/api\/?$/, '');
 
 // Create axios instance
 const api = axios.create({
