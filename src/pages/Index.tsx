@@ -9,6 +9,7 @@ import prefetchForm from "@/lib/prefetchForm";
 const PlatformsSection = lazy(() => import("@/components/PlatformsSection"));
 const PromoSection = lazy(() => import("@/components/PromoSection"));
 const CaseStudySection = lazy(() => import("@/components/CaseStudySection"));
+const CustomersLogosSection = lazy(() => import("@/components/CustomersLogosSection"));
 const ClientsSection = lazy(() => import("@/components/ClientsSection"));
 const ServicesSection = lazy(() => import("@/components/ServicesSection"));
 const ResultsSection = lazy(() => import("@/components/ResultsSection"));
@@ -47,6 +48,9 @@ const Index = () => {
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <CaseStudySection />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <CustomersLogosSection />
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <ClientsSection />
