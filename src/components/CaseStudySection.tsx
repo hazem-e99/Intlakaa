@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { memo } from "react";
+import SafariVideo from "./ui/safari-video";
 
 const videos = [
   { id: 1, title: "حملة إعلانية ناجحة", src: "/v5.mp4" },
@@ -37,14 +38,11 @@ const CaseStudySection = () => {
               className="relative group cursor-pointer"
             >
               <div className="video-card aspect-video rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden bg-black">
-                <video
+                <SafariVideo
                   src={video.src}
                   controls
-                  preload="metadata"
                   className="w-full h-full object-cover bg-black block relative z-10"
-                >
-                  المتصفح لا يدعم تشغيل الفيديو
-                </video>
+                />
               </div>
             </motion.div>
           ))}

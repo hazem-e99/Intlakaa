@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
+import SafariVideo from "./ui/safari-video";
 
 // List of available video IDs based on actual files
-const clientVideos = [1, 2, 3, 4, 6,7, 13].map((id) => ({
+const clientVideos = [1, 2, 3, 4, 6, 7, 13].map((id) => ({
   id,
   src: `/clients/${id}.mp4`,
 }));
@@ -24,7 +25,7 @@ const ClientsSection = () => {
             استمع إلى تجارب عملائنا الحقيقية مع خدماتنا
           </p>
         </motion.div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {clientVideos.map((video, index) => (
             <motion.div
@@ -37,14 +38,11 @@ const ClientsSection = () => {
               className="relative group cursor-pointer"
             >
               <div className="video-card aspect-video rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden bg-black">
-                <video
+                <SafariVideo
                   src={video.src}
                   controls
-                  preload="metadata"
                   className="w-full h-full object-cover bg-black block relative z-10"
-                >
-                  المتصفح لا يدعم تشغيل الفيديو
-                </video>
+                />
               </div>
             </motion.div>
           ))}
