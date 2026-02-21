@@ -22,6 +22,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Requests = lazy(() => import("./pages/Requests"));
 const Settings = lazy(() => import("./pages/Settings"));
 const ManageAdmins = lazy(() => import("./pages/ManageAdmins"));
+const SEOManagement = lazy(() => import("./pages/SEOManagement"));
 
 // Protected Route
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -91,6 +92,7 @@ const App = () => (
                 <Route path="requests" element={<Requests />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="manage-admins" element={<ManageAdmins />} />
+                <Route path="seo-management" element={<SEOManagement />} />
               </Route>
 
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

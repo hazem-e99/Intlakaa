@@ -7,6 +7,8 @@ import {
   LogOut,
   Menu,
   X,
+  Search,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -32,6 +34,16 @@ const navigation = [
     name: "إدارة الأدمنز",
     href: "/admin/manage-admins",
     icon: Users,
+  },
+  {
+    name: "إدارة SEO",
+    href: "/admin/seo-management",
+    icon: Search,
+  },
+  {
+    name: "الإعدادات",
+    href: "/admin/settings",
+    icon: Settings,
   },
 ];
 
