@@ -78,7 +78,7 @@ export function Sidebar({ className }: SidebarProps) {
   };
 
   const SidebarContent = () => (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col text-right" dir="rtl">
       {/* Logo */}
       <div className="flex h-16 items-center justify-center border-b px-6">
         <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
@@ -96,14 +96,14 @@ export function Sidebar({ className }: SidebarProps) {
               to={item.href}
               onClick={() => setIsMobileOpen(false)}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors justify-start",
                 isActive
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               )}
             >
               <item.icon className="h-5 w-5" />
-              {item.name}
+              <span>{item.name}</span>
             </Link>
           );
         })}
