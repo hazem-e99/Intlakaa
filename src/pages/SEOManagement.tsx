@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Globe, Share2, Search, BarChart3, Save, Loader2 } from "lucide-react";
-import { fetchSeoSettings, saveSeoSettings, type SeoSettings } from "@/services/seoService";
+import { Globe, Share2, Search, BarChart3, Save, Loader2, RefreshCw } from "lucide-react";
+import { fetchSeoSettings, saveSeoSettings, syncSeoFromHtml, type SeoSettings } from "@/services/seoService";
 
 const defaultSeo: SeoSettings = {
     siteTitle: "",
@@ -30,6 +30,7 @@ export default function SEOManagement() {
 
     const [seo, setSeo] = useState<SeoSettings>(defaultSeo);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSyncing, setIsSyncing] = useState(false);
     const [isFetching, setIsFetching] = useState(true);
 
     // ── Load current settings from the backend on mount ──────────────────────
@@ -56,6 +57,28 @@ export default function SEOManagement() {
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         setSeo((prev) => ({ ...prev, [field]: e.target.value }));
+    };
+
+    // ── Sync from index.html (overwrite DB with HTML values) ───────────────────
+    const handleSync = async () => {
+        setIsSyncing(true);
+        try {
+            const updated = await syncSeoFromHtml();
+            setSeo(updated);
+            toast({
+                title: "✅ تمت المزامنة",
+                description: "تم استيراد جميع الإعدادات من ملف index.html بنجاح",
+            });
+        } catch (err) {
+            console.error("SEO sync error:", err);
+            toast({
+                title: "خطأ في المزامنة",
+                description: "تعذّر مزامنة الإعدادات من ملف index.html",
+                variant: "destructive",
+            });
+        } finally {
+            setIsSyncing(false);
+        }
     };
 
     // ── Save to backend + auto-update index.html ──────────────────────────────
@@ -102,14 +125,30 @@ export default function SEOManagement() {
                         تحسين ظهور موقعك في محركات البحث ومواقع التواصل الاجتماعي
                     </p>
                 </div>
-                <Button onClick={handleSave} disabled={isLoading} className="w-fit gap-2">
-                    {isLoading ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                        <Save className="h-4 w-4" />
-                    )}
-                    {isLoading ? "جاري الحفظ..." : "حفظ وتطبيق على الموقع"}
-                </Button>
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant="outline"
+                        onClick={handleSync}
+                        disabled={isSyncing || isLoading}
+                        title="استيراد القيم الحالية من ملف index.html إلى قاعدة البيانات"
+                        className="w-fit gap-2"
+                    >
+                        {isSyncing ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                            <RefreshCw className="h-4 w-4" />
+                        )}
+                        {isSyncing ? "جاري المزامنة..." : "مزامنة من الموقع"}
+                    </Button>
+                    <Button onClick={handleSave} disabled={isLoading || isSyncing} className="w-fit gap-2">
+                        {isLoading ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                            <Save className="h-4 w-4" />
+                        )}
+                        {isLoading ? "جاري الحفظ..." : "حفظ وتطبيق على الموقع"}
+                    </Button>
+                </div>
             </div>
 
             <Tabs defaultValue="general" className="w-full" dir="rtl">

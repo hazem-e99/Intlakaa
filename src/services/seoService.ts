@@ -34,3 +34,12 @@ export const saveSeoSettings = async (
     const { data } = await api.put('/seo', settings);
     return data.data as SeoSettings;
 };
+
+/**
+ * Sync: re-read index.html on the server and overwrite the DB record.
+ * Call this once to import any pre-existing pixel IDs from the HTML file.
+ */
+export const syncSeoFromHtml = async (): Promise<SeoSettings> => {
+    const { data } = await api.post('/seo/sync');
+    return data.data as SeoSettings;
+};
