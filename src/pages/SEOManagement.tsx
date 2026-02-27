@@ -38,12 +38,14 @@ export default function SEOManagement() {
     // ── Load current settings from the backend on mount ──────────────────────
     useEffect(() => {
         const load = async () => {
+            console.log('[SEO Page] 🚀 Component mounted — loading settings...');
             try {
                 const data = await fetchSeoSettings();
                 setSeo(data);
                 setFetchError(false);
+                console.log('[SEO Page] ✅ State updated with fetched data:', data);
             } catch (err) {
-                console.error("SEO fetch error:", err);
+                console.error('[SEO Page] ❌ Failed to load settings:', err);
                 setFetchError(true);
                 toast({
                     title: "خطأ في تحميل الإعدادات",
@@ -52,6 +54,7 @@ export default function SEOManagement() {
                 });
             } finally {
                 setIsFetching(false);
+                console.log('[SEO Page] 🏁 Fetch sequence complete.');
             }
         };
         load();
@@ -60,21 +63,25 @@ export default function SEOManagement() {
     const handleChange = (field: keyof SeoSettings) => (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-        setSeo((prev) => ({ ...prev, [field]: e.target.value }));
+        const newValue = e.target.value;
+        console.log(`[SEO Page] ✏️ Field changed: ${field} =`, newValue);
+        setSeo((prev) => ({ ...prev, [field]: newValue }));
     };
 
     // ── Sync from index.html (overwrite DB with HTML values) ───────────────────
     const handleSync = async () => {
+        console.log('[SEO Page] 🔁 Sync button clicked...');
         setIsSyncing(true);
         try {
             const updated = await syncSeoFromHtml();
             setSeo(updated);
+            console.log('[SEO Page] ✅ Sync complete — state updated:', updated);
             toast({
                 title: "✅ تمت المزامنة",
                 description: "تم استيراد جميع الإعدادات من ملف index.html بنجاح",
             });
         } catch (err) {
-            console.error("SEO sync error:", err);
+            console.error('[SEO Page] ❌ Sync failed:', err);
             toast({
                 title: "خطأ في المزامنة",
                 description: "تعذّر مزامنة الإعدادات من ملف index.html",
@@ -87,16 +94,18 @@ export default function SEOManagement() {
 
     // ── Save to backend + auto-update index.html ──────────────────────────────
     const handleSave = async () => {
+        console.log('[SEO Page] 💾 Save button clicked — current state:', seo);
         setIsLoading(true);
         try {
             const updated = await saveSeoSettings(seo);
             setSeo(updated);
+            console.log('[SEO Page] ✅ Save complete — state updated:', updated);
             toast({
                 title: "✅ تم الحفظ",
                 description: "تم تحديث إعدادات SEO وتطبيقها على الموقع بنجاح",
             });
         } catch (err) {
-            console.error("SEO save error:", err);
+            console.error('[SEO Page] ❌ Save failed:', err);
             toast({
                 title: "خطأ في الحفظ",
                 description: "تعذّر حفظ إعدادات SEO. يرجى المحاولة مجدداً.",
