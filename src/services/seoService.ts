@@ -7,6 +7,7 @@ export interface SeoSettings {
     ogTitle: string;
     ogDescription: string;
     ogImage: string;
+    ogUrl: string;
     googleConsole: string;
     robotsTxt: string;
     sitemap: string;

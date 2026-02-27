@@ -16,6 +16,7 @@ const defaultSeo: SeoSettings = {
     ogTitle: "",
     ogDescription: "",
     ogImage: "",
+    ogUrl: "",
     googleConsole: "",
     robotsTxt: "",
     sitemap: "",
@@ -32,6 +33,7 @@ export default function SEOManagement() {
     const [isLoading, setIsLoading] = useState(false);
     const [isSyncing, setIsSyncing] = useState(false);
     const [isFetching, setIsFetching] = useState(true);
+    const [fetchError, setFetchError] = useState(false);
 
     // ── Load current settings from the backend on mount ──────────────────────
     useEffect(() => {
@@ -39,8 +41,10 @@ export default function SEOManagement() {
             try {
                 const data = await fetchSeoSettings();
                 setSeo(data);
+                setFetchError(false);
             } catch (err) {
                 console.error("SEO fetch error:", err);
+                setFetchError(true);
                 toast({
                     title: "خطأ في تحميل الإعدادات",
                     description: "تعذّر جلب إعدادات SEO من الخادم",
@@ -110,6 +114,24 @@ export default function SEOManagement() {
                 <div className="text-center space-y-3">
                     <Loader2 className="h-10 w-10 animate-spin text-primary mx-auto" />
                     <p className="text-muted-foreground">جاري تحميل إعدادات SEO...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (fetchError) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]" dir="rtl">
+                <div className="text-center space-y-4">
+                    <div className="text-destructive text-5xl">⚠️</div>
+                    <h2 className="text-xl font-semibold">تعذّر الاتصال بالخادم</h2>
+                    <p className="text-muted-foreground max-w-sm">
+                        تأكد أن الباك إند شغال وأن الاتصال بقاعدة البيانات سليم، ثم أعد تحميل الصفحة.
+                    </p>
+                    <Button onClick={() => window.location.reload()} variant="outline" className="gap-2">
+                        <RefreshCw className="h-4 w-4" />
+                        إعادة المحاولة
+                    </Button>
                 </div>
             </div>
         );
@@ -251,10 +273,22 @@ export default function SEOManagement() {
                                     id="og-image"
                                     value={seo.ogImage}
                                     onChange={handleChange("ogImage")}
-                                    placeholder="https://example.com/og-image.jpg  أو  /logo.png"
+                                    placeholder="https://intlakaa.com/og-image.jpg  أو  /logo.png"
                                 />
                                 <p className="text-xs text-muted-foreground">
                                     أبعاد الصورة الموصى بها: 1200 × 630 بكسل
+                                </p>
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="og-url">رابط الموقع (og:url)</Label>
+                                <Input
+                                    id="og-url"
+                                    value={seo.ogUrl}
+                                    onChange={handleChange("ogUrl")}
+                                    placeholder="https://intlakaa.com"
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    الرابط الأساسي للموقع — مهم لمشاركات فيسبوك وتويتر
                                 </p>
                             </div>
                         </CardContent>
@@ -293,8 +327,11 @@ export default function SEOManagement() {
                                     id="sitemap"
                                     value={seo.sitemap}
                                     onChange={handleChange("sitemap")}
-                                    placeholder="https://example.com/sitemap.xml"
+                                    placeholder="https://intlakaa.com/sitemap.xml"
                                 />
+                                <p className="text-xs text-muted-foreground">
+                                    سيُضاف تلقائياً داخل ملف <code className="bg-muted px-1 rounded text-xs">robots.txt</code> عند الحفظ
+                                </p>
                             </div>
                         </CardContent>
                     </Card>
@@ -306,7 +343,7 @@ export default function SEOManagement() {
                         <CardHeader className="text-right">
                             <CardTitle>أكواد التتبع والتحليل</CardTitle>
                             <CardDescription>
-                                كل كود تضيفه هنا سيُضاف تلقائياً إلى{'<head>'} الموقع عند الحفظ
+                                أدخل الـ ID فقط — الكود الكامل بيتولّد تلقائياً ويُضاف لـ{'<head>'} و{'<body>'} الموقع عند الحفظ
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-5 text-right">
@@ -316,8 +353,11 @@ export default function SEOManagement() {
                                     id="gtm-id"
                                     value={seo.gtmId}
                                     onChange={handleChange("gtmId")}
-                                    placeholder="GTM-XXXXXXX أو AW-XXXXXXXXX"
+                                    placeholder="GTM-KNL4FLN8"
                                 />
+                                <p className="text-xs text-muted-foreground">
+                                    بيولّد كود GTM الكامل في الـ {'<head>'} + {'<noscript>'} في الـ {'<body>'}
+                                </p>
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="ga-id">Google Analytics ID (GA4)</Label>
@@ -325,8 +365,23 @@ export default function SEOManagement() {
                                     id="ga-id"
                                     value={seo.gaId}
                                     onChange={handleChange("gaId")}
-                                    placeholder="G-XXXXXXXXXX"
+                                    placeholder="G-G676SW318K"
                                 />
+                                <p className="text-xs text-muted-foreground">
+                                    استخدمه لو مش شغّال GTM — لو GTM موجود هو اللي بيدير GA4
+                                </p>
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="google-console-search">Google Search Console</Label>
+                                <Input
+                                    id="google-console-search"
+                                    value={seo.googleConsole}
+                                    onChange={handleChange("googleConsole")}
+                                    placeholder="YZbIykBhCX6tmf5srmI1PqKpLXGVuuzQbGpBjh4MBOA"
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    أدخل قيمة الـ <code className="bg-muted px-1 rounded text-xs">content</code> فقط من تاق التحقق
+                                </p>
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="fb-pixel">Facebook Pixel ID</Label>
