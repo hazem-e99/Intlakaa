@@ -327,8 +327,12 @@ export default function SEOManagement() {
                                     id="robots-txt"
                                     value={seo.robotsTxt}
                                     onChange={handleChange("robotsTxt")}
-                                    className="font-mono text-sm min-h-[120px]"
+                                    className="font-mono text-sm min-h-[120px] text-left ltr"
+                                    dir="ltr"
                                 />
+                                <p className="text-xs text-muted-foreground">
+                                    هذا المحتوى سيكون متاحاً لمحركات البحث مباشرةً على رابط <code className="bg-muted px-1 rounded text-xs">/robots.txt</code>
+                                </p>
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="sitemap">رابط ملف السايت ماب (Sitemap URL)</Label>
@@ -337,9 +341,11 @@ export default function SEOManagement() {
                                     value={seo.sitemap}
                                     onChange={handleChange("sitemap")}
                                     placeholder="https://intlakaa.com/sitemap.xml"
+                                    className="text-left ltr"
+                                    dir="ltr"
                                 />
                                 <p className="text-xs text-muted-foreground">
-                                    سيُضاف تلقائياً داخل ملف <code className="bg-muted px-1 rounded text-xs">robots.txt</code> عند الحفظ
+                                    سيُضاف الرابط تلقائياً داخل ملف <code className="bg-muted px-1 rounded text-xs">robots.txt</code> لإخبار محركات البحث بمكانه
                                 </p>
                             </div>
                         </CardContent>

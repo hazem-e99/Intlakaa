@@ -1,9 +1,9 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { initializeGTM } from "./utils/gtm";
+import { initializeDynamicSEO } from "./utils/dynamicSeo";
 
-// Initialize Google Tag Manager
-initializeGTM();
+// Initialize Dynamic SEO (Meta tags & Pixels)
+initializeDynamicSEO();
 
 createRoot(document.getElementById("root")!).render(<App />);
