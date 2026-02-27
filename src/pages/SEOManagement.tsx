@@ -398,8 +398,11 @@ export default function SEOManagement() {
                                     id="fb-pixel"
                                     value={seo.fbPixel}
                                     onChange={handleChange("fbPixel")}
-                                    placeholder="أدخل معرف بكسل فيسبوك"
+                                    placeholder="مثال: 123456789012345"
                                 />
+                                <p className="text-xs text-muted-foreground">
+                                    أدخل الـ ID الخاص بالبيكسل (أرقام فقط)
+                                </p>
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="tiktok-pixel">TikTok Pixel ID</Label>
