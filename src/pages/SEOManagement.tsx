@@ -407,8 +407,11 @@ export default function SEOManagement() {
                                     id="tiktok-pixel"
                                     value={seo.tiktokPixel}
                                     onChange={handleChange("tiktokPixel")}
-                                    placeholder="أدخل معرف بكسل تيك توك"
+                                    placeholder="مثال: D6A307JC77U2V3Q5JGF0"
                                 />
+                                <p className="text-xs text-muted-foreground">
+                                    أدخل الـ ID فقط (أحرف وأرقام) — السكريبت الكامل لـ TikTok يتولد تلقائياً
+                                </p>
                             </div>
                         </CardContent>
                     </Card>
