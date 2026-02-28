@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/robots.txt", "destination": "https://intlakaa-back.onrender.com/robots.txt" },
+    { "source": "/sitemap.xml", "destination": "https://intlakaa-back.onrender.com/sitemap.xml" },
     { "source": "/(.*)", "destination": "/" }
   ]
 }
