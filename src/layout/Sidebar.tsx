@@ -9,6 +9,7 @@ import {
   X,
   Search,
   Settings,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -29,6 +30,11 @@ const navigation = [
     name: "الطلبات",
     href: "/admin/requests",
     icon: FileText,
+  },
+  {
+    name: "الصفحات والمحتوى",
+    href: "/admin/pages",
+    icon: Globe,
   },
   {
     name: "إدارة الأدمنز",
@@ -89,7 +95,9 @@ export function Sidebar({ className }: SidebarProps) {
       {/* Navigation */}
       <nav className="flex-1 space-y-1 px-3 py-4">
         {filteredNavigation.map((item) => {
-          const isActive = location.pathname === item.href;
+          const isActive = item.href === '/admin'
+            ? location.pathname === '/admin'
+            : location.pathname.startsWith(item.href);
           return (
             <Link
               key={item.name}

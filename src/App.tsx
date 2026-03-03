@@ -16,6 +16,11 @@ const Login = lazy(() => import("./pages/Login"));
 const ChangePassword = lazy(() => import("./pages/ChangePassword"));
 const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
 
+// Public CMS pages
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const DynamicPage = lazy(() => import("./pages/DynamicPage"));
+
 // Admin pages
 const AdminLayout = lazy(() => import("./layout/AdminLayout").then(m => ({ default: m.AdminLayout })));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -23,6 +28,9 @@ const Requests = lazy(() => import("./pages/Requests"));
 const Settings = lazy(() => import("./pages/Settings"));
 const ManageAdmins = lazy(() => import("./pages/ManageAdmins"));
 const SEOManagement = lazy(() => import("./pages/SEOManagement"));
+const PagesManagement = lazy(() => import("./pages/PagesManagement"));
+const PageEditor = lazy(() => import("./pages/PageEditor"));
+const PostEditor = lazy(() => import("./pages/PostEditor"));
 
 // Protected Route
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -30,24 +38,20 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60 * 1000, // 1 minute
-      gcTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 60 * 1000,
+      gcTime: 5 * 60 * 1000,
     },
   },
 });
 
-// Loading fallback component
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
     <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
   </div>
 );
 
-// Page view tracking component
 const PageViewTracker = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
-
-  // Track page views on route change
   useEffect(() => {
     pushGTMEvent('page_view', {
       page_path: location.pathname,
@@ -55,7 +59,6 @@ const PageViewTracker = ({ children }: { children: React.ReactNode }) => {
       page_location: window.location.href,
     });
   }, [location]);
-
   return <>{children}</>;
 };
 
@@ -69,17 +72,18 @@ const App = () => (
         <PageViewTracker>
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
+              {/* Public Routes */}
               <Route path="/" element={<Index />} />
               <Route path="/form" element={<Form />} />
               <Route path="/thank-you" element={<ThankYou />} />
 
-              {/* Admin Login Route */}
+              {/* Blog */}
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+
+              {/* Auth */}
               <Route path="/admin/login" element={<Login />} />
-
-              {/* Admin Change Password Route */}
               <Route path="/admin/change-password" element={<ChangePassword />} />
-
-              {/* Admin Accept Invite Route */}
               <Route path="/admin/accept-invite" element={<AcceptInvite />} />
 
               {/* Protected Admin Routes */}
@@ -93,15 +97,19 @@ const App = () => (
                 <Route path="settings" element={<Settings />} />
                 <Route path="manage-admins" element={<ManageAdmins />} />
                 <Route path="seo-management" element={<SEOManagement />} />
+                <Route path="pages" element={<PagesManagement />} />
+                <Route path="pages/:id" element={<PageEditor />} />
+                <Route path="posts/:id" element={<PostEditor />} />
               </Route>
 
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              {/* Dynamic Pages — must be LAST before catch-all */}
+              <Route path="/:slug" element={<DynamicPage />} />
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </PageViewTracker>
       </BrowserRouter>
-      {/* CTA anchor removed as requested */}
     </TooltipProvider>
   </QueryClientProvider>
 );
