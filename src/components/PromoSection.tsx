@@ -23,16 +23,18 @@ const PromoSection = () => {
             خطوة واحدة تفصلك عن النمو الحقيقي. شاركنا بياناتك وخل فريقنا يبدأ معك الرحلة
           </p>
 
-          <Link to="/form" onMouseEnter={prefetchForm} onFocus={prefetchForm} onTouchStart={prefetchForm}>
-            <motion.button
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => pushGTMEvent('cta_click', { button_name: 'احجز استشارتك المجانية', location: 'promo_section' })}
-              className="bg-white text-primary px-12 py-5 rounded-full text-xl font-bold shadow-lg hover:shadow-xl transition-all"
-            >
-              احجز استشارتك المجانية
-            </motion.button>
-          </Link>
+          <div className="flex justify-center">
+            <Link to="/form" onMouseEnter={prefetchForm} onFocus={prefetchForm} onTouchStart={prefetchForm} className="w-full md:w-auto">
+              <motion.button
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => pushGTMEvent('cta_click', { button_name: 'احجز استشارتك المجانية', location: 'promo_section' })}
+                className="bg-white text-primary px-6 py-4 md:px-12 md:py-5 rounded-full text-base md:text-xl font-bold shadow-lg hover:shadow-xl transition-all w-full md:w-auto whitespace-nowrap"
+              >
+                احجز استشارتك المجانية
+              </motion.button>
+            </Link>
+          </div>
         </motion.div>
       </div>
     </section>
