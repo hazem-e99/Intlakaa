@@ -39,15 +39,14 @@ function HeadingBlock({ data, settings }: { data: any; settings?: Block['setting
 
 function ParagraphBlock({ data, settings }: { data: any; settings?: Block['settings'] }) {
   return (
-    <p
-      className="text-base md:text-lg leading-relaxed text-foreground/80 whitespace-pre-wrap"
+    <div
+      className="text-base md:text-lg leading-relaxed text-foreground/80 quill-content"
       style={{
         textAlign: settings?.textAlign || 'right',
         color: settings?.textColor || undefined,
       }}
-    >
-      {data.text}
-    </p>
+      dangerouslySetInnerHTML={{ __html: data.text || '' }}
+    />
   );
 }
 

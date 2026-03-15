@@ -1,5 +1,8 @@
 import { useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+// @ts-ignore
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { Block, BlockType } from '@/services/cmsService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -107,12 +110,38 @@ const HeadingEditor = ({ content, onChange }: any) => (
   </div>
 );
 
-const ParagraphEditor = ({ content, onChange }: any) => (
-  <div className="space-y-2">
-    <AlignSelect value={content.align} onChange={(v: string) => onChange({ ...content, align: v })} />
-    <Textarea value={content.text || ''} onChange={e => onChange({ ...content, text: e.target.value })} placeholder="اكتب النص هنا..." rows={4} dir="rtl" />
-  </div>
-);
+const ParagraphEditor = ({ content, onChange }: any) => {
+  const modules = {
+    toolbar: [
+      [{ 'font': [] }],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      ['blockquote', 'code-block'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'direction': 'rtl' }],
+      [{ 'align': [] }],
+      ['link', 'image', 'video'],
+      ['clean']
+    ],
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="bg-background rounded-md overflow-hidden border custom-quill">
+        <ReactQuill 
+          theme="snow" 
+          value={content.text || ''} 
+          onChange={(val: string) => onChange({ ...content, text: val })} 
+          modules={modules}
+          placeholder="اكتب النص هنا..."
+        />
+      </div>
+    </div>
+  );
+};
 
 const ImageEditor = ({ content, onChange }: any) => (
   <div className="space-y-2">
