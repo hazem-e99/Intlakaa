@@ -16,7 +16,13 @@ const HeadingRenderer = ({ content }: { content: any }) => {
 
 const ParagraphRenderer = ({ content }: { content: any }) => {
   const align = content.align === 'center' ? 'text-center' : content.align === 'left' ? 'text-left' : 'text-right';
-  return <p className={`text-base md:text-lg leading-relaxed text-muted-foreground ${align} whitespace-pre-wrap`} dir="rtl">{content.text}</p>;
+  return (
+    <div 
+      className={`text-base md:text-lg leading-relaxed text-muted-foreground ${align} quill-content`} 
+      dir="rtl"
+      dangerouslySetInnerHTML={{ __html: content.text || '' }}
+    />
+  );
 };
 
 const ImageRenderer = ({ content }: { content: any }) => {
