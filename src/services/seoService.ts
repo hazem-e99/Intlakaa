@@ -1,5 +1,18 @@
 import api from '@/lib/api';
 
+export interface SocialLink {
+    icon: string;
+    url: string;
+    label: string;
+}
+
+export interface ContactInfo {
+    icon: string;
+    label: string;
+    text: string;
+    href: string;
+}
+
 export interface SeoSettings {
     siteTitle: string;
     metaDescription: string;
@@ -15,6 +28,8 @@ export interface SeoSettings {
     gaId: string;
     fbPixel: string;
     tiktokPixel: string;
+    socialLinks: SocialLink[];
+    contactInfo: ContactInfo[];
 }
 
 /**
