@@ -57,8 +57,7 @@ const Navbar = () => {
               <img
                 src={logo}
                 alt="انطلاقة"
-                className={`h-12 w-auto transition-all duration-300 ${!isScrolled ? 'invisible md:visible opacity-0 md:opacity-100' : 'visible opacity-100'
-                  }`}
+                className="hidden md:block h-12 w-auto"
               />
             </Link>
 

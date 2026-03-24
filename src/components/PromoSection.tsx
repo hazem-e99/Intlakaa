@@ -13,7 +13,7 @@ const PromoSection = () => {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="gradient-brand rounded-3xl p-12 md:p-16 text-center shadow-medium"
+          className="gradient-brand rounded-3xl p-8 md:p-16 text-center shadow-medium"
         >
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-8">
             عَبّي النموذج وخلنا نطلق متجرك سوا
@@ -29,7 +29,7 @@ const PromoSection = () => {
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => pushGTMEvent('cta_click', { button_name: 'احجز استشارتك المجانية', location: 'promo_section' })}
-                className="bg-white text-primary px-6 py-4 md:px-12 md:py-5 rounded-full text-base md:text-xl font-bold shadow-lg hover:shadow-xl transition-all w-full md:w-auto whitespace-nowrap"
+                className="bg-white text-primary px-6 py-4 md:px-12 md:py-5 rounded-full text-base md:text-xl font-bold shadow-lg hover:shadow-xl transition-all w-full md:w-auto md:whitespace-nowrap"
               >
                 احجز استشارتك المجانية
               </motion.button>
