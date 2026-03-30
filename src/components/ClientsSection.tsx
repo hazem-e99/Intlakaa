@@ -93,7 +93,7 @@ const ClientsSection = () => {
 
   return (
     <>
-      <section className="py-20 px-4 bg-[#1a0540]" id="clients">
+      <section className="section-py px-4 section-bg-elevated" id="clients">
         <div className="container mx-auto">
           {/* Header */}
           <motion.div
@@ -103,11 +103,11 @@ const ClientsSection = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <div className="w-[50px] h-[3px] bg-gradient-to-l from-[#9b50e8] to-[#6a2bc4] rounded-full mx-auto mb-4" />
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-[1.5] max-w-4xl mx-auto bg-gradient-to-bl from-white to-[#e0ccff] bg-clip-text text-transparent">
+            <div className="w-[50px] h-[3px] rounded-full mx-auto mb-4" style={{ background: 'linear-gradient(to left, #9b50e8, #7c3aed)' }} />
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4 leading-[1.5] max-w-4xl mx-auto text-white">
               آراء عملائنا
             </h2>
-            <p className="text-sm text-white/70 max-w-xl mx-auto leading-relaxed">
+            <p className="text-sm text-white/50 max-w-xl mx-auto leading-relaxed">
               استمع إلى تجارب عملائنا الحقيقية مع خدماتنا
             </p>
           </motion.div>
@@ -118,7 +118,8 @@ const ClientsSection = () => {
               {/* Prev Button */}
               <button
                 onClick={goPrev}
-                className="hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full bg-[#2b0862]/80 backdrop-blur-xl border border-[#9b50e8]/30 text-white hover:bg-[#9b50e8] transition-all"
+                className="hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
+                style={{ background: 'rgba(21,11,46,0.8)', border: '1px solid rgba(155,80,232,0.2)', backdropFilter: 'blur(12px)' }}
                 aria-label="السابق"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -156,7 +157,8 @@ const ClientsSection = () => {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: index * 0.08 }}
-                      className={`${cardFlexBasis} bg-[#0a0a1a] border border-[#9b50e8]/20 rounded-2xl overflow-hidden flex flex-col cursor-pointer hover:border-[#9b50e8] hover:shadow-[0_15px_40px_rgba(0,0,0,0.4)] transition-all group`}
+                      className={`${cardFlexBasis} rounded-2xl overflow-hidden flex flex-col cursor-pointer transition-all group`}
+                      style={{ background: 'rgba(13,5,32,0.9)', border: '1px solid rgba(155,80,232,0.12)' }}
                       onClick={() => setModalVideoSrc(video.src)}
                     >
                       {/* Video Thumbnail Container */}
@@ -193,7 +195,8 @@ const ClientsSection = () => {
               {/* Next Button */}
               <button
                 onClick={goNext}
-                className="hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full bg-[#2b0862]/80 backdrop-blur-xl border border-[#9b50e8]/30 text-white hover:bg-[#9b50e8] transition-all"
+                className="hidden md:flex flex-shrink-0 w-11 h-11 items-center justify-center rounded-full text-white transition-all"
+                style={{ background: 'rgba(21,11,46,0.8)', border: '1px solid rgba(155,80,232,0.2)', backdropFilter: 'blur(12px)' }}
                 aria-label="التالي"
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -206,11 +209,12 @@ const ClientsSection = () => {
                 <button
                   key={i}
                   onClick={() => setCurrentPage(i)}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    i === currentPage
-                      ? "bg-[#9b50e8] scale-[1.3] shadow-[0_0_8px_rgba(155,80,232,0.6)]"
-                      : "bg-[#9b50e8]/30"
-                  }`}
+                  className="w-2 h-2 rounded-full transition-all"
+                  style={{
+                    background: i === currentPage ? '#9b50e8' : 'rgba(155,80,232,0.2)',
+                    transform: i === currentPage ? 'scale(1.3)' : 'scale(1)',
+                    boxShadow: i === currentPage ? '0 0 8px rgba(155,80,232,0.5)' : 'none',
+                  }}
                   aria-label={`صفحة ${i + 1}`}
                 />
               ))}

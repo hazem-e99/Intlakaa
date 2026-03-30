@@ -2,161 +2,138 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { fetchSeoSettings, type SocialLink, type ContactInfo } from "@/services/seoService";
 import { ICON_MAP } from "@/pages/SEOManagement";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
+import prefetchForm from "@/lib/prefetchForm";
+import { pushGTMEvent } from "@/utils/gtm";
+import logo from "@/assets/logo.png";
 
-// ── Fallback data (shown before API responds or on error) ─────────────────────
 const DEFAULT_CONTACT: ContactInfo[] = [
-  { icon: "phone",    label: "اتصل بنا", text: "+966532759488",    href: "tel:+966532759488"           },
-  { icon: "whatsapp", label: "راسلنا",   text: "واتساب",           href: "https://wa.me/966532759488"  },
-  { icon: "email",    label: "البريد",   text: "info@antlaqa.com", href: "mailto:info@antlaqa.com"     },
+  { icon: "phone",    label: "اتصل بنا",  text: "+966 532 759 488", href: "tel:+966532759488" },
+  { icon: "whatsapp", label: "واتساب",    text: "راسلنا مباشرةً",  href: "https://wa.me/966532759488" },
+  { icon: "email",    label: "البريد",    text: "info@antlaqa.com", href: "mailto:info@antlaqa.com" },
 ];
-
 const DEFAULT_SOCIAL: SocialLink[] = [
-  { icon: "tiktok",   url: "https://www.tiktok.com/@qualified.leads.ksa", label: "TikTok"   },
+  { icon: "tiktok",   url: "https://www.tiktok.com/@qualified.leads.ksa", label: "TikTok" },
   { icon: "facebook", url: "https://www.facebook.com/share/1Vv4xzKZyu",   label: "Facebook" },
   { icon: "linkedin", url: "https://www.linkedin.com/company/intlakaa/",   label: "LinkedIn" },
 ];
 
-// ── Component ─────────────────────────────────────────────────────────────────
 const Footer = () => {
   const [contactInfo, setContactInfo] = useState<ContactInfo[]>(DEFAULT_CONTACT);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>(DEFAULT_SOCIAL);
 
   useEffect(() => {
-    fetchSeoSettings()
-      .then(data => {
-        if (data.contactInfo?.length) setContactInfo(data.contactInfo);
-        if (data.socialLinks?.length) setSocialLinks(data.socialLinks);
-      })
-      .catch(() => { /* keep defaults */ });
+    fetchSeoSettings().then(data => {
+      if (data.contactInfo?.length) setContactInfo(data.contactInfo);
+      if (data.socialLinks?.length) setSocialLinks(data.socialLinks);
+    }).catch(() => {});
   }, []);
 
-  // Only render social links that have a URL
-  const activeSocials = socialLinks.filter(l => l.url?.trim());
-  // Only render contact cards that have an href
+  const activeSocials  = socialLinks.filter(l => l.url?.trim());
   const activeContacts = contactInfo.filter(c => c.href?.trim());
 
   return (
-    <footer className="relative bg-gradient-to-br from-primary via-primary to-primary/90 text-primary-foreground py-20 px-4 overflow-hidden">
-      {/* Background blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute -top-20 -right-20 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute -bottom-20 -left-20 w-80 h-80 bg-white/5 rounded-full blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
+    <footer className="relative text-white overflow-hidden" style={{ background: "linear-gradient(180deg, #0d0520 0%, #060218 100%)" }}>
+      {/* Top line */}
+      <div className="h-px" style={{ background: "linear-gradient(to right, transparent, rgba(155,80,232,0.3), transparent)" }} />
+
+      {/* CTA Banner */}
+      <div className="relative section-py px-6 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <motion.div className="absolute -top-20 right-1/4 w-[500px] h-[500px] rounded-full blur-[120px] opacity-10"
+            style={{ background: "radial-gradient(circle, #9b50e8, transparent 70%)" }}
+            animate={{ scale: [1, 1.15, 1], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }} />
+        </div>
+
+        <div className="container mx-auto relative z-10 text-center">
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <div className="inline-flex items-center gap-2 rounded-full px-5 py-2 mb-8" style={{ background: "rgba(155,80,232,0.1)", border: "1px solid rgba(155,80,232,0.18)" }}>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+              </span>
+              <span className="text-sm font-bold text-white/80">استشارة مجانية الآن</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black mb-4 leading-[1.4]">
+              لنبدأ معًا <span className="text-gradient">رحلة النجاح</span>
+            </h2>
+            <p className="text-lg text-white/50 mb-10 max-w-xl mx-auto">تواصل معنا الآن واحصل على استشارة تسويقية مجانية وخطة نمو مخصصة لمشروعك</p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link to="/form" onMouseEnter={prefetchForm}>
+                <motion.button whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.97 }}
+                  onClick={() => pushGTMEvent("cta_click", { button_name: "footer_cta", location: "footer" })}
+                  className="relative group inline-flex items-center gap-3 px-9 py-4 rounded-full font-black text-white text-base shadow-xl overflow-hidden"
+                  style={{ background: "linear-gradient(135deg, #7c3aed, #9b50e8)" }}>
+                  <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-transparent via-white/15 to-transparent -skew-x-12" />
+                  <span className="relative flex items-center gap-3">احجز استشارتك المجانية <ArrowLeft className="w-4 h-4" /></span>
+                </motion.button>
+              </Link>
+              <a href="https://wa.me/966532759488" target="_blank" rel="noopener noreferrer">
+                <motion.button whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.97 }}
+                  className="px-8 py-4 rounded-full font-bold text-white text-base transition-all"
+                  style={{ border: "1px solid rgba(155,80,232,0.25)", background: "rgba(155,80,232,0.08)" }}>واتساب مباشر</motion.button>
+              </a>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
-      <div className="container mx-auto relative z-10">
-        {/* Headline */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">لنبدأ معًا رحلة النجاح</h2>
-          <p className="text-xl opacity-90 max-w-2xl mx-auto">
-            تواصل معنا الآن واحصل على استشارة مجانية لمشروعك
-          </p>
-        </motion.div>
+      <div className="h-px" style={{ background: "linear-gradient(to right, transparent, rgba(155,80,232,0.1), transparent)" }} />
 
-        {/* Contact Cards — dynamic from backend */}
-        {activeContacts.length > 0 && (
-          <div className={`grid gap-6 max-w-5xl mx-auto mb-12 ${
-            activeContacts.length === 1 ? "md:grid-cols-1 max-w-sm" :
-            activeContacts.length === 2 ? "md:grid-cols-2 max-w-2xl" :
-            "md:grid-cols-3"
-          }`}>
-            {activeContacts.map((contact, index) => {
-              const meta = ICON_MAP[contact.icon] ?? ICON_MAP["globe"];
-              const IconComp = meta.Icon;
-              return (
-                <motion.a
-                  key={index}
-                  href={contact.href}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  className="group bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all border border-white/20"
-                >
-                  <div className="flex flex-col items-center gap-4">
-                    <motion.div
-                      whileHover={{ rotate: 360, scale: 1.1 }}
-                      transition={{ duration: 0.5 }}
-                      className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center group-hover:bg-secondary/30 transition-all"
-                    >
-                      <IconComp className="w-8 h-8 text-white" />
-                    </motion.div>
-                    <div className="text-center">
-                      <p className="text-sm opacity-75 mb-1">{contact.label}</p>
-                      <p className="text-lg font-semibold">{contact.text}</p>
-                    </div>
-                  </div>
-                </motion.a>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Social Media Icons — dynamic from backend */}
-        {activeSocials.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-center mb-12"
-          >
-            <h3 className="text-2xl font-bold mb-6">تابعنا على</h3>
-            <div className="flex items-center justify-center gap-4 flex-wrap">
-              {activeSocials.map((social, index) => {
-                const meta = ICON_MAP[social.icon] ?? ICON_MAP["globe"];
+      {/* Contact Cards */}
+      {activeContacts.length > 0 && (
+        <div className="py-12 px-6">
+          <div className="container mx-auto">
+            <div className={`grid gap-4 max-w-4xl mx-auto ${activeContacts.length === 1 ? "max-w-xs" : activeContacts.length === 2 ? "md:grid-cols-2 max-w-2xl" : "md:grid-cols-3"}`}>
+              {activeContacts.map((contact, index) => {
+                const meta = ICON_MAP[contact.icon] ?? ICON_MAP["globe"];
                 const IconComp = meta.Icon;
                 return (
-                  <motion.a
-                    key={index}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                    whileHover={{ scale: 1.15, y: -5 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-secondary transition-all border border-white/20"
-                    title={social.label}
-                  >
-                    <IconComp className="w-6 h-6" />
+                  <motion.a key={index} href={contact.href} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: index * 0.1 }} whileHover={{ y: -4, scale: 1.02 }}
+                    className="group rounded-2xl p-5 flex items-center gap-4 transition-all"
+                    style={{ background: "rgba(21,11,46,0.5)", border: "1px solid rgba(155,80,232,0.1)" }}>
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all group-hover:scale-110"
+                      style={{ background: "rgba(155,80,232,0.12)", border: "1px solid rgba(155,80,232,0.2)" }}>
+                      <IconComp className="w-5 h-5" style={{ color: "#9b50e8" }} />
+                    </div>
+                    <div>
+                      <p className="text-xs text-white/35 mb-0.5">{contact.label}</p>
+                      <p className="text-sm font-bold text-white/85" dir="ltr">{contact.text}</p>
+                    </div>
                   </motion.a>
                 );
               })}
             </div>
-          </motion.div>
-        )}
-
-        {/* Divider */}
-        <div className="max-w-4xl mx-auto mb-8">
-          <div className="h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+          </div>
         </div>
+      )}
 
-        {/* Copyright */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="text-center"
-        >
-          <p className="text-lg opacity-75">
-            © {new Date().getFullYear()} انطلاقة. جميع الحقوق محفوظة.
-          </p>
-        </motion.div>
+      <div className="h-px" style={{ background: "linear-gradient(to right, transparent, rgba(155,80,232,0.06), transparent)" }} />
+
+      {/* Bottom Bar */}
+      <div className="py-8 px-6">
+        <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <img src={logo} alt="انطلاقة" className="h-9 w-auto opacity-70 hover:opacity-100 transition-opacity" />
+          {activeSocials.length > 0 && (
+            <div className="flex items-center gap-3">
+              {activeSocials.map((social, index) => {
+                const meta = ICON_MAP[social.icon] ?? ICON_MAP["globe"];
+                const IconComp = meta.Icon;
+                return (
+                  <motion.a key={index} href={social.url} target="_blank" rel="noopener noreferrer" aria-label={social.label}
+                    whileHover={{ scale: 1.15, y: -2 }} whileTap={{ scale: 0.95 }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center transition-all"
+                    style={{ background: "rgba(155,80,232,0.08)", border: "1px solid rgba(155,80,232,0.12)" }}>
+                    <IconComp className="w-4 h-4 text-white/60" />
+                  </motion.a>
+                );
+              })}
+            </div>
+          )}
+          <p className="text-sm text-white/25 text-center">© {new Date().getFullYear()} انطلاقة. جميع الحقوق محفوظة.</p>
+        </div>
       </div>
     </footer>
   );

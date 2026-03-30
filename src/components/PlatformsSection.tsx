@@ -2,58 +2,37 @@ import { motion } from "framer-motion";
 import { useState, memo } from "react";
 
 const platforms = [
-  { name: "سلة", logo: "/Logos/sallaLogo.png", color: "from-green-500 to-emerald-500", bgGlow: "rgba(16, 185, 129, 0.2)" },
-  { name: "زد", logo: "/Logos/ZidLogo.png", color: "from-blue-500 to-cyan-500", bgGlow: "rgba(59, 130, 246, 0.2)" },
-  { name: "TikTok", logo: "/Logos/TikTokLogo.png", color: "from-pink-500 to-purple-500", bgGlow: "rgba(236, 72, 153, 0.2)" },
-  { name: "Snapchat", logo: "/Logos/SnapchatLogo.jpg", color: "from-yellow-400 to-amber-500", bgGlow: "rgba(251, 191, 36, 0.2)" },
-  { name: "Meta", logo: "/Logos/MetaLogo.png", color: "from-blue-600 to-indigo-600", bgGlow: "rgba(37, 99, 235, 0.2)" },
-  { name: "Google Ads", logo: "/Logos/GoogleAds.png", color: "from-red-500 to-orange-500", bgGlow: "rgba(239, 68, 68, 0.2)" },
+  { name: "سلة",        logo: "/Logos/sallaLogo.png",   color: "#10b981", glow: "rgba(16,185,129,0.4)" },
+  { name: "زد",         logo: "/Logos/ZidLogo.png",      color: "#a855f7", glow: "rgba(168,85,247,0.4)" },
+  { name: "TikTok",     logo: "/Logos/TikTokLogo.png",   color: "#ec4899", glow: "rgba(236,72,153,0.4)" },
+  { name: "Snapchat",   logo: "/Logos/SnapchatLogo.jpg", color: "#eab308", glow: "rgba(234,179,8,0.4)" },
+  { name: "Meta",       logo: "/Logos/MetaLogo.png",     color: "#3b82f6", glow: "rgba(59,130,246,0.4)" },
+  { name: "Google Ads", logo: "/Logos/GoogleAds.png",    color: "#3b82f6", glow: "rgba(59,130,246,0.4)" },
 ];
 
 const PlatformsSection = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section className="relative py-8 md:py-32 px-4 bg-background overflow-hidden">
-      {/* خلفية متحركة */}
+    <section className="relative section-py px-4 overflow-hidden section-bg-elevated">
+      {/* Background orb */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-1/4 -right-1/4 w-96 h-96 rounded-full blur-3xl opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(155, 80, 232, 0.3), transparent)" }}
-          animate={{
-            scale: [1, 1.3, 1],
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 -left-1/4 w-96 h-96 rounded-full blur-3xl opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(231, 116, 255, 0.3), transparent)" }}
-          animate={{
-            scale: [1.3, 1, 1.3],
-            x: [0, -100, 0],
-            y: [0, 50, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          className="absolute top-1/4 -right-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
+          style={{ background: "radial-gradient(circle, rgba(155,80,232,0.3), transparent)" }}
+          animate={{ scale: [1, 1.25, 1], x: [0, 80, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
-      <div className="container mx-auto mb-16 relative z-10">
+      <div className="container mx-auto relative z-10">
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center"
+          className="text-center mb-16"
         >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -62,81 +41,87 @@ const PlatformsSection = () => {
             transition={{ duration: 0.5, type: "spring" }}
             className="inline-block mb-6"
           >
-            <div className="bg-gradient-to-r from-primary/20 to-secondary/20 backdrop-blur-sm border border-primary/30 rounded-full px-6 py-2">
-              <span className="text-sm font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                شركاء النجاح
-              </span>
+            <div className="rounded-full px-6 py-2" style={{ background: "rgba(155,80,232,0.1)", border: "1px solid rgba(155,80,232,0.25)" }}>
+              <span className="text-sm font-bold text-gradient">شركاء النجاح</span>
             </div>
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 bg-gradient-to-r from-primary via-secondary to-primary py-4 bg-clip-text text-transparent">
-            المنصات التي نُبدع فيها
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 text-white leading-[1.4]">
+            المنصات التي{" "}
+            <span className="text-gradient">نُبدع فيها</span>
           </h2>
-
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
             نحول حضورك الرقمي لتجربة استثنائية عبر أقوى المنصات العالمية
           </p>
         </motion.div>
-      </div>
 
-      {/* شبكة اللوجوهات الإبداعية */}
-      <div className="container mx-auto relative z-10">
-        {/* شريط أفقي للموبايل والتابلت */}
-        <div className="grid grid-flow-col auto-cols-max gap-4 overflow-x-auto no-scrollbar pb-4 md:hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
-          {platforms.map((platform, index) => (
-            <div
-              key={platform.name}
-              className="relative group"
-            >
-              <div className="relative aspect-square bg-card/50 backdrop-blur-xl rounded-3xl p-2 flex items-center justify-center transition-all duration-300 overflow-hidden min-w-[72px] w-[72px] h-[72px]">
-                <img
-                  src={platform.logo}
-                  alt={platform.name}
-                  loading="lazy"
-                  className="relative w-10 h-10 object-contain transition-all duration-500"
-                />
-              </div>
+        {/* Mobile horizontal scroll */}
+        <div className="grid grid-flow-col auto-cols-max gap-4 overflow-x-auto no-scrollbar pb-6 md:hidden px-4" style={{ WebkitOverflowScrolling: "touch" }}>
+          {platforms.map((p) => (
+            <div key={p.name} className="w-[84px] h-[84px] rounded-2xl flex items-center justify-center relative shadow-lg" style={{ background: "rgba(21,11,46,0.8)", border: `1px solid ${p.color}50`, boxShadow: `0 0 20px ${p.glow}` }}>
+              <div
+                className="absolute inset-0 rounded-2xl blur-xl opacity-60"
+                style={{ background: `radial-gradient(circle, ${p.glow}, transparent 70%)` }}
+              />
+              <img src={p.logo} alt={p.name} loading="lazy" className="w-12 h-12 object-contain relative z-10" style={{ filter: `drop-shadow(0 0 10px ${p.color}80) brightness(1.2)` }} />
             </div>
           ))}
         </div>
 
-        {/* شبكة أعمدة للديسكتوب */}
-        <div className="hidden md:grid grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
+        {/* Desktop grid */}
+        <div className="hidden md:grid grid-cols-4 lg:grid-cols-6 gap-8">
           {platforms.map((platform, index) => (
-            <div
+            <motion.div
               key={platform.name}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
               className="relative group"
+              style={{ perspective: "800px" }}
             >
-              {hoveredIndex === index && (
-                <div
-                  className="absolute -inset-2 rounded-3xl blur-xl opacity-100 transition-opacity duration-500"
-                  style={{
-                    background: `linear-gradient(135deg, ${platform.bgGlow}, transparent)`,
-                  }}
-                />
-              )}
-              <div className="relative aspect-square bg-card/50 backdrop-blur-xl rounded-3xl p-8 flex items-center justify-center transition-all duration-300 overflow-hidden min-w-0 w-full">
-                {hoveredIndex === index && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-100" />
-                )}
+              {/* Permanent glow */}
+              <motion.div
+                className="absolute -inset-3 rounded-3xl blur-2xl"
+                style={{ background: `radial-gradient(circle, ${platform.glow}, transparent 70%)` }}
+                initial={{ opacity: 0.6 }}
+                animate={{ opacity: hoveredIndex === index ? 1 : 0.6 }}
+                transition={{ duration: 0.3 }}
+              />
+              <div
+                className="relative aspect-square rounded-3xl p-8 flex flex-col items-center justify-center transition-all duration-500 overflow-hidden cursor-pointer"
+                style={{
+                  background: "rgba(21,11,46,0.7)",
+                  border: `1px solid ${hoveredIndex === index ? `${platform.color}80` : `${platform.color}40`}`,
+                  boxShadow: `0 0 ${hoveredIndex === index ? '35px' : '20px'} ${platform.glow}`,
+                  backdropFilter: "blur(12px)",
+                  transform: hoveredIndex === index ? "translateY(-6px) scale(1.03)" : "translateY(0)",
+                }}
+              >
                 <img
                   src={platform.logo}
                   alt={platform.name}
                   loading="lazy"
-                  className="relative w-full h-full object-contain transition-all duration-500"
-                  style={hoveredIndex === index ? { transform: 'scale(1.1)', filter: 'brightness(1.15) contrast(1.1)' } : {}}
+                  className="w-full h-full object-contain transition-all duration-500 z-10"
+                  style={{ 
+                    filter: `drop-shadow(0 0 12px ${platform.color}90) brightness(1.2)`, 
+                    transform: hoveredIndex === index ? "scale(1.1)" : "scale(1)" 
+                  }}
                 />
-                {hoveredIndex === index && (
-                  <div className="absolute bottom-3 left-0 right-0 text-center opacity-100 transition-opacity duration-300">
-                    <span className={`text-xs font-bold bg-gradient-to-r ${platform.color} bg-clip-text text-transparent`}>
-                      {platform.name}
-                    </span>
-                  </div>
-                )}
+                {/* Name on hover */}
+                <motion.div
+                  initial={false}
+                  animate={{ opacity: hoveredIndex === index ? 1 : 0, y: hoveredIndex === index ? 0 : 8 }}
+                  transition={{ duration: 0.25 }}
+                  className="absolute bottom-3 text-xs font-bold"
+                  style={{ color: platform.color }}
+                >
+                  {platform.name}
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

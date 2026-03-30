@@ -12,6 +12,7 @@ const Index = lazy(() => import("./pages/Index"));
 const Form = lazy(() => import("./pages/Form"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const AdsLanding = lazy(() => import("./pages/AdsLanding"));
 const Login = lazy(() => import("./pages/Login"));
 const ChangePassword = lazy(() => import("./pages/ChangePassword"));
 const AcceptInvite = lazy(() => import("./pages/AcceptInvite"));
@@ -76,6 +77,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/form" element={<Form />} />
               <Route path="/thank-you" element={<ThankYou />} />
+              <Route path="/ads" element={<AdsLanding />} />
 
               {/* Blog */}
               <Route path="/blog" element={<Blog />} />
