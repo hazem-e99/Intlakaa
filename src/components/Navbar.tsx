@@ -50,8 +50,14 @@ const Navbar = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-[72px]">
           {/* Logo */}
-          <Link to="/" className="flex items-center flex-shrink-0">
-            <motion.img whileHover={{ scale: 1.06 }} src={logo} alt="انطلاقة" className="h-9 w-auto" />
+          <Link to="/" className="flex items-center flex-shrink-0 relative group py-1">
+            <motion.img 
+              whileHover={{ scale: 1.05 }} 
+              src={logo} 
+              alt="انطلاقة" 
+              className="h-10 md:h-11 w-auto relative z-10" 
+              style={{ filter: "brightness(0) invert(1) drop-shadow(0 0 8px rgba(255,255,255,0.3))" }} 
+            />
           </Link>
 
           {/* Desktop Links */}

@@ -4,7 +4,6 @@ import { memo, useEffect, useRef, useState, useMemo } from "react";
 import { ArrowLeft, TrendingUp, Users, Zap, Star } from "lucide-react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { pushGTMEvent } from "@/utils/gtm";
-import logo from "@/assets/logo.png";
 
 /* ── Animated Counter ──────────────────────────────────── */
 function AnimatedCounter({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
@@ -65,7 +64,7 @@ const HeroSection = () => {
     })), []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center pt-24 md:pt-16 pb-16 px-4 overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center pt-32 md:pt-40 pb-16 px-4 overflow-hidden">
       {/* ─ Parallax background ─ */}
       <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
         <div className="absolute inset-0" style={{ background: "linear-gradient(170deg, #0d0520 0%, #1a0a34 40%, #130828 70%, #0d0520 100%)" }} />
@@ -126,12 +125,12 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.7 }}
             >
-              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.35] tracking-tight text-white">
-                <span className="block mb-2">بنساعدك تخلي</span>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.7] md:leading-[1.6] text-white">
+                <span className="block mb-5">بنساعدك تخلي</span>
                 <span className="block">
                   نموك أسرع و{" "}
                   <span
-                    className="inline-block"
+                    className="inline-block mt-3 md:mt-2 py-3 px-1"
                     style={{
                       background: "linear-gradient(135deg, #c084fc, #9b50e8)",
                       WebkitBackgroundClip: "text",
@@ -218,7 +217,7 @@ const HeroSection = () => {
             </motion.div>
           </div>
 
-          {/* ── Left: Logo Visual with 3D perspective ── */}
+          {/* ── Left: Hero Visual with 3D perspective ── */}
           <motion.div
             initial={{ opacity: 0, scale: 0.85, rotateY: 8 }}
             animate={{ opacity: 1, scale: 1, rotateY: 0 }}
@@ -226,36 +225,22 @@ const HeroSection = () => {
             className="order-1 lg:order-2 relative hidden md:flex items-center justify-center"
             style={{ perspective: "1200px" }}
           >
-            {/* Glow ring */}
+            {/* Deep Glow backing the image */}
             <div
-              className="absolute w-[320px] h-[320px] md:w-[420px] md:h-[420px] rounded-full blur-3xl opacity-30 animate-glow-pulse"
+              className="absolute w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full blur-[100px] opacity-40"
               style={{ background: "radial-gradient(circle, #9b50e8, transparent 70%)" }}
             />
-            {/* Rotating orbit */}
-            <motion.div
-              className="absolute w-[280px] h-[280px] md:w-[380px] md:h-[380px] rounded-full"
-              style={{ border: "1px dashed rgba(155,80,232,0.2)" }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            />
-            {/* Logo container with 3D tilt */}
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-              className="relative z-10 p-10 rounded-3xl"
-              style={{
-                background: "rgba(255,255,255,0.95)",
-                border: "1px solid rgba(155,80,232,0.15)",
-                boxShadow: "0 24px 64px rgba(13,5,32,0.5), 0 0 40px rgba(155,80,232,0.12)",
-              }}
-            >
+            
+            {/* Hero graphics container */}
+            <div className="relative z-10 w-full max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-3xl mx-auto flex items-center justify-center transform scale-110 md:scale-125 lg:scale-110 lg:-translate-x-6">
               <img
-                src={logo}
-                alt="انطلاقة – وكالة تسويق رقمي"
+                src="/hero%20section.png"
+                alt="وكالة انطلاقة للخدمات التسويقية"
                 loading="eager"
-                className="w-48 h-auto md:w-64"
+                className="w-full h-auto object-contain"
+                style={{ filter: "drop-shadow(0 25px 45px rgba(155,80,232,0.2))" }}
               />
-            </motion.div>
+            </div>
 
             {/* Floating stat badges */}
             <motion.div

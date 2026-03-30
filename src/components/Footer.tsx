@@ -115,7 +115,12 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="py-8 px-6">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <img src={logo} alt="انطلاقة" className="h-9 w-auto opacity-70 hover:opacity-100 transition-opacity" />
+          <img 
+            src={logo} 
+            alt="انطلاقة" 
+            className="h-10 md:h-12 w-auto transition-all duration-300 hover:scale-105" 
+            style={{ filter: "brightness(0) invert(1) drop-shadow(0 0 8px rgba(255,255,255,0.3))" }} 
+          />
           {activeSocials.length > 0 && (
             <div className="flex items-center gap-3">
               {activeSocials.map((social, index) => {
