@@ -96,7 +96,7 @@ function ResultCard({ icon: Icon, value, suffix, prefix, label, description, col
 
         {/* Value with gradient text */}
         <div 
-          className="text-6xl md:text-7xl font-black mb-3 transition-all duration-500"
+          className="text-5xl md:text-6xl lg:text-7xl font-black mb-3 transition-all duration-500"
           style={{
             background: `linear-gradient(135deg, #ffffff 20%, ${color} 100%)`,
             WebkitBackgroundClip: "text",
@@ -121,7 +121,7 @@ function ResultCard({ icon: Icon, value, suffix, prefix, label, description, col
 
 /* ── Section ───────────────────────────────────────────── */
 const ResultsSection = () => (
-  <section className="relative py-32 md:py-40 px-4 overflow-hidden" style={{ background: "#080312" }} id="results">
+  <section className="relative py-20 md:py-28 px-4 overflow-hidden" style={{ background: "#080312" }} id="results">
     {/* Grid Background */}
     <div
       className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -163,9 +163,9 @@ const ResultsSection = () => (
             </span>
             <span className="text-sm font-bold text-white tracking-wide">نتائج قابلة للقياس والإثبات</span>
           </div>
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.7] md:leading-[1.6]">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.7] md:leading-[1.6]">
             <span className="block mb-4 lg:inline lg:mb-0">أرقام تتحدث عن{" "}</span>
-            <span className="text-transparent bg-clip-text inline-block py-3 px-1" style={{ backgroundImage: "linear-gradient(135deg, #c084fc 0%, #7c3aed 100%)" }}>نفسها</span>
+            <span className="text-gradient inline-block py-3 px-1">نفسها</span>
           </h2>
         </motion.div>
 

@@ -26,7 +26,7 @@ function HeadingBlock({ data, settings }: { data: any; settings?: Block['setting
   };
   return (
     <Tag
-      className={cn(sizes[data.level || 'h2'], 'leading-tight')}
+      className={cn(sizes[data.level || 'h2'], 'leading-[1.45]')}
       style={{
         textAlign: settings?.textAlign || 'right',
         color: settings?.textColor || undefined,

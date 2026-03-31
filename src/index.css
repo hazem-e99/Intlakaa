@@ -109,6 +109,7 @@
   html {
     direction: rtl;
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
@@ -117,6 +118,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: 0.01em;
+    overflow-x: clip;
+    max-width: 100%;
   }
 
   /* Scrollbar */
@@ -154,16 +157,12 @@
 
   /* ── Text Gradients ── */
   .text-gradient {
-    background: linear-gradient(135deg, #9b50e8, #c084fc);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #9b50e8;
+    display: inline-block;
   }
   .text-gradient-vivid {
-    background: linear-gradient(135deg, #c084fc, #9b50e8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #c084fc;
+    display: inline-block;
   }
 
   /* ── Shadows ── */
@@ -216,8 +215,8 @@
   }
 
   /* ── Section spacing (8px grid) ── */
-  .section-py { padding-top: 96px; padding-bottom: 96px; }      /* 12 × 8 */
-  .section-py-sm { padding-top: 64px; padding-bottom: 64px; }   /* 8 × 8 */
+  .section-py { padding-top: clamp(64px, 9vw, 96px); padding-bottom: clamp(64px, 9vw, 96px); }
+  .section-py-sm { padding-top: clamp(48px, 7vw, 64px); padding-bottom: clamp(48px, 7vw, 64px); }
   .section-gap { margin-bottom: 64px; }                          /* 8 × 8 */
 
   /* ── Noise Overlay ── */

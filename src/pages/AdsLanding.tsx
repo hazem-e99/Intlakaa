@@ -151,7 +151,7 @@ const AdsLanding = () => {
               className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.35] text-white mb-6"
             >
               ضاعف مبيعاتك{" "}
-              <span style={{ background: "linear-gradient(135deg, #c084fc, #a855f7)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+              <span className="text-gradient">
                 في 90 يومًا
               </span>
               <br />أو لا تدفع شيئًا

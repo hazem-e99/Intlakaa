@@ -11,7 +11,7 @@ const HeadingRenderer = ({ content }: { content: any }) => {
     h3: 'text-2xl md:text-3xl font-semibold', h4: 'text-xl md:text-2xl font-semibold',
     h5: 'text-lg md:text-xl font-medium', h6: 'text-base md:text-lg font-medium',
   };
-  return <Tag className={`${size[content.level || 'h2']} ${align} text-foreground leading-tight`} dir="rtl">{content.text}</Tag>;
+  return <Tag className={`${size[content.level || 'h2']} ${align} text-foreground leading-[1.45]`} dir="rtl">{content.text}</Tag>;
 };
 
 const ParagraphRenderer = ({ content }: { content: any }) => {
@@ -199,7 +199,7 @@ const BannerRenderer = ({ content }: { content: any }) => {
 
   const TextBlock = () => (
     <div className={`space-y-4 ${alignClass}`} style={{ color: textColor }}>
-      <h2 className="text-3xl md:text-4xl font-bold leading-tight">{content.title}</h2>
+      <h2 className="text-3xl md:text-4xl font-bold leading-[1.4]">{content.title}</h2>
       {content.subtitle && <p className="text-lg opacity-80 leading-relaxed">{content.subtitle}</p>}
       {content.buttonText && (
         <a

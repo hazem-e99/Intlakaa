@@ -93,7 +93,7 @@ const ClientsSection = () => {
 
   return (
     <>
-      <section className="section-py px-4 section-bg-elevated" id="clients">
+      <section className="section-py px-4 section-bg-elevated overflow-hidden" id="clients">
         <div className="container mx-auto">
           {/* Header */}
           <motion.div

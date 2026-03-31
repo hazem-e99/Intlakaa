@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
+import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
 import { useEffect } from "react";
 import prefetchForm from "@/lib/prefetchForm";
 
@@ -38,7 +39,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ background: "#0d0520" }}>
+    <div className="min-h-screen overflow-x-clip" style={{ background: "#0d0520" }}>
       {/* 1. Navbar */}
       <Navbar />
 
@@ -92,6 +93,9 @@ const Index = () => {
 
       {/* 12. Footer */}
       <Footer />
+
+      {/* Floating WhatsApp CTA */}
+      <FloatingWhatsAppButton />
     </div>
   );
 };

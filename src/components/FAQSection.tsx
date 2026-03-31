@@ -57,7 +57,7 @@ const FAQSection = () => {
             <HelpCircle className="w-4 h-4" style={{ color: "#9b50e8" }} strokeWidth={2.5} />
             <span className="text-sm font-bold text-white/90">أسئلة شائعة</span>
           </motion.div>
-          <h2 className="text-4xl md:text-5xl font-black mb-4 text-white leading-[1.3]">عندك سؤال؟ <span className="text-gradient">عندنا الجواب</span></h2>
+          <h2 className="text-4xl md:text-5xl font-black mb-4 text-white leading-[1.4]">عندك سؤال؟ <span className="text-gradient">عندنا الجواب</span></h2>
           <p className="text-white/45 text-lg max-w-xl mx-auto">نجاوب على أكثر الأسئلة اللي يسألها العملاء قبل ما يبدأوا معنا</p>
         </motion.div>
         <div className="space-y-4">

@@ -1,106 +1,134 @@
 import { motion } from "framer-motion";
 import { memo } from "react";
-import { Megaphone, BarChart3, MessageCircle, Search, ArrowLeft, Check } from "lucide-react";
+import { Megaphone, BarChart3, MessageCircle, Search, ArrowLeft, CheckCircle2, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import prefetchForm from "@/lib/prefetchForm";
 import { pushGTMEvent } from "@/utils/gtm";
 
 const services = [
   {
-    icon: Megaphone, number: "01",
-    title: "باقة المحتوى والإعلان", tagline: "كل ما تحتاجه من A إلى Z",
-    color: "#9b50e8", glow: "rgba(155,80,232,0.3)",
-    items: ["تخطيط حملات تسويقية مدروسة", "خطة محتوى توصّل رسالتك باحترافية", "سكربتات ومونتاج فيديوهات", "تصميم صفحات هبوط تزيد التحويلات", "تحسين مستمر للأداء (CRO)", "مدير حساب مخصص معك دائمًا"],
+    icon: Megaphone,
+    number: "01",
+    title: "باقة المحتوى والإعلان",
+    tagline: "كل ما تحتاجه من A إلى Z",
+    color: "#9b50e8",
+    items: [
+      "تخطيط حملات تسويقية مدروسة",
+      "خطة محتوى توصّل رسالتك باحترافية",
+      "سكربتات ومونتاج فيديوهات",
+      "تصميم صفحات هبوط تزيد التحويلات",
+      "تحسين مستمر للأداء (CRO)",
+      "مدير حساب مخصص معك دائمًا",
+    ],
   },
   {
-    icon: BarChart3, number: "02",
-    title: "باقة الإعلانات", tagline: "نُطلق ونتابع ونُحسّن",
-    color: "#60a5fa", glow: "rgba(96,165,250,0.3)",
-    items: ["إعداد الحملات بالطريقة الصحيحة", "توجيه بنوع المحتوى المطلوب للإعلان", "متابعة يومية وتعديل مستمر", "تقارير شفافة توريك العائد الفعلي"],
+    icon: BarChart3,
+    number: "02",
+    title: "باقة الإعلانات",
+    tagline: "نُطلق ونتابع ونُحسّن",
+    color: "#60a5fa",
+    items: [
+      "إعداد الحملات بالطريقة الصحيحة",
+      "توجيه بنوع المحتوى المطلوب للإعلان",
+      "متابعة يومية وتعديل مستمر",
+      "تقارير شفافة توريك العائد الفعلي",
+    ],
   },
   {
-    icon: MessageCircle, number: "03",
-    title: "الاستشارات", tagline: "خبرة تختصر عليك السنين",
-    color: "#34d399", glow: "rgba(52,211,153,0.3)",
-    items: ["استشارة تختصر الوقت والمال", "خبرات عملية في السوق السعودي", "استراتيجيات مجربة لمتاجر كبرى"],
+    icon: MessageCircle,
+    number: "03",
+    title: "الاستشارات",
+    tagline: "خبرة تختصر عليك السنين",
+    color: "#34d399",
+    items: [
+      "استشارة تختصر الوقت والمال",
+      "خبرات عملية في السوق السعودي",
+      "استراتيجيات مجربة لمتاجر كبرى",
+    ],
   },
   {
-    icon: Search, number: "04",
-    title: "البحث والتحليل", tagline: "بيانات تقود، لا تخمينات",
-    color: "#fbbf24", glow: "rgba(251,191,36,0.3)",
-    items: ["بحث تحليلي بأعلى المعايير", "دراسة المنافسين بدقة متناهية", "صورة كاملة لفرص مضاعفة الأرقام"],
+    icon: Search,
+    number: "04",
+    title: "البحث والتحليل",
+    tagline: "بيانات تقود، لا تخمينات",
+    color: "#fbbf24",
+    items: [
+      "بحث تحليلي بأعلى المعايير",
+      "دراسة المنافسين بدقة متناهية",
+      "صورة كاملة لفرص مضاعفة الأرقام",
+    ],
   },
+];
+
+const highlights = [
+  "خدمات متكاملة تحت سقف واحد",
+  "تنفيذ سريع وقياس دقيق للنتائج",
+  "خطط مبنية على بيانات السوق السعودي",
+  "تحسين مستمر مبني على الأرقام",
 ];
 
 function ServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
   const Icon = service.icon;
-  // Make even cards structurally slighty different by adjusting border gradients based on color
+
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95, y: 50 }}
-      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.7, delay: index * 0.15, type: "spring", stiffness: 60 }}
-      whileHover={{ y: -10 }}
-      className="relative rounded-[2.5rem] p-8 md:p-10 overflow-hidden group cursor-pointer"
-      style={{ 
-        background: "linear-gradient(135deg, rgba(21,11,46,0.85) 0%, rgba(13,5,32,0.95) 100%)",
-        border: "1px solid rgba(155,80,232,0.15)",
-        boxShadow: "0 25px 50px rgba(0,0,0,0.3)"
+      transition={{ duration: 0.55, delay: index * 0.08 }}
+      whileHover={{ y: -5 }}
+      className="relative rounded-3xl p-6 sm:p-7 overflow-hidden group"
+      style={{
+        background: "linear-gradient(180deg, rgba(24,13,49,0.95) 0%, rgba(13,5,32,0.98) 100%)",
+        border: "1px solid rgba(155,80,232,0.2)",
+        boxShadow: "0 14px 32px rgba(0,0,0,0.32)",
       }}
     >
-      {/* Animated Gradient Glow on Hover */}
-      <motion.div
-        className="absolute -inset-[150%] opacity-0 group-hover:opacity-50 transition-opacity duration-700 pointer-events-none"
-        style={{
-          background: `conic-gradient(from 0deg at 50% 50%, transparent 0deg, ${service.color} 180deg, transparent 360deg)`,
-        }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ background: `radial-gradient(ellipse at top right, ${service.color}20, transparent 55%)` }}
       />
-      {/* Glass Mask */}
-      <div className="absolute inset-[1px] rounded-[calc(2.5rem-1px)] z-0" style={{ background: "rgba(13,5,32,0.96)" }} />
-
-      {/* Large Floating Number Background */}
-      <div 
-        className="absolute -top-6 -left-6 text-[10rem] font-black opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-500 select-none z-0 pointer-events-none leading-none" 
-        style={{ color: service.color, transform: "rotate(-10deg)" }}
-      >
-        {service.number}
-      </div>
+      <div className="absolute top-0 right-0 left-0 h-[2px]" style={{ background: `linear-gradient(90deg, transparent, ${service.color}, transparent)` }} />
 
       <div className="relative z-10 flex flex-col h-full">
-        <div className="flex justify-between items-center mb-8">
-          <div className="w-16 h-16 rounded-[1.25rem] flex items-center justify-center relative shadow-lg" style={{ background: `${service.color}15`, border: `1px solid ${service.color}30` }}>
-            <div className="absolute inset-0 blur-xl opacity-40 group-hover:opacity-80 transition-opacity duration-500" style={{ background: service.color }} />
-            <Icon className="w-8 h-8 relative z-10" style={{ color: service.color }} strokeWidth={2} />
+        <div className="flex items-start justify-between gap-3 mb-5">
+          <div className="inline-flex items-center gap-3 min-w-0">
+            <div
+              className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: `${service.color}1e`, border: `1px solid ${service.color}55` }}
+            >
+              <Icon className="w-5 h-5" style={{ color: service.color }} strokeWidth={2.2} />
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-lg sm:text-xl font-black text-white leading-[1.45]">{service.title}</h3>
+              <p className="text-xs sm:text-sm font-bold mt-1" style={{ color: service.color }}>{service.tagline}</p>
+            </div>
           </div>
-          <div className="text-right">
-             <h3 className="text-2xl md:text-[1.75rem] font-black text-white mb-2">{service.title}</h3>
-             <p className="text-sm font-bold" style={{ color: service.color }}>{service.tagline}</p>
+          <div
+            className="shrink-0 text-[11px] font-black rounded-full px-2.5 py-1"
+            style={{ background: `${service.color}24`, border: `1px solid ${service.color}60`, color: service.color }}
+          >
+            {service.number}
           </div>
         </div>
-        
-        {/* Subtle Divider */}
-        <div className="w-full h-px mb-6 opacity-30 group-hover:opacity-50 transition-opacity" style={{ background: `linear-gradient(to right, transparent, ${service.color}, transparent)` }} />
 
-        <ul className="space-y-4">
+        <ul className="space-y-3 mt-1">
           {service.items.map((item, i) => (
-            <motion.li 
-              key={i} 
-              initial={{ opacity: 0, x: 20 }} 
-              whileInView={{ opacity: 1, x: 0 }} 
-              viewport={{ once: true }} 
-              transition={{ delay: index * 0.15 + i * 0.08 }}
-              className="flex items-start gap-4 text-white/70 group-hover:text-white/90 transition-colors text-[0.95rem] font-medium leading-relaxed"
+            <motion.li
+              key={i}
+              initial={{ opacity: 0, x: 12 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08 + i * 0.04 }}
+              className="flex items-start gap-3 text-white/75 group-hover:text-white/90 transition-colors text-sm sm:text-[0.95rem] font-medium leading-relaxed"
             >
-              <div 
-                className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-0.5 shadow-sm"
+              <div
+                className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5"
                 style={{ background: `linear-gradient(135deg, ${service.color}40, ${service.color}10)`, border: `1px solid ${service.color}50` }}
               >
-                <Check className="w-3.5 h-3.5" style={{ color: service.color }} strokeWidth={3} />
+                <CheckCircle2 className="w-3.5 h-3.5" style={{ color: service.color }} strokeWidth={2.4} />
               </div>
-              {item}
+              <span>{item}</span>
             </motion.li>
           ))}
         </ul>
@@ -110,77 +138,121 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
 }
 
 const ServicesSection = () => (
-  <section className="relative py-32 md:py-40 px-4 overflow-hidden" style={{ background: "#0b0416" }} id="services">
-    {/* Dynamic Background */}
+  <section className="relative section-py px-4 overflow-hidden section-bg-elevated" id="services">
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.02]" 
-        style={{ backgroundImage: `radial-gradient(circle at center, white 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
-      <motion.div 
-        className="absolute top-0 right-0 w-[800px] h-[800px] rounded-full blur-[150px] opacity-20" 
-        style={{ background: "radial-gradient(circle, #9b50e8, transparent 70%)" }} 
-        animate={{ scale: [1, 1.1, 1], x: [0, -30, 0] }} transition={{ duration: 15, repeat: Infinity }}
+      <div
+        className="absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage: "linear-gradient(rgba(255,255,255,0.24) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.24) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
+      <motion.div
+        className="absolute top-[-18%] right-[-8%] w-[420px] h-[420px] sm:w-[560px] sm:h-[560px] rounded-full blur-[120px] opacity-25"
+        style={{ background: "radial-gradient(circle, rgba(155,80,232,0.35), transparent 70%)" }}
+        animate={{ scale: [1, 1.1, 1], x: [0, -18, 0], y: [0, 10, 0] }}
+        transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-[-12%] left-[-7%] w-[320px] h-[320px] sm:w-[460px] sm:h-[460px] rounded-full blur-[100px] opacity-20"
+        style={{ background: "radial-gradient(circle, rgba(96,165,250,0.25), transparent 70%)" }}
+        animate={{ scale: [1.05, 1, 1.05], x: [0, 14, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
       />
     </div>
 
-    <div className="container mx-auto relative z-10">
-      {/* Creative Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }} 
-        whileInView={{ opacity: 1, y: 0 }} 
-        viewport={{ once: true }} 
-        transition={{ duration: 0.8, type: "spring" }} 
-        className="text-center mb-24"
+    <div className="container mx-auto relative z-10 max-w-7xl">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="mb-10 md:mb-14 text-center"
       >
-        <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full mb-8 relative group" style={{ background: "rgba(155,80,232,0.12)", border: "1px solid rgba(155,80,232,0.3)" }}>
-           <div className="absolute inset-0 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "rgba(155,80,232,0.4)" }} />
-           <Megaphone className="w-4 h-4 text-emerald-400 relative z-10" strokeWidth={2.5} />
-           <span className="text-sm font-bold text-white tracking-wide relative z-10">الحلول التي نقدمها</span>
+        <div
+          className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-5"
+          style={{ background: "rgba(155,80,232,0.14)", border: "1px solid rgba(155,80,232,0.28)" }}
+        >
+          <Sparkles className="w-4 h-4 text-[#c084fc]" strokeWidth={2.3} />
+          <span className="text-sm font-bold text-white/90">الحلول التي نقدمها</span>
         </div>
-        
-        <h2 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 text-white leading-[1.4] md:leading-[1.3]">
-          وش نقدر <span className="text-transparent bg-clip-text inline-block" style={{ backgroundImage: "linear-gradient(135deg, #c084fc 0%, #7c3aed 100%)" }}>نضيف لمشروعك؟</span>
+
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 text-white leading-[1.45]">
+          وش نقدر نضيف
+          <span className="block text-gradient">لمشروعك؟</span>
         </h2>
-        <p className="text-xl text-white/50 max-w-2xl mx-auto leading-relaxed border-b border-white/5 pb-8 font-medium">
-          باقات متكاملة وحلول استراتيجية مصممة خصيصًا لتحقيق النمو الفعلي لعلامتك التجارية — لا وعود فضفاضة، بل نتائج ملموسة.
+
+        <p className="text-base sm:text-lg text-white/60 max-w-3xl mx-auto leading-relaxed">
+          نماذج خدمة مصممة لتناسب مرحلتك الحالية وتدفعك للنمو بخطة واضحة، تنفيذ احترافي، وتحسين مستمر مبني على النتائج.
         </p>
       </motion.div>
 
-      {/* Grid of Services */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 max-w-6xl mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="mb-8 md:mb-10"
+      >
+        <div className="flex flex-wrap justify-center gap-3">
+          {highlights.map((item, i) => (
+            <div
+              key={i}
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold text-white/85"
+              style={{ background: "rgba(21,11,46,0.74)", border: "1px solid rgba(155,80,232,0.2)" }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#9b50e8]" />
+              {item}
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 lg:gap-7 max-w-6xl mx-auto">
         {services.map((s, i) => <ServiceCard key={s.number} service={s} index={i} />)}
       </div>
 
-      {/* Call to Action */}
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }} 
-        whileInView={{ opacity: 1, y: 0 }} 
-        viewport={{ once: true }} 
-        transition={{ duration: 0.7, delay: 0.5, type: "spring" }} 
-        className="mt-28 text-center"
+      <motion.div
+        initial={{ opacity: 0, y: 22 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.55, delay: 0.2 }}
+        className="mt-10 md:mt-14"
       >
-        <div className="inline-block p-10 rounded-[2.5rem] relative overflow-hidden" style={{ background: "rgba(155,80,232,0.05)", border: "1px solid rgba(155,80,232,0.2)" }}>
-           {/* CTA Background Glow */}
-           <div className="absolute inset-0 blur-3xl opacity-20" style={{ background: "linear-gradient(135deg, #7c3aed, transparent)" }} />
-           
-           <h3 className="text-3xl font-black text-white relative z-10 mb-4">مو عارف أي باقة تناسبك وتوصلك لهدفك؟</h3>
-           <p className="text-white/60 mb-8 max-w-lg mx-auto relative z-10 text-lg">
-             احجز استشارة مجانية الآن وخلنا نحلل وضعك ونختار الخطة الأنسب لمضاعفة أرباحك.
-           </p>
+        <div
+          className="relative overflow-hidden rounded-3xl p-6 sm:p-8 md:p-10"
+          style={{ background: "rgba(21,11,46,0.78)", border: "1px solid rgba(155,80,232,0.22)" }}
+        >
+          <div className="absolute inset-0 opacity-20" style={{ background: "linear-gradient(120deg, rgba(124,58,237,0.45), transparent 45%, rgba(96,165,250,0.3))" }} />
 
-           <Link to="/form" onMouseEnter={prefetchForm} className="relative z-10 block">
-             <motion.button 
-               whileHover={{ scale: 1.05, y: -3 }} 
-               whileTap={{ scale: 0.97 }}
-               onClick={() => pushGTMEvent("cta_click", { button_name: "استشارة مجانية", location: "services_section" })}
-               className="group relative inline-flex items-center justify-center gap-3 px-12 py-5 rounded-full text-lg font-black text-white shadow-[0_10px_40px_rgba(124,58,237,0.4)] overflow-hidden"
-               style={{ background: "linear-gradient(135deg, #7c3aed, #9b50e8)" }}
-             >
-               <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-r from-transparent via-white/25 to-transparent -skew-x-12 translate-x-[-150%] group-hover:translate-x-[150%] ease-in-out" />
-               <span className="relative flex items-center gap-3">
-                 احجز استشارة مجانية <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-               </span>
-             </motion.button>
-           </Link>
+          <div className="relative z-10 grid md:grid-cols-[1.35fr_auto] gap-6 items-center">
+            <div className="text-center md:text-right">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2 leading-[1.45]">
+                مو متأكد أي باقة تناسب هدفك الحالي؟
+              </h3>
+              <p className="text-white/65 text-base sm:text-lg leading-relaxed">
+                احجز استشارة مجانية، ونطلع لك بخطة تنفيذ واضحة تناسب ميزانيتك ومرحلة مشروعك.
+              </p>
+            </div>
+
+            <div className="text-center md:text-left">
+              <Link to="/form" onMouseEnter={prefetchForm} className="inline-block">
+                <motion.button
+                  whileHover={{ scale: 1.04, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => pushGTMEvent("cta_click", { button_name: "استشارة مجانية", location: "services_section" })}
+                  className="group relative inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full text-base sm:text-lg font-black text-white overflow-hidden"
+                  style={{ background: "linear-gradient(135deg, #7c3aed, #9b50e8)", boxShadow: "0 12px 34px rgba(124,58,237,0.35)" }}
+                >
+                  <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-150%] group-hover:translate-x-[150%]" />
+                  <span className="relative inline-flex items-center gap-2.5">
+                    احجز استشارة مجانية
+                    <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                  </span>
+                </motion.button>
+              </Link>
+            </div>
+          </div>
         </div>
       </motion.div>
     </div>

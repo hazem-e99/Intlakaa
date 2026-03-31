@@ -162,7 +162,7 @@ const CaseStudySection = () => {
 
   return (
     <>
-      <section className="section-py px-4 section-bg-elevated" id="casestudies">
+      <section className="section-py px-4 section-bg-elevated overflow-hidden" id="casestudies">
         <div className="container mx-auto">
           {/* Header */}
           <motion.div
